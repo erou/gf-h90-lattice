@@ -1,0 +1,295 @@
+\documentclass{sig-alternate}
+
+\usepackage{hyperref}
+\usepackage{macros}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+
+\numberofauthors{3}
+\author{
+  \alignauthor Luca De Feo\\
+  \affaddr{Universit\'e Paris Saclay -- UVSQ, LMV}\\
+  \email{luca.de-feo@uvsq.fr}
+  \alignauthor Hugues Randriam
+  \alignauthor Édouard Rousseau
+}
+
+\title{Efficient lattices of compatibly embedded finite fields}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  We make embeddings.
+\end{abstract}
+
+\category{F.2.1}{Theory of computation}{Analysis of algorithms and problem complexity}[Computations in finite fields]
+\category{G.4}{Mathematics of computing}{Mathematical software}
+\terms{Algorithms,Theory}
+\keywords{Finite fields, field extensions, Conway polynomials.}
+
+\section{Introduction}
+\label{sec:introduction}
+
+Computer algebra systems (CAS) are often faced with the problem of
+constructing several extensions of a finite field $\F_p$ in a
+\emph{compatible} way, i.e., such that the (subfield) inclusion
+lattice of the given extensions can be computed and evaluated
+efficiently.
+
+Concretely, what is sought is a data structure $\Lambda$ to represent
+arbitrary collections of extensions of $\F_p$, in such a way that
+elements of $\F_{p^n}$ are represented in optimal space (i.e., $O(n)$
+coefficients), and that arithmetic operations are performed
+efficiently (i.e., $O\left(\lcm(n,m)^d\right)$ arithmetic operations
+to combine an element of $\F_{p^m}$ and an element of $\F_{p^n}$,
+where $d\le 3$ and, possibly, $d=1+\varepsilon$). %
+To this end, it is useful to set several sub-goals:
+
+\begin{description}
+\item[\emph{Effective embeddings:}] For any pair of extensions
+  $k\subset K$ in $\Lambda$, there exists an efficiently computable
+  embedding $\phi:k\to K$, and algorithms to evaluate $\phi$ on $k$,
+  and the section $\phi^{-1}$ on $K$.
+\item[\emph{Compatibility:}] The embeddings are \emph{compatible},
+  i.e., for any triple $k\subset K\subset L$ in $\Lambda$, and
+  embeddings $\phi:k\to K$, $\psi:K\to L$, $\chi:k\to L$, one has
+  $\chi=\psi\circ\phi$.
+\item[\emph{Incrementality:}] The data associated with an extension
+  (e.g., its irreducible polynomial, change-of-basis matrices, \dots)
+  must be computable efficiently and \emph{incrementally}, i.e.,
+  adding a new field extensions to $\Lambda$ does not require
+  recomputing data for all extensions already in $\Lambda$. %
+\item[\emph{Uniqueness:}] Any extension of $\F_p$ is determined by an
+  irreducible polynomial whose definition only depends on the
+  characteristic $p$ and the degree of the extension. %
+\item[\emph{Generality:}] Extensions of $\F_p$ can be represented by
+  arbitrary irreducible polynomials.
+\end{description}
+
+Some goals, such as incrementality, uniqueness and generality are
+optional, and it is obvious that uniqueness and generality are even in
+conflict with each other. %
+An incremental data structure can be used to effectively represent an
+algebraic closure $\bar\F_p$, with new finite extensions built on the
+fly as they are needed. %
+Uniqueness is useful for defining field elements in a standard way,
+portable between different CAS, while generality is useful in a
+context where the user is left with the freedom of choosing the
+defining polynomials. %
+Note that any solution can be made unique by replacing all random
+choices with pseudo-random ones, however one is usually interested in
+uniqueness solutions that have a simple mathematical description. %
+Also, any solution can be made general by means of an isomorphism
+algorithm~\cite{LenstraJr91,Allombert02,rains2008,brieulle2018computing,narayanan2016fast}. %
+Other optional goals, such as computing normal bases or evaluating
+Frobenius morphisms, may be added to the list, however they are out of
+the scope of this work.
+
+\paragraph{Previous work}
+The first and most well known solution is the family of Conway
+polynomials~\cite{Nickel1988,heath+loehr99}, first adopted in
+GAP~\cite{GAP4}, and then also by Magma~\cite{MAGMA} and
+Sage~\cite{Sage}. %
+Conway polynomials yield uniqueness, however computing them requires
+exponential time, thus incrementality is only available at a
+prohibitive cost; for this reason, they are usually pre-computed and
+tabulated up to some bound.
+
+The first to show the existence of a (incremental, general) data
+structure computable in deterministic polynomial time was
+Lenstra~\cite{LenstraJr91}, who proved that, besides the problem of
+finding irreducible polynomials, any other question is amenable to
+linear algebra. %
+Subsequent work of Lenstra and de
+Smit~\cite{lenstra+desmit08-stdmodels} tackled the uniqueness problem,
+albeit only from a theoretical point of view. %
+
+In practice, randomized algorithms are good enough for a CAS, then
+polynomial factorization and basic linear algebra provide an easy
+(incremental, general) solution, that was first analyzed by Bosma,
+Cannon and Steel~\cite{bosma+cannon+steel97}, and is currently used in
+Magma. %
+
+All solutions presented so far have superquadratic complexity, i.e.,
+$d>2$. %
+Recent work on embedding algorithms~\cite{DoSc12,DeDoSc13,DeDoSc2014}
+yields subquadratic (more precisely, $d\le 1.5$) solutions for
+specially constructed (non-unique, non-general) families of
+irreducible polynomials, and even quasi-optimal ones (i.e.,
+$d=1+\varepsilon$) if a quasi-linear modular composition algorithm is
+available (Kedlaya and Umans' algorithm~\cite{KeUm11} is quasi-optimal
+in the binary RAM model, however it is widely considered
+unpractical). %
+However these constructions involve counting points of random elliptic
+curves over finite fields, and have thus a rather high polynomial
+dependency in $\log p$; for this reason, they are usually considered
+practical only for relatively small characteristic.
+
+
+\paragraph{Our contribution}
+In this work we present the first
+quadratic, % TODO: let's hope this is true...
+incremental, general and/or unique % TODO: also this...
+solution for lattices of compatibly embedded finite fields. %
+Our starting point is Allombert's~\cite{Allombert02} and
+subsequent~\cite{brieulle2018computing} improvements to Lenstra's
+isomorphism algorithm. %
+Plugging them in the Bosma-Cannon-Steel framework immediately produces
+a quadratic, incremental general solution, however we go much
+further. %
+Indeed, we show that the compatibility requirement can be taken a step
+further by constructing a lattice of $\F_p$-algebras with a
+distinguished element, which is a byproduct of the Lenstra-Allombert
+algorithm.
+
+The advantages of our construction over a naive combination of the
+Lenstra-Allombert algorithm and the Bosma-Cannon-Steel framework are
+multiple. %
+Storage drops from quadratic to linear in the number of extensions
+stored in $\Lambda$, and the cost of adding a new extension to
+$\Lambda$ drops similarly. %
+This yields a significant speedup in practice, as we show in our
+implementation (see Section~\ref{sec:implementation}).
+
+Our $\F_p$-algebras are constructed by tensoring element-wise an
+arbitrary lattice of extensions of $\F_p$ with a lattice of compatible
+roots of unity. %
+One of the possible ways to construct the second lattice is by using
+Conway polynomials; this way, our construction can be seen as a
+generalization of Conway polynomials, permitting to represent
+(uniquely) an exponentially larger set of finite fields than with
+Conway polynomials alone. %
+Since the storage overhead for the second lattice is only logarithmic
+in the degree of the extension fields, the high cost for computing
+Conway polynomials is absorbed in the total complexity.
+
+The main drawback of our method is that, in some instances, combining
+elements of $\F_{p^m}$ and $\F_{p^n}$ requires constructing a field
+extension of degree larger than $\lcm(m,n)$. %
+While this does not affect the asymptotic complexity of our
+construction, % TODO: doesn't it?
+it can in practice make some computations visibly slower.
+
+
+\paragraph{Organisation}
+The presentation is structured as follows. %
+In Section~\ref{sec:conway} we review some basic facts on roots of
+unity and Conway polynomials. %
+In Section~\ref{sec:lenstra} we review the Lenstra-Allombert algorithm
+and define \emph{Kummer
+  algebras}, % TODO: Kummer algebras? Does this sound right?
+the main ingredient to our construction. %
+In Section~\ref{sec:lattices} we prove the existence of lattices of
+compatible Kummer algebras, while in Section~\ref{sec:construction} we
+explain how to construct them incrementally. %
+Finally, in Section~\ref{sec:implementation} we present our
+implementation and compare it to available alternatives.
+
+
+\section{Compatible roots of unity and Conway polynomials}
+\label{sec:conway}
+
+% TODO: copy-pasted from Luca's HDR without editing. Clean and shorten
+% this.
+
+One of the most famous constructions is that of \emph{Conway
+  polynomials}. %
+The main feature of Conway polynomials is \emph{norm compatibility}:
+the norm map $\F_{q^n}\to\F_{q^m}$ is a surjection from the roots of the
+$n$-th Conway polynomial to the roots of the $m$-th Conway polynomial,
+whenever $m$ divides $n$. %
+
+Norm compatibility is easy to achieve for a fixed collection
+$\mathcal{F}$ of finite extensions of $\F_p$: let $K/\F_p$ be the
+smallest finite field containing all fields in $\mathcal{F}$, let
+$\eta$ be a primitive element of $K$, i.e., a generator of the
+multiplicative group $K^\times$, then the Conway polynomial of a field
+$k\subset K$ is defined as the minimal polynomial of $N_{K/k}(\eta)$,
+where $N_{K/k}$ is the norm map. %
+However, Conway polynomials have two other goals: incrementality and
+uniqueness. %
+This leads to the following definition.
+
+\begin{definition}[Conway polynomial]
+  Let $p$ be a prime and $n>1$ an integer. %
+  The \emph{Conway polynomial} $C_{p,n}$ is the
+  \emph{lexicographically smallest} monic irreducible polynomial of
+  degree $n$ satisfying the following conditions:
+  \begin{itemize}
+  \item \emph{Primitivity:} $C_{p,n}$ is primitive (i.e., its roots
+    generate the multiplicative group $\F_{p^n}^\times$);
+  \item \emph{Norm compatibility:} If $m$ divides $n$, then
+    $C_{p,m}\left(X^{\frac{p^n-1}{p^m-1}}\right) = 0 \mod C_{p,n}$.
+  \end{itemize}
+\end{definition}
+
+The ``lexicographically smallest'' condition is required to ensure
+uniqueness; it is typically defined by writing $f\in\F_p[X]$ as
+\begin{equation*}
+  f = \sum_{i=0}^n (-1)^{n-i} f_i x^i,
+  \qquad\text{with $0\le f_i<p$,}
+\end{equation*}
+and taking the lexicographic order on the words $f_n\dots f_0$.
+
+Conway polynomials were defined by Parker%
+\footnote{According to Lübeck~\cite{Luebeck}.}, %
+who named them in honor of John Conway and his famous book ``On
+Numbers and Games''~\cite{Conway:ONAG2000}; their existence was shown
+by Nickel~\cite{Nickel1988}. %
+They were first adopted by the computer algebra system GAP~\cite{GAP4}
+as a default representation for finite fields. %
+They are typically computed by exhaustive search over all irreducible
+polynomials, or by a slightly better algorithm due to Heath and
+Loehr~\cite{heath+loehr99}. %
+Given the huge computational cost involved in finding them, they are
+usually precomputed; tables of Conway polynomials are available in any
+major computer algebra system.%
+\footnote{Most computer algebra systems switch to other methods when
+  precomputed Conway polynomials are not available. %
+  An interesting exception is SageMath (since version
+  5.13~\cite{Roe2013}), that defines \emph{pseudo-Conway polynomials}
+  by dropping the ``lexicographically first'' requirement, and
+  computes them on the fly whenever a true Conway polynomial is not
+  available in the tables. %
+  The approach is notoriously slow: computing a pseudo-Conway
+  polynomial for $\F_{p^{30}}$ takes in the order of seconds, already
+  for $p>1000$; compare this to the milliseconds needed to compute a
+  random irreducible polynomial of the same degree.} %
+
+We note that Conway polynomials are not especially good to represent
+embeddings: given an element of $\F_{p^m}$ represented as
+$a(X) \bmod C_{p,m}(X)$, its image in $\F_{p^n}$, for $m\mid n$, is
+computed as $a(X^{(p^n-1)/(p^m-1)})\bmod C_{p,n}(X)$, requiring very
+large modular exponentiations; while there are algorithms to perform
+this computation in $O(n^{1+o(1)})$ operations~\cite{KeUm11}, they are
+known to be very inefficient in practice. %
+
+
+\section{The Lenstra-Allombert embedding algorithm}
+\label{sec:lenstra}
+
+\cite{LenstraJr91}\cite{Allombert02}\cite{brieulle2018computing}
+
+\section{Norm-compatible lattices of Kummer algebras}
+\label{sec:lattices}
+
+\section{Incrementally constructing lattices}
+\label{sec:construction}
+
+\subsection{Poor Artin-Schreier}
+
+
+\section{Implementation}
+\label{sec:implementation}
+
+\bibliographystyle{plain}
+\bibliography{gf-h90}
+
+\end{document}
+
+% LocalWords:  embeddings computable Frobenius Lenstra
