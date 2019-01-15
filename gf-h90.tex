@@ -14,7 +14,7 @@
   \affaddr{Universit\'e Paris Saclay -- UVSQ, LMV}\\
   \email{luca.de-feo@uvsq.fr}
   \alignauthor Hugues Randriam
-  \alignauthor Édouard Rousseau
+  \alignauthor \'Edouard Rousseau
 }
 
 \title{Efficient lattices of compatibly embedded finite fields}
@@ -275,8 +275,118 @@ known to be very inefficient in practice. %
 
 \cite{LenstraJr91}\cite{Allombert02}\cite{brieulle2018computing}
 
+\begin{equation}
+  \tag{H90}
+ (\sigma\otimes1)(x) = (1\otimes\zeta)x
+  \label{h90}
+\end{equation}
+
 \section{Norm-compatible lattices of Kummer algebras}
 \label{sec:lattices}
+
+In order to prove the existence of a compatible lattice of finite fields,
+we construct a slightly more rigid structure: a norm-compatible lattice of
+Kummer algebras. For $a, b$ two integers with $a\,|\,b$, and $A$ a Kummer
+algebra, we define
+\[
+\begin{array}{cccc}
+  \N_{b/a}: & A & \to & A \\
+  & \gamma & \mapsto & \prod_{j=0}^{b/a-1} (1 \otimes
+  \sigma^{ja})(\gamma).
+\end{array}
+\]
+The ``norms'' $\N$ are transitive: given $a, b, c$ three integers with
+$a\,|\,b\,|\,c$, we have $\N_{c/a} = \N_{b/a}\circ\N_{c/b}$. These maps also
+commute with $\sigma\otimes1$, that will also be important for the construction
+of our structure.
+
+\begin{proposition}
+  There exists a family of solutions of \eqref{h90}
+  $(\alpha_{p^n-1})_{n\in\mathbb{N}}$, corresponding to the roots of unity
+  $(\zeta_{p^n-1})_{n\in\mathbb{N}}$, such that, for each $a,b\in\mathbb{N}$
+  with $a\,|\,b$, we have
+  \[
+    \N_{b/a}(\alpha_{p^b-1})=\alpha_{p^a-1}.
+  \]
+\end{proposition}
+\begin{proof}
+
+%TODO: make the proof shorter? Cleaner? Better?
+
+  We prove the result by induction. First, choose any primitive element
+  $\zeta_{p-1}\in\mathbb{F}_p$, and a solution $\alpha_{p-1}\in
+  A_{p-1}$ of \eqref{h90} for the root $\zeta_{p-1}$. Then, suppose that we have
+  a family of solutions of \eqref{h90} $(\alpha_{p^n-1})_{n\in \left[ d
+  \right]}$ for the roots
+  $(\zeta_{p^n-1})_{n\in \left[ d \right]}$, where $\left[ d \right]$ is
+  the set of all the divisors of some integer $d\in\mathbb{N}$, and such that for all $a,
+  b\in \left[ d \right]$ with $a\,|\,b$, we have
+  \[
+    \N_{b/a}(\alpha_{p^b-1})=\alpha_{p^a-1}.
+  \]
+  Let $e\in\mathbb{N}$ such that $d\,|\,e$, consider the
+  finite field extension $\mathbb{F}_{p^{e}}/\mathbb{F}_{p^{d}}$, and
+  let $N:\mathbb{F}_{p^{e}}\to\mathbb{F}_{p^{d}}$ be the corresponding
+  norm. Since $N$ is surjective, we note $y\in\mathbb{F}_{p^{e}}$ such
+  that
+  \[
+    N(y) = \zeta_{p^{d}-1}.
+  \]
+  Because $N(y)=y^{\frac{p^{e}-1}{p^{d}-1}}$, we have that the order of
+  $y$ is $p^{e}-1$, otherwise the order of $N(y)=\zeta_{p^{d}-1}$ could not
+  be $p^{d_n}-1$. Hence we can define a new root $\zeta_{p^{e}-1}=y$, and we
+  have that
+  \[
+    N(\zeta_{p^{e}-1})=\zeta_{p^{d}-1}.
+  \]
+  Furthermore, the map $\N_{e/d}$ acts on
+  $1\otimes\mathbb{F}_{p^{e}}$ exactly as $1\otimes N$, so we also have
+  \[
+    \N_{e/d}(1\otimes\zeta_{p^{e}-1}) = 1\otimes\zeta_{p^{d}-1}.
+  \]
+Now let
+$\beta\in A_{p^{e}-1}$ be any nonzero solution of \eqref{h90} with the root
+$\zeta_{p^{e}-1}$.
+Then we get
+\begin{align*}
+  (\sigma\otimes1)(\N_{e/d}(\beta)) &= \N_{e/d}((\sigma\otimes1)(\beta)) \\
+  &= \N_{e/d}(1\otimes\zeta_{p^{e}-1}) \N_{e/d}(\beta) \\
+  &= (1\otimes\zeta_{p^{d}-1})\N_{e/d}(\beta),
+\end{align*}
+meaning that we have
+\[
+  \N_{e/d}(\beta)=(1\otimes\lambda)\alpha_{p^{d}-1},
+\]
+where $\lambda\in\mathbb{F}_{p^d}$. Since the map
+$\N_{e/d}$ acts on $1\otimes\mathbb{F}_{p^{e}}$ as the
+usual norm $N$, we can use
+the surjectivity of the norm to ``correct'' our element $\beta$. In the end we
+obtain an element $\alpha_{p^{e}-1}$ such
+that
+\[
+  \N_{e/d}(\alpha_{p^{e}-1}) = \alpha_{p^{d}-1}.
+\]
+Since our norm-like functions $\N$ are transitive, we also obtain that
+\[
+  \N_{b/a}(\alpha_{p^b-1})=\alpha_{p^a-1}
+\]
+for any $a,b\in \left[ d \right]\cup\left\{ e \right\}$ such that
+$a\,|\,b$. Additionnaly, for every divisor $c$ of $e$ that is not already in $\left[
+d \right]$, we define
+\[
+  \alpha_{p^c-1}=\N_{e/c}(\alpha_{p^{e}-1}).
+\]
+In the end, for any $a, b\in\left[ e \right]$ such that
+$a\,|\,b$ we have that
+\[
+  \N_{b/a}(\alpha_{p^b-1})=\alpha_{p^a-1}.
+\]
+The result follows by considering any sequence $(d_n)_{n\in\mathbb{N}}$ such
+that for all $n\in\mathbb{N}$, $d_n\,|\,d_{n+1}$ and for all
+$\ell\in\mathbb{N}$, there exists $n_\ell\in\mathbb{N}$ with
+$\ell\,|\,d_{n_\ell}$.
+\end{proof}
+
 
 \section{Incrementally constructing lattices}
 \label{sec:construction}
