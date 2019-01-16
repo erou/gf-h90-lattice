@@ -1,9 +1,43 @@
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newcounter{algo}
+
+\newenvironment{algorithm_endline}[4]{\small\begin{center}\begin{minipage}{0.48\textwidth}
+      \refstepcounter{algo}
+      \label{#4}
+      \sf
+      \rule{\textwidth}{0.2pt}\\
+      \makebox[\textwidth][c]{Algorithm~\arabic{algo}:~\textbf{#1}}\\
+      \rule[0.5\baselineskip]{\textwidth}{0.2pt}\\
+
+      \vspace{-12pt}
+
+      \parbox{\textwidth}{\textbf{Input} #2}
+      \parbox{\textwidth}{\textbf{Output} #3}
+
+\vspace{-7pt}
+
+      \begin{enumerate}}{\end{enumerate}
+      \vspace{-11pt}
+      \rule{\textwidth}{0.2pt}
+\end{minipage}\end{center}
+%\vspace{-0.5cm}
+}
+
 \def\Z {\ensuremath{\mathbb{Z}}}
 \def\F {\ensuremath{\mathbb{F}}}
 \def\Tr {\ensuremath{\mathrm{Tr}}}
 \def\tildO {\ensuremath{\tilde{O}}}
 \def\N {\ensuremath{\mathcal{N}}}
+\def\a {\ensuremath{c}}
 \DeclareMathOperator{\lcm}{lcm}
 
 % Redifine \paragraph to take less space
 \def\paragraph#1{\smallskip\noindent{{\bf \rm #1.}}}
+
+\newcommand{\embed}[2]{\phi_{\mathbb{F}_{p^{#1}}\hookrightarrow\mathbb{F}_{p^{#2}}}}
+\newcommand{\embedcyc}[2]{\phi_{\mathbb{F}_{p}(\zeta_{#1})\hookrightarrow\mathbb{F}_{p}(\zeta_{#2})}}
+\newcommand{\embedalg}[2]{\Phi_{A_{#1}\hookrightarrow A_{#2}}}

@@ -272,14 +272,91 @@ known to be very inefficient in practice. %
 
 \section{The Lenstra-Allombert embedding algorithm}
 \label{sec:lenstra}
+\cite{LenstraJr91}\cite{brieulle2018computing}
 
-\cite{LenstraJr91}\cite{Allombert02}\cite{brieulle2018computing}
+%TODO: add context? Change the notation to get rid of \Phi and \phi ?
 
+The main ingredient of Allombert's algorithm~\cite{Allombert02} is an extension
+of Kummer theory. Since $\mathbb{F}_{p^\ell}$ is not necessarily a Kummer
+extension of $\mathbb{F}_p$, we make an extension of scalars and work in the
+\emph{Kummer algebra}
+\[
+  A_\ell = \mathbb{F}_{p^\ell}\otimes\mathbb{F}_{p}(\zeta_\ell),
+\]
+where $\zeta_\ell$ is a primitive $\ell$-th root of unity. Using, for instance,
+Conway polynomials, we assume that the right tower is compatibly embedded: if
+$\ell, m$ are two integers such that $\ell\,|\,m$, we have the embedding
+\[
+\begin{array}{cccc}
+  \embedcyc{\ell}{m}: & \mathbb{F}_{p}(\zeta_\ell) & \to & \mathbb{F}_{p}(\zeta_m) \\
+  & \zeta_\ell & \mapsto & (\zeta_{m})^{m/\ell}.
+\end{array}
+\]
+Denoting by $\sigma$ the Frobenius automorphism, Allombert proves that
+$\sigma\otimes1$ is again an automorphism of the
+$\mathbb{F}_{p}(\zeta_\ell)$-algebra $A_\ell$. The equation
 \begin{equation}
   \tag{H90}
- (\sigma\otimes1)(x) = (1\otimes\zeta)x
+ (\sigma\otimes1)(x) = (1\otimes\zeta_\ell)x
   \label{h90}
 \end{equation}
+then plays the role of $\sigma(x)=\zeta_\ell x$ in the classical theory. The
+solutions of~\eqref{h90} in $A_\ell$ form a dimension $1$
+$\mathbb{F}_{p}(\zeta_{\ell})$-vector space and if $\alpha_\ell$ is a
+nonzero solution
+of~\eqref{h90}, we define $\a_\ell = (\alpha_\ell)^\ell$ and remark that
+$\a_\ell$ is a nonzero element in $1\otimes\mathbb{F}_{p}(\zeta_\ell)$. Finally,
+if $r$ is the dimension of the extension
+$\mathbb{F}_{p}(\zeta_\ell)/\mathbb{F}_p$, and if we write
+\[
+  \alpha_\ell = \sum_{i =  0}^{r-1}a_i\otimes\zeta_{\ell}^i,
+\]
+the element $a_0$ is known to be a primitive element of the extension
+$\mathbb{F}_{p^\ell}/\mathbb{F}_{p}$. Put together, these facts give Allombert's
+algorithm.
+
+\begin{algorithm_endline}
+  {Allombert's}
+  {$\mathbb{F}_{p^\ell}, \mathbb{F}_{p^m}$, with $\ell\,|\,m$.}
+  {$s\in\mathbb{F}_{p^\ell}, t\in\mathbb{F}_{p^m}$, such that the map $s\mapsto t$
+  defines an embedding $\embed{\ell}{m}$.}
+  {algo:allombert}
+\item Compute the Kummer algebras $A_\ell$ and $A_m$.
+\item Find a solution $\alpha_\ell\in A_\ell$ of~\eqref{h90} for $\zeta_\ell$
+  and a solution $\alpha_m\in A_m$ of~\eqref{h90} for $\zeta_m$.
+\item Compute $s$ a $\ell$-th root of $\embedcyc{\ell}{m}(\a_\ell)/\a_m$.
+\item Return $x_0$ and $y_0$, where $\alpha_\ell=\sum_i x_i\otimes\zeta_\ell^i$
+  and $s\times(\alpha_m)^{m/\ell} = \sum_j y_j\otimes(\zeta_m)^{jm/\ell}$.
+\end{algorithm_endline}
+\begin{proposition}
+  Algorithm~\ref{algo:allombert} is correct: it returns elements that define an
+  embedding $\embed{\ell}{m}$.
+\end{proposition}
+\begin{proof}
+  Let $\embedalg{\ell}{m}'=\embed{\ell}{m}'\otimes\embedcyc{\ell}{m}$ an embedding
+  between the algebras $A_\ell$ and $A_m$, where $\embed{\ell}{m}'$ is some
+  arbitrary embedding between $\mathbb{F}_{p^\ell}$ and $\mathbb{F}_{p^m}$.
+  Since $\sigma\otimes1$ and $\embedalg{\ell}{m}$ commute,
+  $\embedalg{\ell}{m}(\alpha_\ell)$ are $(\alpha_m)^{(m/\ell)}$ are two solutions
+  in $A_m$ of~\eqref{h90} for the root $(\zeta_m)^{m/\ell} =
+  \embedcyc{\ell}{m}(\zeta_\ell)$. The solutions form a vector space of
+  dimension $1$, so we know there exists $\lambda\in\mathbb{F}_{p}(\zeta_m)$
+  with
+  \[
+    (\alpha_m)^{m/\ell} = (1\otimes\lambda)\embedalg{\ell}{m}(\alpha_\ell).
+  \]
+  We can then compute a $\ell$-th root $s = 1\otimes(\zeta_{m})^{um/\ell}\lambda^{-1}$, for some
+  integer $u$, thus we obtain
+  \begin{align*}
+    s\times(\alpha_m)^{m/\ell} &= \embedalg{\ell}{m}'(\zeta_\ell^u\alpha_\ell)\\
+    &= \embedalg{\ell}{m}(\alpha_\ell),
+  \end{align*}
+  with $\embedalg{\ell}{m}=\embed{\ell}{m}\otimes\embedcyc{\ell}{m}$ and
+  $\embed{\ell}{m} = \embed{\ell}{m}'\circ\sigma^u$. It follows that
+  $\embed{\ell}{m}(x_0)=y_0$, and since $x_0$ is a primitive element of
+  $\mathbb{F}_{p^\ell}/\mathbb{F}_{p}$, this relation is sufficient to define
+  $\embed{\ell}{m}$.
+\end{proof}
 
 \section{Norm-compatible lattices of Kummer algebras}
 \label{sec:lattices}
@@ -312,6 +389,9 @@ of our structure.
 \begin{proof}
 
 %TODO: make the proof shorter? Cleaner? Better?
+  % Instead of doing the calculation, I can just say that we can find an element
+  % alpha using the surjectivity of the norm and the fact the solutions are a
+  % dimension 1 vector space
 
   We prove the result by induction. First, choose any primitive element
   $\zeta_{p-1}\in\mathbb{F}_p$, and a solution $\alpha_{p-1}\in
