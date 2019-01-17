@@ -39,5 +39,5 @@ A function `embed` that will take care of everything:
     5. Compute f(beta), where f is a function using an exponantiation, or a norm, depending
        on the degrees of k and K
     6. Compute the first coordinates u and v of alpha and f(beta)
-    7. Compute the embedding u|->v thanks to the function matrices and save it
-       in EMBEDDINGS
+    7. Compute the embedding u|->v thanks to the function matrices, save it
+       in EMBEDDINGS, and return it
