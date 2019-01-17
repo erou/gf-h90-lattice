@@ -312,7 +312,8 @@ $\mathbb{F}_{p}(\zeta_\ell)/\mathbb{F}_p$, and if we write
   \alpha_\ell = \sum_{i =  0}^{r-1}a_i\otimes\zeta_{\ell}^i,
 \]
 the element $a_0$ is known to be a primitive element of the extension
-$\mathbb{F}_{p^\ell}/\mathbb{F}_{p}$. Put together, these facts give Allombert's
+$\mathbb{F}_{p^\ell}/\mathbb{F}_{p}$. This element plays a central role and we
+denote it by $a_0 = \first{\alpha_\ell}{\zeta_\ell}$. Put together, these facts give Allombert's
 algorithm.
 
 \begin{algorithm_endline}
@@ -325,9 +326,10 @@ algorithm.
 \item Find a solution $\alpha_\ell\in A_\ell$ of~\eqref{h90} for $\zeta_\ell$
   and a solution $\alpha_m\in A_m$ of~\eqref{h90} for $\zeta_m$.
 \item Compute $s$ a $\ell$-th root of $\embedcyc{\ell}{m}(\a_\ell)/\a_m$.
-\item Return $x_0$ and $y_0$, where $\alpha_\ell=\sum_i x_i\otimes\zeta_\ell^i$
-  and $s\times(\alpha_m)^{m/\ell} = \sum_j y_j\otimes(\zeta_m)^{jm/\ell}$.
+\item Return $\first{\alpha_{\ell}}{\zeta_\ell}$ and $\first{s\times
+    (\alpha_m)^{m/\ell}}{(\zeta_m)^{m/\ell}}$
 \end{algorithm_endline}
+
 \begin{proposition}
   Algorithm~\ref{algo:allombert} is correct: it returns elements that define an
   embedding $\embed{\ell}{m}$.
