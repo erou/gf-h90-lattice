@@ -1,8 +1,8 @@
 # API Flint
 
     solve_h90
-        INPUT: ζ a n-th root of unity, 
-        OUTPUT: x a solution of H90 for ζ, with x^n = the right constant
+        INPUT: ζ a n-th root of unity, A a Kummer algebra
+        OUTPUT: x a solution in A of H90 for ζ, with x^n = the right constant
     
     norm_r
         INPUT: x an element of the Kummer algebra, (a, b) two integers
@@ -12,7 +12,7 @@
         INPUT: x an element of the Kummer algebra, ζ a n-th root of unity
         OUTPUT: the first coordinate of x in the base 1⊗ζ
     
-    matrices (fq_embed_matrices)
+    matrices (fq_embed_matrices does this job)
         INPUT: x, y elements of two finite fields
         OUTPUT: M, N two matrices corresponding to the map x|->y and its section
 
@@ -39,4 +39,5 @@ A function `embed` that will take care of everything:
     5. Compute f(beta), where f is a function using an exponantiation, or a norm, depending
        on the degrees of k and K
     6. Compute the first coordinates u and v of alpha and f(beta)
-    7. Compute the embedding u|->v thanks to the function matrice
+    7. Compute the embedding u|->v thanks to the function matrices and save it
+       in EMBEDDINGS
