@@ -24,6 +24,7 @@ In Julia there will be global variables
  - `ROOTS_UNITY` containing the chosen roots of unity
 
 A function `embed` that will take care of everything:
+
     embed
         INPUT: k, K two finite fields
         OUTPUT: an embedding from k to K
