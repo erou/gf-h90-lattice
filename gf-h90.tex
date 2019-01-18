@@ -24,7 +24,26 @@
 \maketitle
 
 \begin{abstract}
-  We make embeddings.
+  Lattices of compatibly embedded finite fields are useful in computer
+  algebra systems for managing many extensions of a finite field
+  $\F_p$ at once. %
+  They can also be used to represent the algebraic closure $\bar\F_p$,
+  and to represent all finite fields in a standard manner.
+
+  The most well known constructions are Conway polynomials, and the
+  Bosma-Cannon-Steel framework used in Magma. %
+  They all have drawbacks: Conway polynomials are extremely expensive
+  to compute, while the Bosma-Cannon-Steel framework does not provide
+  a standard way to represent finite fields, and becomes inefficient
+  as the number of extensions grows.
+
+  In this work, leveraging the theory of the Lenstra-Allombert
+  isomorphism algorithm, we generalize at the same time Conway
+  polynomials and the Bosma-Cannon-Steel framework, obtaining the
+  first construction with quadratic complexity in the extension
+  degree, and linear complexity in the number of extensions. %
+  We also provide an implementation in C/Flint/Julia/Nemo, showing
+  that our construction is practical.
 \end{abstract}
 
 \category{F.2.1}{Theory of computation}{Analysis of algorithms and problem complexity}[Computations in finite fields]
