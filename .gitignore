@@ -242,3 +242,10 @@ TSWLatexianTemp*
 *.spl
 
 *.pdf
+
+# emacs backups
+*~
+
+# C stuff
+*.o
+*.exe
