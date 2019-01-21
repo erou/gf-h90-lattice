@@ -87,7 +87,7 @@ void solve_h90(fq_nmod_poly_t res, flint_rand_t state,
 }
 
 /*
- * Tests if x∈A is a soultion of Hilbert 90 of order ord(A).
+ * Tests if x∈A is a solution of Hilbert 90 of order ord(A).
  */
 int is_h90(const fq_nmod_poly_t x, const struct tensor A) {
   int ret = 1;

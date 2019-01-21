@@ -81,7 +81,7 @@ To this end, it is useful to set several sub-goals:
 \item[\emph{Incrementality:}] The data associated with an extension
   (e.g., its irreducible polynomial, change-of-basis matrices, \dots)
   must be computable efficiently and \emph{incrementally}, i.e.,
-  adding a new field extensions to $\Lambda$ does not require
+  adding a new field extension to $\Lambda$ does not require
   recomputing data for all extensions already in $\Lambda$. %
 \item[\emph{Uniqueness:}] Any extension of $\F_p$ is determined by an
   irreducible polynomial whose definition only depends on the
@@ -302,8 +302,19 @@ extension of $\mathbb{F}_p$, we make an extension of scalars and work in the
 \[
   A_\ell = \mathbb{F}_{p^\ell}\otimes\mathbb{F}_{p}(\zeta_\ell),
 \]
-where $\zeta_\ell$ is a primitive $\ell$-th root of unity. Using, for instance,
-Conway polynomials, we assume that the right tower is compatibly embedded: if
+where $\zeta_\ell$ is a primitive $\ell$-th root of unity. We
+call $\mathbb{F}_{p}(\zeta_\ell)$ the \emph{cyclotomic part} of $A_\ell$, and,
+noting
+\[
+  a = \omega_{(\mathbb{Z}/\ell\mathbb{Z})^\times}(p)
+\]
+the order of $p$ in the group $(\mathbb{Z}/\ell\mathbb{Z})^\times$,
+we say that the \emph{level} of $A_\ell$ is $a$. In other words, we say that
+$A_\ell$ is of level $a$ if $\mathbb{F}_{p}(\zeta_\ell)$ is an extension of
+$\mathbb{F}_p$ of degree $a$.
+
+Using, for instance,
+Conway polynomials, we assume that the cyclotomic parts are compatibly embedded: if
 $\ell, m$ are two integers such that $\ell\,|\,m$, we have the embedding
 \[
 \begin{array}{cccc}
@@ -311,7 +322,7 @@ $\ell, m$ are two integers such that $\ell\,|\,m$, we have the embedding
   & \zeta_\ell & \mapsto & (\zeta_{m})^{m/\ell}.
 \end{array}
 \]
-Denoting by $\sigma$ the Frobenius automorphism, Allombert proves that
+Denoting by $\sigma:x\mapsto x^p$ the Frobenius automorphism, Allombert proves that
 $\sigma\otimes1$ is again an automorphism of the
 $\mathbb{F}_{p}(\zeta_\ell)$-algebra $A_\ell$. The equation
 \begin{equation}
@@ -325,14 +336,13 @@ $\mathbb{F}_{p}(\zeta_{\ell})$-vector space and if $\alpha_\ell$ is a
 nonzero solution
 of~\eqref{h90}, we define $\a_\ell = (\alpha_\ell)^\ell$ and remark that
 $\a_\ell$ is a nonzero element in $1\otimes\mathbb{F}_{p}(\zeta_\ell)$. Finally,
-if $r$ is the dimension of the extension
-$\mathbb{F}_{p}(\zeta_\ell)/\mathbb{F}_p$, and if we write
+if $A_\ell$ is of level $a$ and if we write
 \[
-  \alpha_\ell = \sum_{i =  0}^{r-1}a_i\otimes\zeta_{\ell}^i,
+  \alpha_\ell = \sum_{i =  0}^{a-1}x_i\otimes\zeta_{\ell}^i,
 \]
-the element $a_0$ is known to be a primitive element of the extension
+the element $x_0$ is known to be a primitive element of the extension
 $\mathbb{F}_{p^\ell}/\mathbb{F}_{p}$. This element plays a central role and we
-denote it by $a_0 = \first{\alpha_\ell}{\zeta_\ell}$. Put together, these facts give Allombert's
+denote it by $x_0 = \first{\alpha_\ell}{\zeta_\ell}$. Put together, these facts give Allombert's
 algorithm.
 
 \begin{algorithm_endline}
@@ -358,7 +368,7 @@ algorithm.
   between the algebras $A_\ell$ and $A_m$, where $\embed{\ell}{m}'$ is some
   arbitrary embedding between $\mathbb{F}_{p^\ell}$ and $\mathbb{F}_{p^m}$.
   Since $\sigma\otimes1$ and $\embedalg{\ell}{m}$ commute,
-  $\embedalg{\ell}{m}(\alpha_\ell)$ are $(\alpha_m)^{(m/\ell)}$ are two solutions
+  $\embedalg{\ell}{m}(\alpha_\ell)$ and $(\alpha_m)^{(m/\ell)}$ are two solutions
   in $A_m$ of~\eqref{h90} for the root $(\zeta_m)^{m/\ell} =
   \embedcyc{\ell}{m}(\zeta_\ell)$. The solutions form a vector space of
   dimension $1$, so we know there exists $\lambda\in\mathbb{F}_{p}(\zeta_m)$
@@ -383,7 +393,7 @@ algorithm.
 \label{sec:lattices}
 
 In order to prove the existence of a compatible lattice of finite fields,
-we construct a slightly more rigid structure: a norm-compatible lattice of
+we construct another structure: a norm-compatible lattice of
 Kummer algebras. For $a, b$ two integers with $a\,|\,b$, and $A$ a Kummer
 algebra, we define
 \[
@@ -393,10 +403,16 @@ algebra, we define
   \sigma^{ja})(\gamma).
 \end{array}
 \]
-The ``norms'' $\N$ are transitive: given $a, b, c$ three integers with
-$a\,|\,b\,|\,c$, we have $\N_{c/a} = \N_{b/a}\circ\N_{c/b}$. These maps also
+The ``norms'' $\N$ are multiplicative:
+\[
+  \forall\gamma, \gamma'\in A,\,\N_{b/a}(\gamma\gamma')=\N_{b/a}(\gamma)\N_{b/a}(\gamma')
+\]
+and transitive: given $a, b, c$ three integers with
+$a\,|\,b\,|\,c$, we have $\N_{c/a} = \N_{b/a}\circ\N_{c/b}$. These maps 
 commute with $\sigma\otimes1$, that will also be important for the construction
-of our structure.
+of our lattice. We start by working in algebras of the form $A_{p^n-1}$, for
+$n\in\mathbb{N}$. We call them \emph{complete} algebras because
+$A_{p^n-1}$ is the biggest Kummer algebra of level $n$.
 
 \begin{proposition}
   There exists a family of solutions of \eqref{h90}
@@ -410,7 +426,7 @@ of our structure.
 \begin{proof}
 
 %TODO: make the proof shorter? Cleaner? Better?
-  % Instead of doing the calculation, I can just say that we can find an element
+  % Instead of doing the calculation, we can just say that we can find an element
   % alpha using the surjectivity of the norm and the fact the solutions are a
   % dimension 1 vector space
 
@@ -435,7 +451,7 @@ of our structure.
   \]
   Because $N(y)=y^{\frac{p^{e}-1}{p^{d}-1}}$, we have that the order of
   $y$ is $p^{e}-1$, otherwise the order of $N(y)=\zeta_{p^{d}-1}$ could not
-  be $p^{d_n}-1$. Hence we can define a new root $\zeta_{p^{e}-1}=y$, and we
+  be $p^{d}-1$. Hence we can define a new root $\zeta_{p^{e}-1}=y$, and we
   have that
   \[
     N(\zeta_{p^{e}-1})=\zeta_{p^{d}-1}.
