@@ -296,22 +296,21 @@ known to be very inefficient in practice. %
 %TODO: add context? Change the notation to get rid of \Phi and \phi ?
 
 The main ingredient of Allombert's algorithm~\cite{Allombert02} is an extension
-of Kummer theory. Since $\mathbb{F}_{p^\ell}$ is not necessarily a Kummer
+of Kummer theory.
+Let $\ell$ be an integer prime to $p$.
+Since $\mathbb{F}_{p^\ell}$ is not necessarily a Kummer
 extension of $\mathbb{F}_p$, we make an extension of scalars and work in the
-\emph{Kummer algebra}
+\emph{Kummer algebra} of \emph{degree} $\ell$:
 \[
-  A_\ell = \mathbb{F}_{p^\ell}\otimes\mathbb{F}_{p}(\zeta_\ell),
+  A_\ell = \mathbb{F}_{p^\ell}\otimes_{\mathbb{F}_{p}}\mathbb{F}_{p}(\zeta_\ell),
 \]
 where $\zeta_\ell$ is a primitive $\ell$-th root of unity. We
-call $\mathbb{F}_{p}(\zeta_\ell)$ the \emph{cyclotomic part} of $A_\ell$, and,
-noting
+call $\mathbb{F}_{p}(\zeta_\ell)$ the \emph{cyclotomic part} of $A_\ell$, and
+we define the \emph{level} of $A_\ell$ as
 \[
-  a = \omega_{(\mathbb{Z}/\ell\mathbb{Z})^\times}(p)
+  \lambda(\ell) = \omega_{(\mathbb{Z}/\ell\mathbb{Z})^\times}(p) = [\mathbb{F}_{p}(\zeta_\ell):\mathbb{F}_{p}],
 \]
-the order of $p$ in the group $(\mathbb{Z}/\ell\mathbb{Z})^\times$,
-we say that the \emph{level} of $A_\ell$ is $a$. In other words, we say that
-$A_\ell$ is of level $a$ if $\mathbb{F}_{p}(\zeta_\ell)$ is an extension of
-$\mathbb{F}_p$ of degree $a$.
+that is, the degree of its cyclotomic part.
 
 Using, for instance,
 Conway polynomials, we assume that the cyclotomic parts are compatibly embedded: if
@@ -331,8 +330,8 @@ $\mathbb{F}_{p}(\zeta_\ell)$-algebra $A_\ell$. The equation
   \label{h90}
 \end{equation}
 then plays the role of $\sigma(x)=\zeta_\ell x$ in the classical theory. The
-solutions of~\eqref{h90} in $A_\ell$ form a dimension $1$
-$\mathbb{F}_{p}(\zeta_{\ell})$-vector space and if $\alpha_\ell$ is a
+solutions of~\eqref{h90} in $A_\ell$ form a
+$\mathbb{F}_{p}(\zeta_{\ell})$-vector space of dimension $1$, and if $\alpha_\ell$ is a
 nonzero solution
 of~\eqref{h90}, we define $\a_\ell = (\alpha_\ell)^\ell$ and remark that
 $\a_\ell$ is a nonzero element in $1\otimes\mathbb{F}_{p}(\zeta_\ell)$. Finally,
@@ -389,8 +388,35 @@ algorithm.
   $\embed{\ell}{m}$.
 \end{proof}
 
-\section{Norm-compatible lattices of Kummer algebras}
+\section{Compatible solutions of Hilbert~90 in Kummer algebras}
 \label{sec:lattices}
+
+Since Algorithm~\ref{algo:allombert} relies on solutions $\alpha_\ell,\alpha_m$ of~\eqref{h90},
+we see that in order to produce compatible embeddings between various finite fields,
+we will need solutions of~\eqref{h90} in the various Kummer algebras involved,
+that satisfy some compatiblity conditions.
+
+Here we somehow start from the end and assume that all our Kummer algebras are
+embedded in $A_\infty=\bar{\mathbb{F}}_{p}\otimes\mathbb{F}_p(\zeta_\infty)$.
+This will allow us to prove the existence (at least in an abstract, mathematical way)
+of a lattice of solutions $(\alpha_\ell)_{p{\nmid}\ell}$ that satisfy such ``nice''
+compatibility relations. A key point is that these compatibility relations should respect
+the fact that $\alpha_\ell$ belongs to the subalgebra $A_\ell$.
+This forces us to proceed in several steps.
+
+First we say that a Kummer algebra is \emph{complete} if it is the one of largest degree
+for a given level. Thus, the complete Kummer algebra of degree $a$ is $A_{p^a-1}$.
+%Sometimes we will also say that $\ell=p^a-1$ is a complete degree.
+For $a|b$ we have $p^a-1|p^b-1$, and we will ask for \emph{norm-compatibility}
+between $\alpha_{p^a-1}$ and $\alpha_{p^b-1}$.
+
+On the other hand, suppose $\ell|m$ are such that $A_\ell$ and $A_m$ have the same level.
+Then we will ask for \emph{power-compatibility} between $\alpha_{\ell}$ and $\alpha_{m}$.
+
+For general $\ell|m$ we will use a combination of both, but this
+
+PAS FINI
+
 
 In order to prove the existence of a compatible lattice of finite fields,
 we construct another structure: a norm-compatible lattice of
