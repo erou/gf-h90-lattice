@@ -394,7 +394,20 @@ algorithm.
 
 In order to prove the existence of a compatible lattice of finite fields,
 we construct another structure: a norm-compatible lattice of
-Kummer algebras. For $a, b$ two integers with $a\,|\,b$, and $A$ a Kummer
+Kummer algebras. Our goal is to compute a solution $\alpha_\ell\in A_\ell$
+of~\eqref{h90} for the root $\zeta_\ell$ for all $\ell\in\mathbb{N}$, and,
+whenever we have $(\ell, m)\in\mathbb{N}^2$ with $\ell\,|\,m$, that there exists
+some easy-to-compute map $f$ such that $f(\alpha_m) =
+\embedalg{\ell}{m}(\alpha_\ell)$. After that, we define our embedding
+$\embed{\ell}{m}$ as the map sending $\first{\alpha_\ell}{\zeta_\ell}$ to
+$\first{f(\alpha_m)}{(\zeta_m)^{m/\ell}}$. For simplicity, we assume in the
+remaining part of this section that all our Kummer algebras are subsets of
+$\bar{\mathbb{F}}_{p}\otimes\bar{\mathbb{F}}_p$, so our goal becomes to find a map
+$f$ with $f(\alpha_m) = \alpha_\ell$.
+
+\subsection{Complete algebras}
+
+For $a, b$ two integers with $a\,|\,b$, and $A$ a Kummer
 algebra, we define
 \[
 \begin{array}{cccc}
@@ -415,6 +428,7 @@ $n\in\mathbb{N}$. We call them \emph{complete} algebras because
 $A_{p^n-1}$ is the biggest Kummer algebra of level $n$.
 
 \begin{proposition}
+  \label{prop:complete-alg}
   There exists a family of solutions of \eqref{h90}
   $(\alpha_{p^n-1})_{n\in\mathbb{N}}$, corresponding to the roots of unity
   $(\zeta_{p^n-1})_{n\in\mathbb{N}}$, such that, for each $a,b\in\mathbb{N}$
@@ -503,6 +517,47 @@ that for all $n\in\mathbb{N}$, $d_n\,|\,d_{n+1}$ and for all
 $\ell\in\mathbb{N}$, there exists $n_\ell\in\mathbb{N}$ with
 $\ell\,|\,d_{n_\ell}$.
 \end{proof}
+
+Proposition~\ref{prop:complete-alg}, together with the transitivity of the
+norms $\N$,
+shows that we are able to construct a compatible lattice of embeddings between
+complete algebras, and therefore between finite fields of the form
+$\mathbb{F}_{p^{p^n-1}}$ for $n\in\mathbb{N}$.
+
+\subsection{Incomplete algebras}
+
+We have left to define how we deal with \emph{incomplete} algebras (Kummer
+algebras that are not complete). Assume $A_\ell$ is a Kummer algebra of level
+$a$, then we define $\alpha_\ell = (\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}$.
+\begin{proposition}
+  The element $\alpha_\ell\in A_{p^a-1}$ is a solution of~\eqref{h90} for the
+  root $\zeta_\ell$. We also have $\alpha_\ell\in A_\ell$.
+\end{proposition}
+\begin{proof}
+We still assume that the cyclotomic parts of our algebras are compatibly
+embedded, so we have $(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}} = \zeta_\ell$,
+moreover
+\begin{align*}
+  (\sigma\otimes1)(\alpha_\ell) &=
+  (\alpha\otimes1)((\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}) \\
+  &= (\alpha\otimes1)(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}} \\
+  &= (1\otimes\zeta_\ell)\alpha_\ell
+\end{align*}
+so $\alpha_\ell$ is a solution of~\eqref{h90} for $\zeta_\ell$. Now note that 
+\[
+  (\sigma^k\otimes1)(\alpha_\ell) = (1\otimes\zeta_\ell^k)\alpha_\ell,
+\]
+therefore the smallest integer $k$ such that $\sigma^k\otimes1$ fixes
+$\alpha_\ell$ is $\ell$. Since the elements in
+$A_{p^a-1}=\mathbb{F}_{p^{p^a-1}}\otimes\mathbb{F}_{p^a}$ fixed by
+$\sigma^\ell\otimes1$ are the one in
+$A_\ell = \mathbb{F}_{p^\ell}\otimes\mathbb{F}_{p^a}$, this concludes the
+proof.
+\end{proof}
+If $A_m$ is another Kummer algebra of level $a$, with $\ell\,|\,m$, we then have
+$(\alpha_m)^{m/\ell} = \alpha_\ell$. These relations allow us to construct
+compatible embeddings between Kummer algebra of the same level. We have left to
+construct embeddings between algebras of different levels.
 
 
 \section{Incrementally constructing lattices}
