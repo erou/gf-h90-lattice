@@ -17,7 +17,7 @@ int main() {
   flint_randinit(state);
   for (int i = 1 ; i < 40 ; i++) {
     fq_nmod_ctx_randtest(A.L, state);
-    slong n = tensor_order(A);
+    slong n = tensor_degree(A);
     if (n == 1) {
       fq_nmod_ctx_clear(A.L);
       continue;

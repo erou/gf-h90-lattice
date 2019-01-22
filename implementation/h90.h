@@ -16,10 +16,10 @@ struct tensor {
   fq_nmod_ctx_t R;
 };
 
-static inline slong tensor_order(struct tensor A) {
+static inline slong tensor_degree(struct tensor A) {
   return fq_nmod_ctx_degree(A.L);
 }
-static inline slong tensor_ext_degree(struct tensor A) {
+static inline slong tensor_level(struct tensor A) {
   return fq_nmod_ctx_degree(A.R);
 }
 static inline mp_limb_t tensor_p(struct tensor A) {

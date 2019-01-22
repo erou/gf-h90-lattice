@@ -11,7 +11,7 @@
  */
 void lift_h90(fq_nmod_poly_t res,
 	      const fq_nmod_t a, const struct tensor A) {
-  slong k = tensor_ext_degree(A);
+  slong k = tensor_level(A);
 
   if (fq_nmod_is_zero(a, A.L)) {
     fq_nmod_poly_zero(res, A.L);
@@ -66,7 +66,7 @@ void solve_h90(fq_nmod_poly_t res, flint_rand_t state,
 	       const struct tensor A) {
   fq_nmod_t a;
   nmod_poly_t g;
-  slong n = tensor_order(A);
+  slong n = tensor_degree(A);
 
   // Set g to (X^n - 1) / R
   // Can't this be improved?
@@ -91,7 +91,7 @@ void solve_h90(fq_nmod_poly_t res, flint_rand_t state,
  */
 int is_h90(const fq_nmod_poly_t x, const struct tensor A) {
   int ret = 1;
-  slong k = tensor_ext_degree(A);
+  slong k = tensor_level(A);
   fq_nmod_t temp1, temp2;
   fq_nmod_init(temp1, A.L);
   fq_nmod_init(temp2, A.L);
