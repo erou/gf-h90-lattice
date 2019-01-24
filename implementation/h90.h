@@ -14,7 +14,7 @@
  * Can use to reconstruct a H90 solution from its (k-1)-th coefficient.
  */
 void lift_h90(fq_nmod_poly_t res,
-	      const fq_nmod_t a, const struct tensor A);
+	      const fq_nmod_t a, const fq_nmod_ctx_t L, const fq_nmod_ctx_t R);
 
 /*
  * Find a solution res to the hilbert 90 equation
@@ -24,10 +24,10 @@ void lift_h90(fq_nmod_poly_t res,
  * in the algebra L⊗R, where ζ is the canonical root of R
  */
 void solve_h90(fq_nmod_poly_t res, flint_rand_t state,
-	       const struct tensor A);
+	       const fq_nmod_ctx_t L, const fq_nmod_ctx_t R);
 /*
  * Tests if x∈A is a soultion of Hilbert 90 of order ord(A).
  */
-int is_h90(const fq_nmod_poly_t x, const struct tensor A);
+int is_h90(const fq_nmod_poly_t x, const fq_nmod_ctx_t L, const fq_nmod_ctx_t R);
 
 #endif

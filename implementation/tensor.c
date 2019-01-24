@@ -23,18 +23,18 @@ void _transpose(fq_nmod_poly_t res, const fq_nmod_poly_t a,
  */
 void tensor_mul(fq_nmod_poly_t res,
 		const fq_nmod_poly_t a, const fq_nmod_poly_t b,
-		struct tensor A) {
+		const fq_nmod_ctx_t L, const fq_nmod_ctx_t R) {
   fq_nmod_poly_t temp;
   
-  fq_nmod_poly_mul(res, a, b, A.L);
+  fq_nmod_poly_mul(res, a, b, L);
     
-  fq_nmod_poly_init(temp, A.R);
-  _transpose(temp, res, A.L, A.R);
+  fq_nmod_poly_init(temp, R);
+  _transpose(temp, res, L, R);
   for (slong i = 0; i < temp->length; i++) {
-    fq_nmod_reduce(temp->coeffs + i, A.R);
+    fq_nmod_reduce(temp->coeffs + i, R);
   }
-  _fq_nmod_poly_set_length(res, 0, A.L);
-  _transpose(res, temp, A.R, A.L);
+  _fq_nmod_poly_set_length(res, 0, L);
+  _transpose(res, temp, R, L);
 
-  fq_nmod_poly_clear(temp, A.R);
+  fq_nmod_poly_clear(temp, R);
 }
