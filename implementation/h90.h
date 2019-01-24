@@ -23,7 +23,7 @@ void lift_h90(fq_nmod_poly_t res,
  *
  * in the algebra L⊗R, where ζ is the canonical root of R
  */
-void solve_h90(fq_nmod_poly_t res, flint_rand_t state,
+void solve_h90(fq_nmod_poly_t res,
 	       const fq_nmod_ctx_t L, const fq_nmod_ctx_t R);
 /*
  * Tests if x∈A is a soultion of Hilbert 90 of order ord(A).

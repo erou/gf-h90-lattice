@@ -62,10 +62,11 @@ void _eval_cycle(fq_nmod_poly_t res, const fq_nmod_t a,
  *
  * in the algebra L⊗R, where ζ is the canonical root of R
  */
-void solve_h90(fq_nmod_poly_t res, flint_rand_t state,
+void solve_h90(fq_nmod_poly_t res,
 	       const fq_nmod_ctx_t L, const fq_nmod_ctx_t R) {
   fq_nmod_t a;
   nmod_poly_t g;
+  flint_rand_t state;
   slong n = tensor_degree(L, R);
 
   // Set g to (X^n - 1) / R
@@ -76,12 +77,13 @@ void solve_h90(fq_nmod_poly_t res, flint_rand_t state,
   nmod_poly_div(g, g, R->modulus);
 
   fq_nmod_init(a, L);
-
+  flint_randinit(state);
   do {
     fq_nmod_randtest(a, state, L);
     _eval_cycle(res, a, L, R, g);
   } while(fq_nmod_poly_is_zero(res, L));
 
+  flint_randclear(state);
   fq_nmod_clear(a, L);
   nmod_poly_clear(g);
 }

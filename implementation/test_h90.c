@@ -36,7 +36,7 @@ int main() {
     fq_nmod_ctx_init_modulus(R, fact, "Z");
 
     fq_nmod_poly_init(h90, L);
-    solve_h90(h90, state, L, R);
+    solve_h90(h90, L, R);
     
     if (!is_h90(h90, L, R)) {
       flint_printf("Not an H90 solution of order %d: ", n);

@@ -14,7 +14,7 @@ int main() {
     fq_nmod_init(a, ctx);
     fq_nmod_randtest(a, state, ctx);
     nmod_poly_init(min, ctx->mod.n);
-    minpoly(min, a, ctx, state);
+    minpoly(min, a, ctx);
 
     fq_nmod_init(eval, ctx);
     fq_nmod_zero(eval, ctx);

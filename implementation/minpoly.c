@@ -208,13 +208,13 @@ void project_powers(mp_limb_t *result, const mp_limb_t *a, slong l, const nmod_p
  */
 
 void minpoly(nmod_poly_t result,
-	     const fq_nmod_t f, const fq_nmod_ctx_t ctx,
-	     flint_rand_t state) {
+	     const fq_nmod_t f, const fq_nmod_ctx_t ctx) {
   const nmod_poly_struct * modulus = ctx->modulus;
   const nmod_poly_struct * modulus_inv_rev = ctx->inv;
   nmod_poly_t g;
   nmod_poly_t temp_g;
   nmod_poly_t tau;
+  flint_rand_t state;
 
   slong degree = nmod_poly_degree(modulus);
   if (fq_nmod_is_zero(f, ctx)) {
@@ -231,6 +231,7 @@ void minpoly(nmod_poly_t result,
 
   mp_limb_t *sequence = _nmod_vec_init(2 * degree);
 
+  flint_randinit(state);
   slong l = 0;
   while (1) {
     _nmod_vec_randtest(sequence, state, 2 * degree, f->mod);
@@ -249,9 +250,9 @@ void minpoly(nmod_poly_t result,
     if (nmod_poly_is_zero(tau))
       break;
   }
-
   nmod_poly_set(result, g);
 
+  flint_randclear(state);
   nmod_poly_clear(g);
   nmod_poly_clear(temp_g);
   nmod_poly_clear(tau);

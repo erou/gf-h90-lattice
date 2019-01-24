@@ -5,7 +5,6 @@
 #include <flint/nmod_poly_mat.h>
 
 void minpoly(nmod_poly_t result,
-	     const fq_nmod_t f, const fq_nmod_ctx_t ctx,
- 	     flint_rand_t state);
+	     const fq_nmod_t f, const fq_nmod_ctx_t ctx);
 
 #endif
