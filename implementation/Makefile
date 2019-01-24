@@ -16,10 +16,14 @@ test_minpoly.exe: minpoly.o test_minpoly.o
 test_tensor.exe: tensor.o test_tensor.o
 	${CC} tensor.o test_tensor.o -o test_tensor.exe ${LFLAGS}
 
-test: test_AE.exe test_h90.exe test_minpoly.exe test_tensor.exe
+test_tensor.exe: tensor.o test_tensor_scalarmul.o
+	${CC} tensor.o test_tensor_scalarmul.o -o test_tensor_scalarmul.exe ${LFLAGS}
+
+test: test_AE.exe test_h90.exe test_minpoly.exe test_tensor.exe test_tensor_scalarmul.exe
 	./test_AE.exe
 	./test_h90.exe
 	./test_minpoly.exe
 	./test_tensor.exe
+	./test_tensor_scalarmul.exe
 
 .PHONY: test

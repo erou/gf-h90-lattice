@@ -32,4 +32,11 @@ void tensor_mul(fq_nmod_poly_t res,
 		const fq_nmod_poly_t a, const fq_nmod_poly_t b,
 		const fq_nmod_ctx_t L, const fq_nmod_ctx_t R);
 
+/*
+ * Computes a*b, where a ∈ R and b ∈ L⊗R.
+ */
+void tensor_scalar_mul_r(fq_nmod_poly_t res,
+			 const fq_nmod_t a, const fq_nmod_poly_t b,
+			 const fq_nmod_ctx_t L, const fq_nmod_ctx_t R);
+
 #endif
