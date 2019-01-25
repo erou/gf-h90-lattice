@@ -3,10 +3,11 @@
 \usepackage{hyperref}
 \usepackage{macros}
 
-\newtheorem{definition}{Definition}
 \newtheorem{theorem}{Theorem}
-\newtheorem{proposition}{Proposition}
-\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
 
 \numberofauthors{3}
 \author{
@@ -61,7 +62,7 @@ lattice of the given extensions can be computed and evaluated
 efficiently.
 
 Concretely, what is sought is a data structure $\Lambda$ to represent
-arbitrary collections of extensions of $\F_p$, in such a way that
+arbitrary collections of extensions of $\F_{p}$, in such a way that
 elements of $\F_{p^n}$ are represented in optimal space (i.e., $O(n)$
 coefficients), and that arithmetic operations are performed
 efficiently (i.e., $O\left(\lcm(n,m)^d\right)$ arithmetic operations
@@ -83,10 +84,10 @@ To this end, it is useful to set several sub-goals:
   must be computable efficiently and \emph{incrementally}, i.e.,
   adding a new field extension to $\Lambda$ does not require
   recomputing data for all extensions already in $\Lambda$. %
-\item[\emph{Uniqueness:}] Any extension of $\F_p$ is determined by an
+\item[\emph{Uniqueness:}] Any extension of $\F_{p}$ is determined by an
   irreducible polynomial whose definition only depends on the
   characteristic $p$ and the degree of the extension. %
-\item[\emph{Generality:}] Extensions of $\F_p$ can be represented by
+\item[\emph{Generality:}] Extensions of $\F_{p}$ can be represented by
   arbitrary irreducible polynomials.
 \end{description}
 
@@ -94,7 +95,7 @@ Some goals, such as incrementality, uniqueness and generality are
 optional, and it is obvious that uniqueness and generality are even in
 conflict with each other. %
 An incremental data structure can be used to effectively represent an
-algebraic closure $\bar\F_p$, with new finite extensions built on the
+algebraic closure $\bar\F_{p}$, with new finite extensions built on the
 fly as they are needed. %
 Uniqueness is useful for defining field elements in a standard way,
 portable between different CAS, while generality is useful in a
@@ -162,7 +163,7 @@ Plugging them in the Bosma-Cannon-Steel framework immediately produces
 a quadratic, incremental general solution, however we go much
 further. %
 Indeed, we show that the compatibility requirement can be taken a step
-further by constructing a lattice of $\F_p$-algebras with a
+further by constructing a lattice of $\F_{p}$-algebras with a
 distinguished element, which is a byproduct of the Lenstra-Allombert
 algorithm.
 
@@ -175,8 +176,8 @@ $\Lambda$ drops similarly. %
 This yields a significant speedup in practice, as we show in our
 implementation (see Section~\ref{sec:implementation}).
 
-Our $\F_p$-algebras are constructed by tensoring element-wise an
-arbitrary lattice of extensions of $\F_p$ with a lattice of compatible
+Our $\F_{p}$-algebras are constructed by tensoring element-wise an
+arbitrary lattice of extensions of $\F_{p}$ with a lattice of compatible
 roots of unity. %
 One of the possible ways to construct the second lattice is by using
 Conway polynomials; this way, our construction can be seen as a
@@ -200,12 +201,13 @@ The presentation is structured as follows. %
 In Section~\ref{sec:conway} we review some basic facts on roots of
 unity and Conway polynomials. %
 In Section~\ref{sec:lenstra} we review the Lenstra-Allombert algorithm
-and define \emph{Kummer
-  algebras}, % TODO: Kummer algebras? Does this sound right?
+and we define and study \emph{Kummer algebras},
 the main ingredient to our construction. %
-In Section~\ref{sec:lattices} we prove the existence of lattices of
-compatible Kummer algebras, while in Section~\ref{sec:construction} we
-explain how to construct them incrementally. %
+In Section~\ref{sec:compatibleH90} we introduce a notion of compatibility
+for solutions of Hilbert~90 in Kummer algebras, that provides standard
+defining polynomials for finite fields.
+Then in Section~\ref{sec:construction} we use these compatible solutions
+to incrementally construct lattices with compatible embeddings.
 Finally, in Section~\ref{sec:implementation} we present our
 implementation and compare it to available alternatives.
 
@@ -224,7 +226,7 @@ $n$-th Conway polynomial to the roots of the $m$-th Conway polynomial,
 whenever $m$ divides $n$. %
 
 Norm compatibility is easy to achieve for a fixed collection
-$\mathcal{F}$ of finite extensions of $\F_p$: let $K/\F_p$ be the
+$\mathcal{F}$ of finite extensions of $\F_{p}$: let $K/\F_{p}$ be the
 smallest finite field containing all fields in $\mathcal{F}$, let
 $\eta$ be a primitive element of $K$, i.e., a generator of the
 multiplicative group $K^\times$, then the Conway polynomial of a field
@@ -248,7 +250,7 @@ This leads to the following definition.
 \end{definition}
 
 The ``lexicographically smallest'' condition is required to ensure
-uniqueness; it is typically defined by writing $f\in\F_p[X]$ as
+uniqueness; it is typically defined by writing $f\in\F_{p}[X]$ as
 \begin{equation*}
   f = \sum_{i=0}^n (-1)^{n-i} f_i x^i,
   \qquad\text{with $0\le f_i<p$,}
@@ -297,111 +299,202 @@ known to be very inefficient in practice. %
 
 The main ingredient of Allombert's algorithm~\cite{Allombert02} is an extension
 of Kummer theory.
+On any finite extension of $\F_{p}$, denote by \[ \sigma:x\mapsto x^p \]
+the Frobenius automorphism.
 Let $\ell$ be an integer not divisible by $p$.
-Since $\F_{p^\ell}$ is not necessarily a Kummer
-extension of $\F_p$, we make an extension of scalars and work in the
-\emph{Kummer algebra} of \emph{degree} $\ell$:
+Then $\sigma$ acting on $\F_{p^\ell}$ can be seen as a $\F_{p}$-linear endomorphism,
+with minimal polynomial $T^\ell-1$, which is separable but not necessarily split,
+i.e. $\F_{p^\ell}$ is not necessarily a Kummer extension of $\F_{p}$.
+We make an extension of scalars and work in the
+\emph{Kummer algebra of degree $\ell$}:
 \[
-  A_\ell = \F_{p^\ell}\otimes_{\F_{p}}\F_{p}(\zeta_\ell),
+  A_\ell = \F_{p^\ell}\otimes\F_{p}(\zeta_\ell),
 \]
-where $\zeta_\ell$ is a primitive $\ell$-th root of unity. We
-call $\F_{p}(\zeta_\ell)$ the \emph{cyclotomic part} of $A_\ell$, and
+where $\otimes$ is tensor product over $\F_{p}$, and $\zeta_\ell$ is a primitive $\ell$-th root of unity. We
+call $\F_{p}(\zeta_\ell)$ the \emph{scalar part} of $A_\ell$, and
 we define the \emph{level} of $A_\ell$ as
 \[
   \lambda(\ell) = \omega_{(\mathbb{Z}/\ell\mathbb{Z})^\times}(p) = [\F_{p}(\zeta_\ell):\F_{p}],
 \]
-that is, the degree of its cyclotomic part.
+that is, the degree of its scalar part.
 
-Using, for instance,
-Conway polynomials, we assume that the cyclotomic parts are compatibly embedded:
+Now $\sigma\otimes1$ is a $1\otimes\F_{p}(\zeta_\ell)$-linear endomorphism of $A_\ell$
+with $\ell$ distinct eigenvalues, namely the powers of $1\otimes\zeta_\ell$.
+Thus, if $\eta=\zeta_\ell^i$ is any $\ell$-th root of unity in $\F_{p}(\zeta_\ell)$,
+the corresponding eigenspace is defined by the \emph{Hilbert 90 equation for $\eta$}:
+\begin{equation}
+  \tag{H90}
+ (\sigma\otimes1)(x) = (1\otimes\eta)x,
+  \label{h90}
+\end{equation}
+which plays the role of $\sigma(x)=\eta x$ in classical Kummer theory.
+The solutions of~\eqref{h90} in $A_\ell$ form a
+$1\otimes\F_{p}(\zeta_{\ell})$-vector space of dimension $1$,
+and if $x$ is such a solution for $\eta$, then $x^j$ is a solution for $\eta^j$.
+
+In particular, let $\alpha_\ell$ be a nonzero solution of~\eqref{h90} for $\zeta_\ell$.
+Then $1,\alpha_\ell,\cdots,(\alpha_\ell)^{\ell-1}$ are eigenvectors for distinct eigenvalues and thus
+form a basis of $A_\ell$ over $1\otimes\F_{p}(\zeta_{\ell})$,
+while
+\[ (\alpha_\ell)^\ell = 1\otimes\a_\ell \]
+for a certain scalar constant $\a_\ell=\a(\alpha_\ell)\in\F_{p}(\zeta_\ell)$,
+nonzero since $A_\ell$ does not have nilpotents.
+This proves:
+\begin{proposition}
+\label{alphagen}
+Any such $\alpha_\ell$ is a generating element for $A_\ell$ as an algebra over $1\otimes\F_{p}(\zeta_{\ell})$,
+inducing an isomorphism
+\[ A_\ell\simeq \F_{p}(\zeta_{\ell})[T]/(T^\ell-\a_\ell). \]
+\end{proposition}
+
+We will make frequent use of the following:
+\begin{lemma}
+\label{FrobFrob}
+Let $K,L$ are two finite extensions of $\F_{p}$.
+Then for any $\beta\in K\otimes L$,
+we have $(\sigma\otimes\sigma)(\beta)=\beta^p$.
+\end{lemma}
+In this generality we also introduce the following notation: if $\eta\in L$ has degree $d$ over $\F_{p}$,
+then any $\beta\in K\otimes\F_{p}(\eta)\subset K\otimes L$ decomposes uniquely as $\beta = \sum_{i =  0}^{d-1}y_i\otimes\eta^i$,
+and we set  \[ \first{\beta}{\eta}=y_0. \]
+In particular, back to $A_\ell$, if we write
+$\alpha_\ell = \sum_{i =  0}^{a-1}x_i\otimes\zeta_{\ell}^i$ where $a=\lambda(\ell)$,
+it is shown in~\cite{Allombert02} that $x_0=\first{\alpha_\ell}{\zeta_\ell}$ is a generating element for the extension
+$\F_{p^\ell}/\F_{p}$.
+
+\begin{proposition}
+\label{depend}
+With the notations above, there are precisely $\ell$ elements $x\in A_\ell$ that are solutions of~\eqref{h90} for $\zeta_\ell$
+and satisfy $x^\ell=1\otimes\a_\ell$, namely, these are the $(1\otimes\zeta_\ell)^u\alpha_\ell=(\sigma^u\otimes 1)(\alpha_\ell)$
+for $0\leq u<\ell$.
+The corresponding generating elements for $\F_{p^\ell}/\F_{p}$ are the $\first{(\sigma^u\otimes 1)(\alpha_\ell)}{\zeta_\ell}=\sigma^u(x_0)$.
+They all have the same minimal polynomial, which is a generating polynomial for $\F_{p^\ell}/\F_{p}$ that depends only on $\a_\ell$.
+\end{proposition}
+\begin{proof}
+Clear.
+\end{proof}
+
+Now we consider Kummer algebras of various degrees.
+Using, for instance, Conway polynomials, we assume that the scalar parts are compatibly embedded:
 for $\ell\,|\,m$ not divisible by $p$, we have the embedding
 \[
 \begin{array}{cccc}
-  \embedcyc{\ell}{m}: & \F_{p}(\zeta_\ell) & \to & \F_{p}(\zeta_m) \\
-  & \zeta_\ell & \mapsto & (\zeta_{m})^{m/\ell}.
+  \embedcyc{\ell}{m}: & \F_{p}(\zeta_\ell) & \hookrightarrow & \F_{p}(\zeta_m) \\
+  & \zeta_\ell & \mapsto & (\zeta_{m})^{\frac{m}{\ell}}.
 \end{array}
 \]
-Denoting by \[ \sigma:x\mapsto x^p \]
-the Frobenius automorphism, Allombert proves that
-$\sigma\otimes1$ is again an automorphism of the
-$\F_{p}(\zeta_\ell)$-algebra $A_\ell$. The equation
-\begin{equation}
-  \tag{H90}
- (\sigma\otimes1)(x) = (1\otimes\zeta_\ell)x
-  \label{h90}
-\end{equation}
-then plays the role of $\sigma(x)=\zeta_\ell x$ in the classical theory. The
-solutions of~\eqref{h90} in $A_\ell$ form a
-$\F_{p}(\zeta_{\ell})$-vector space of dimension $1$, and if $\alpha_\ell$ is a
-nonzero solution of~\eqref{h90}, we observe that $(\alpha_\ell)^\ell$ is a nonzero
-element in $1\otimes\F_{p}(\zeta_\ell)$.
-This allows us to define \[ \a_\ell =\a(\alpha_\ell) \]
-by the formula
-\[ (\alpha_\ell)^\ell = 1\otimes\a_\ell. \]
-Finally, if $A_\ell$ is of level $a$ and if we write
-\[
-  \alpha_\ell = \sum_{i =  0}^{a-1}x_i\otimes\zeta_{\ell}^i,
-\]
-the element $x_0$ is known to be a generating element for the extension
-$\F_{p^\ell}/\F_{p}$. This element plays a central role and we
-denote it by $x_0=\first{\alpha_\ell}{\zeta_\ell}$. Put together, these facts give Allombert's
-algorithm.
+
+It is easily shown that, as an $\F_{p}$-algebra, $A_\ell$ is isomorphic to a product of copies of $\F_{p^\ell}(\zeta_\ell)$,
+and $A_m$ to a product of copies of $\F_{p^m}(\zeta_m)$.
+This allows to describe all $\F_{p}$-algebra morphisms from $A_\ell$ to $A_m$. However here we will focus only on a certain
+subclass of them:
+\begin{definition}
+\label{Kembedding}
+A \emph{Kummer embedding} of $A_\ell$ into $A_m$ is an \emph{injective} $\F_{p}$-algebra morphism $\Phi:A_\ell\hookrightarrow A_m$
+such that:
+\begin{itemize}
+\item $\Phi$ extends the scalar embedding $1\otimes\embedcyc{\ell}{m}$
+\item $\Phi$ commutes with $\sigma\otimes1$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+\label{Phialpha}
+Let $\alpha_\ell\in A_\ell$ be a solution of~\eqref{h90} for $\zeta_\ell$, and set $\a_\ell=\a(\alpha_\ell)\in\F_{p}(\zeta_\ell)$.
+Then, there is a $1$-to-$1$ correspondence between Kummer embeddings $\Phi:A_\ell\hookrightarrow A_m$ and solutions $\hat{\alpha}\in A_m$
+of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$ that satisfy $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$,
+given by \[ \Phi\quad\longleftrightarrow\quad\hat{\alpha}=\Phi(\alpha_\ell). \]
+\end{proposition}
+\begin{proof}
+Direct consequence of Proposition~\ref{alphagen} and Definition~\ref{Kembedding}.
+\end{proof}
+
+Actually, Kummer embeddings are easily characterized:
+\begin{proposition}
+\label{Phipsi}
+There is a natural $1$-to-$1$ correspondence between Kummer embeddings $\Phi:A_\ell\hookrightarrow A_m$
+and embeddings of finite fields $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$, given by:
+\begin{itemize}
+\item If $\Phi$ is a Kummer embedding, then $\Phi$ maps $\F_{p^\ell}\otimes1$ into $\F_{p^m}\otimes 1$.
+Thus the restriction of $\Phi$ to $\F_{p^\ell}\otimes1$ is of the form $\psi\otimes1$ for some $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
+\item Conversely, if $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$ is an embedding of finite fields, then $\Phi=\psi\otimes\embedcyc{\ell}{m}$
+is a Kummer embedding.
+\end{itemize}
+Moreover, this correspondence commutes with composition of embeddings.
+\end{proposition}
+\begin{proof}
+Let $\Phi$ be a Kummer embedding. Being a $\F_{p}$-algebra morphism, it satisfies $\Phi(\beta^p)=\Phi(\beta)^p$ for all $\beta\in A_\ell$.
+By Lemma~\ref{FrobFrob}, this means that $\Phi$ commutes with $\sigma\otimes\sigma$, and thus,
+also with $(\sigma\otimes 1)^{-1}\circ(\sigma\otimes\sigma)=1\otimes\sigma$.
+This gives that $\Phi$ maps $\F_{p^\ell}\otimes1$ into $\F_{p^m}\otimes 1$.
+The other assertions are clear.
+\end{proof}
+
+\begin{corollary}
+\label{alphapsi}
+Let $\alpha_\ell\in A_\ell$ be a solution of~\eqref{h90} for $\zeta_\ell$,
+and $\hat{\alpha}\in A_m$ a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$
+that satisfy $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$.
+Then:
+\begin{itemize}
+\item $\hat{\alpha}\in\F_{p^m}\otimes\F_{p}((\zeta_m)^{\frac{m}{\ell}})\;\subset\;A_m$
+\item the assignation $\first{\alpha_{\ell}}{\zeta_\ell}\mapsto\first{\hat{\alpha}}{(\zeta_m)^{\frac{m}{\ell}}}$
+defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$
+\item $\Phi=\psi\otimes\embedcyc{\ell}{m}$ is the unique Kummer embedding such that $\Phi(\alpha_\ell)=\hat{\alpha}$.
+\end{itemize}
+\end{corollary}
+\begin{proof}
+By Proposition~\ref{Phialpha} there is a unique Kummer embedding $\Phi$ such that $\Phi(\alpha_\ell)=\hat{\alpha}$.
+By Proposition~\ref{Phipsi} we have $\Phi=\psi\otimes\embedcyc{\ell}{m}$ for some $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
+Writing $\alpha_\ell=\sum_{i=0}^{a-1}x_i\otimes\zeta_{\ell}^i$,
+it follows \[ \hat{\alpha}=\Phi(\alpha_\ell)=\sum_{i=0}^{a-1}\psi(x_i)\otimes(\zeta_m)^{\frac{mi}{\ell}}. \]
+Thus $\first{\hat{\alpha}}{(\zeta_m)^{\frac{m}{\ell}}}=\psi(x_0)=\psi(\first{\alpha_{\ell}}{\zeta_\ell})$,
+and since $\first{\alpha_{\ell}}{\zeta_\ell}$ generates $\F_{p^\ell}$, this uniquely characterizes $\psi$.
+\end{proof}
+
+We can now state and prove Allombert's algorithm.
 
 \begin{algorithm_endline}
   {Allombert's}
   {$\F_{p^\ell}, \F_{p^m}$, with $\ell\,|\,m$.}
-  {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the map $s\mapsto t$
-  defines an embedding $\embed{\ell}{m}$.}
+  {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
+  defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.}
   {algo:allombert}
 \item Compute the Kummer algebras $A_\ell$ and $A_m$.
 \item Find a solution $\alpha_\ell\in A_\ell$ of~\eqref{h90} for $\zeta_\ell$
   and a solution $\alpha_m\in A_m$ of~\eqref{h90} for $\zeta_m$.
 \item Compute $\kappa$ a $\ell$-th root of $\embedcyc{\ell}{m}(\a_\ell)/\a_m$.
-\item Return $\first{\alpha_{\ell}}{\zeta_\ell}$ and $\first{(1\otimes\kappa)(\alpha_m)^{m/\ell}}{\zeta_m}$.
+\item Return $\first{\alpha_{\ell}}{\zeta_\ell}$ and $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{(\zeta_m)^{\frac{m}{\ell}}}$.
+\vspace{.5\baselineskip}
 \end{algorithm_endline}
 
 \begin{proposition}
   Algorithm~\ref{algo:allombert} is correct: it returns elements that define an
-  embedding $\embed{\ell}{m}$.
+  embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
 \end{proposition}
 \begin{proof}
-  Let $\embedalg{\ell}{m}'=\embed{\ell}{m}'\otimes\embedcyc{\ell}{m}$ an embedding
-  between the algebras $A_\ell$ and $A_m$, where $\embed{\ell}{m}'$ is some
-  arbitrary embedding between $\F_{p^\ell}$ and $\F_{p^m}$.
-  Since $\sigma\otimes1$ and $\embedalg{\ell}{m}'$ commute,
-  $\embedalg{\ell}{m}'(\alpha_\ell)$ and $(\alpha_m)^{(m/\ell)}$ are two solutions
-  in $A_m$ of~\eqref{h90} for the root $(\zeta_m)^{m/\ell} =
-  \embedcyc{\ell}{m}(\zeta_\ell)$. The solutions form a vector space of
-  dimension $1$, so we know there exists $\lambda\in\F_{p}(\zeta_m)$
-  with
-  \[
-    (\alpha_m)^{m/\ell} = (1\otimes\lambda)\embedalg{\ell}{m}'(\alpha_\ell).
-  \]
-Thus $\embedcyc{\ell}{m}(\a_\ell)/\a_m=1\otimes\lambda^{-\ell}$,
-and $\kappa = (\zeta_{m})^{um/\ell}\lambda^{-1}$ for some integer $u$.
-We deduce
-  \begin{align*}
-    (1\otimes\kappa)(\alpha_m)^{m/\ell} &= \embedalg{\ell}{m}'((1\otimes\zeta_\ell^u)\alpha_\ell)\\
-    &= \embedalg{\ell}{m}(\alpha_\ell),
-  \end{align*}
-  with $\embedalg{\ell}{m}=\embed{\ell}{m}\otimes\embedcyc{\ell}{m}$ and
-  $\embed{\ell}{m} = \embed{\ell}{m}'\circ\sigma^u$.
-
-It follows that
-  $\embed{\ell}{m}(\first{\alpha_{\ell}}{\zeta_\ell})=\first{(1\otimes\kappa)(\alpha_m)^{m/\ell}}{\zeta_m}$,
-and since $\first{\alpha_{\ell}}{\zeta_\ell}$ is a generating element for
-  $\F_{p^\ell}/\F_{p}$, this relation is sufficient to define
-  $\embed{\ell}{m}$.
+By Propositions~\ref{Phialpha} and~\ref{Phipsi}, there exists $\hat{\alpha}\in A_m$
+solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$ that satisfy $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$.
+On the other hand, $(\alpha_m)^{\frac{m}{\ell}}\in A_m$ is also a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$,
+thus $(\alpha_m)^{\frac{m}{\ell}}=(1\otimes\lambda)(\hat{\alpha})$ for some $\lambda\in\F_{p}(\zeta_m)$.
+It follows $\embedcyc{\ell}{m}(\a_\ell)/\a_m=\lambda^{-\ell}$ is a $\ell$-th power,
+and $\kappa = (\zeta_{m})^{\frac{um}{\ell}}\lambda^{-1}$ for some integer $u$.
+Now we can replace $\hat{\alpha}$
+with $(1\otimes(\zeta_{m})^{\frac{um}{\ell}})(\hat{\alpha})=(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}$
+and conclude with Corollary~\ref{alphapsi}.
 \end{proof}
-
-\section{Compatible solutions of Hilbert~90 in Kummer algebras}
-\label{sec:lattices}
+From this proof and Proposition~\ref{depend}, we remark that another choice of $l$-th root $\kappa$
+only changes $\psi$ by a power of $\sigma$.
+    
+\section{Compatible solutions of H90}
+\label{sec:compatibleH90}
 
 There are two points in Algorithm~\ref{algo:allombert} on which we would like to improve:
 \begin{description}
 \item[\emph{Uniqueness:}] As mentioned, the element $\first{\alpha_{\ell}}{\zeta_\ell}$ is a generating element for $\F_{p^{\ell}}$,
 or equivalently, we get a defining irreducible polynomial of degree $\ell$.
-However this polynomial highly depends on the choice of the solution $\alpha_{\ell}$ of~\eqref{h90}.
+However this polynomial depends on the choice of $\alpha_{\ell}$
+(even though only through~$\a_\ell$, cf. Proposition~\ref{depend}).
 \item[\emph{Compatibility:}] The embedding $\embed{\ell}{m}$ depends a constant $\kappa=\kappa_{\ell,m}$,
 which itself depends on the choice of $\alpha_\ell,\alpha_m$ and of a $\ell$-th root extraction.
 Thus, given a certain number of finite fields, in order to ensure compatibility of the various
@@ -416,7 +509,7 @@ we will need solutions of~\eqref{h90} in the various Kummer algebras involved,
 that satisfy some compatiblity conditions.
 
 Here we somehow start from the end and assume that all our Kummer algebras are
-embedded in $A_\infty=\bar{\F}_{p}\otimes\F_p(\zeta_\infty)$.
+embedded in $A_\infty=\bar{\F}_{p}\otimes\F_{p}(\zeta_\infty)$.
 This will allow us to prove the existence (at least in an abstract, mathematical way)
 of a lattice of solutions $(\alpha_\ell)_{p{\nmid}\ell}$ that satisfy such ``nice''
 compatibility relations. A key point is that these compatibility relations should respect
@@ -445,7 +538,7 @@ whenever we have $(\ell, m)\in\N^2$ with $\ell\,|\,m$, that there exists
 some easy-to-compute map $f$ such that $f(\alpha_m) =
 \embedalg{\ell}{m}(\alpha_\ell)$. After that, we define our embedding
 $\embed{\ell}{m}$ as the map sending $\first{\alpha_\ell}{\zeta_\ell}$ to
-$\first{f(\alpha_m)}{(\zeta_m)^{m/\ell}}$. For simplicity, we assume in the
+$\first{f(\alpha_m)}{(\zeta_m)^{\frac{m}{\ell}}}$. For simplicity, we assume in the
 remaining part of this section that all our Kummer algebras are subsets of
 $\bar{\F}_{p}\otimes\bar{\F}_p$, so our goal becomes to find a map
 $f$ with $f(\alpha_m) = \alpha_\ell$.
@@ -490,7 +583,7 @@ $A_{p^n-1}$ is the biggest Kummer algebra of level $n$.
   % dimension 1 vector space
 
   We prove the result by induction. First, choose any primitive element
-  $\zeta_{p-1}\in\F_p$, and a solution $\alpha_{p-1}\in
+  $\zeta_{p-1}\in\F_{p}$, and a solution $\alpha_{p-1}\in
   A_{p-1}$ of \eqref{h90} for the root $\zeta_{p-1}$. Then, suppose that we have
   a family of solutions of \eqref{h90} $(\alpha_{p^n-1})_{n\in \left[ d
   \right]}$ for the roots
@@ -579,7 +672,7 @@ $a$, then we define $\alpha_\ell = (\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}$.
   root $\zeta_\ell$. We also have $\alpha_\ell\in A_\ell$.
 \end{proposition}
 \begin{proof}
-We still assume that the cyclotomic parts of our algebras are compatibly
+We still assume that the scalar parts of our algebras are compatibly
 embedded, so we have $(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}} = \zeta_\ell$,
 moreover
 \begin{align*}
@@ -600,7 +693,7 @@ $A_\ell = \F_{p^\ell}\otimes\F_{p^a}$, this concludes the
 proof.
 \end{proof}
 If $A_m$ is another Kummer algebra of level $a$, with $\ell\,|\,m$, we then have
-$(\alpha_m)^{m/\ell} = \alpha_\ell$. These relations allow us to construct
+$(\alpha_m)^{\frac{m}{\ell}} = \alpha_\ell$. These relations allow us to construct
 compatible embeddings between Kummer algebra of the same level. We have left to
 construct embeddings between algebras of different levels.
 
