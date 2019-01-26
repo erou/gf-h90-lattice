@@ -15,9 +15,9 @@
   \alignauthor Luca De Feo\\
   \affaddr{Universit\'e Paris Saclay -- UVSQ, LMV}\\
   \email{luca.de-feo@uvsq.fr}
-  \alignauthor Hugues Randriam
-  \affaddr{LTCI T\'el\'ecom ParisTech}\\
-  \email{luca.de-feo@uvsq.fr}
+  \alignauthor Hugues Randriam\\
+  \affaddr{LTCI, T\'el\'ecom ParisTech}\\
+  \email{randriam@enst.fr}
   \alignauthor \'Edouard Rousseau
 }
 
@@ -399,10 +399,11 @@ and if $x$ is such a solution for $\eta$, then $x^j$ is a solution for $\eta^j$.
 
 In particular, let $\alpha_\ell$ be a nonzero solution of~\eqref{h90} for $\zeta_\ell$.
 Then $1,\alpha_\ell,\cdots,(\alpha_\ell)^{\ell-1}$ are eigenvectors for distinct eigenvalues and thus
-form a basis of $A_\ell$ over $1\otimes\F_{p}(\zeta_{\ell})$,
-while
+form a basis of $A_\ell$ over $1\otimes\F_{p}(\zeta_{\ell})$.
+Likewise
 \[ (\alpha_\ell)^\ell = 1\otimes\a_\ell \]
-for a certain scalar constant $\a_\ell=\a(\alpha_\ell)\in\F_{p}(\zeta_\ell)$.
+for a certain scalar $\a_\ell\in\F_{p}(\zeta_\ell)$,
+the \emph{Kummer constant} of $\alpha_\ell$.
 This proves:
 \begin{proposition}
 \label{alphagen}
@@ -411,10 +412,21 @@ inducing an isomorphism
 \[ A_\ell\simeq \F_{p}(\zeta_{\ell})[T]/(T^\ell-\a_\ell). \]
 \end{proposition}
 
-Since $A_\ell$ is known to be an \'etale algebra, we also note that this implies
-that $\a_\ell$ is nonzero, which in turn implies
+Since $A_\ell$ is known to be an \'etale algebra, we note
+that $\alpha_\ell$ nonzero implies $\a_\ell$ is nonzero, which in turn implies
 that $\alpha_\ell$ in \emph{invertible} in $A_\ell$: $\;(\alpha_\ell)^{-1} = (1\otimes\a_\ell^{-1})(\alpha_\ell)^{\ell-1}$.
 
+%We call $\a_\ell$ the \emph{Kummer constant} associated with $\alpha_\ell$.
+%In the sequel, we might have to consider various
+%solutions of~\eqref{h90}, say $\alpha_\ell,\alpha'_\ell,\alpha_m$.
+%With this notation, the index will always implicitely mean that
+%these are solutions for the corresponding distinguished primitive root
+%of unity, so $\alpha_\ell,\alpha'_\ell$ are solutions for $\zeta_\ell$
+%while $\alpha_m$ is solution for $\zeta_m$.
+%Then we will also write $\a_\ell,\a'_\ell,\a_m$, which will always
+%implicitely denote the associated Kummer constants,
+%so e.g. $(\alpha'_\ell)^\ell=1\otimes\a'_\ell$ 
+%and $(\alpha_m)^m=1\otimes\a_m$.
 
 We will make frequent use of the following:
 \begin{lemma}
@@ -471,7 +483,7 @@ such that:
 
 \begin{proposition}
 \label{Phialpha}
-Let $\alpha_\ell\in A_\ell$ be a nonzero solution of~\eqref{h90} for $\zeta_\ell$, and set $\a_\ell=\a(\alpha_\ell)\in\F_{p}(\zeta_\ell)$.
+Let $\alpha_\ell\in A_\ell$ be a nonzero solution of~\eqref{h90} for $\zeta_\ell$, with Kummer constant $\a_\ell$.
 Then, there is a $1$-to-$1$ correspondence between Kummer embeddings $\Phi:A_\ell\hookrightarrow A_m$ and solutions $\hat{\alpha}\in A_m$
 of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$ that satisfy $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$,
 given by \[ \Phi\quad\longleftrightarrow\quad\hat{\alpha}=\Phi(\alpha_\ell). \]
@@ -504,7 +516,8 @@ The other assertions are clear.
 \begin{corollary}
 \label{alphapsi}
 Let $\alpha_\ell\in A_\ell$ be a nonzero solution of~\eqref{h90} for $\zeta_\ell$,
-and $\hat{\alpha}\in A_m$ a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$
+with Kummer constant $\a_\ell$, and
+let $\hat{\alpha}\in A_m$ be a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$
 that satisfies $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$.
 Then:
 \begin{itemize}
@@ -534,7 +547,9 @@ We can now state and prove Allombert's algorithm.
       defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.}
   \STATE Prepare the Kummer algebras $A_\ell$ and $A_m$.
   \STATE Find $\alpha_\ell\in A_\ell$, $\alpha_m\in A_m$ nonzero solutions of \eqref{h90} for $\zeta_\ell$
-    and $\zeta_m$ respectively.
+  and $\zeta_m$ respectively.
+  \STATE Compute their Kummer constants: $(\alpha_\ell)^\ell=1\otimes\a_\ell$, 
+  $(\alpha_m)^m=1\otimes\a_m$.
   \STATE Compute $\kappa$ a $\ell$-th root of $\embedcyc{\ell}{m}(\a_\ell)/\a_m$.
   \STATE Return $\first{\alpha_{\ell}}{\zeta_\ell}$ and $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{(\zeta_m)^{\frac{m}{\ell}}}$.
   \end{algorithmic}
@@ -579,8 +594,9 @@ and $\Phi:A_\ell\hookrightarrow A_m$
 could be chosen so that $\Phi(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
 \begin{lemma}
 \label{power_compatibily}
-Let $\alpha_\ell\in A_\ell$, $\alpha_m\in A_m$ be nonzero solutions of \eqref{h90} for $\zeta_\ell$
-and $\zeta_m$ respectively. Then, there is a Kummer embedding $\Phi:A_\ell\hookrightarrow A_m$
+Let $\alpha_\ell\in A_\ell$, $\alpha_m\in A_m$ be nonzero solutions of \eqref{h90}
+for $\zeta_\ell$ and $\zeta_m$, with Kummer constants $\a_\ell$ and $\a_m$, respectively.
+Then, there is a Kummer embedding $\Phi:A_\ell\hookrightarrow A_m$
 such that $\Phi(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$ if and only if $\a_m=\embedcyc{\ell}{m}(\a_\ell)$.
 
 Moreover, if so, then this $\Phi$ is unique.
@@ -602,8 +618,8 @@ with field of scalars $\F_{p^a}=\F_{p}(\zeta_{p^a-1})$ given by the correspondin
 e.g. defined by the Conway polynomial of degree $a$.
 \begin{lemma}
 \label{Kummer_bizarre}
-For any $\alpha_{p^a-1}\in A_{p^a-1}$ nonzero solution of \eqref{h90} for $\zeta_{p^a-1}$,
-we have $\a_{p^a-1}=(\zeta_{p^a-1})^a$.
+All nonzero solutions $\alpha_{p^a-1}\in A_{p^a-1}$ of \eqref{h90} for $\zeta_{p^a-1}$,
+have the same Kummer constant $\a_{p^a-1}=(\zeta_{p^a-1})^a$.
 \end{lemma}
 \begin{proof}
 From Lemma~\ref{FrobFrob} and the fact that $\sigma^a$ is trivial on $\F_{p}(\zeta_{p^a-1})\simeq\F_{p^a}$ we get
@@ -619,7 +635,7 @@ We conclude since $\alpha_{p^a-1}$ is invertible.
 \label{alphastandard}
 Let $l$ be an integer not divisible by $p$.
 We say a solution $\alpha_\ell\in A_\ell$ of~\eqref{h90} for $\zeta_\ell$ is \emph{standard}
-if it satisfies
+if it has Kummer constant
 \[ \a_{\ell}=(\zeta_{p^a-1})^a \]
 where $a=\nu(\ell)$ is the level of $A_\ell$.
 
@@ -656,6 +672,7 @@ This allows:
       and $s\in\F_{p^\ell}$ a generating element inducing $\F_{p^\ell}\simeq\F_{p}[T]/(P_\ell)$.}
   \STATE Prepare the Kummer algebra $A_\ell$.
   \STATE Find $\alpha'_\ell\in A_\ell$ nonzero solution of \eqref{h90} for $\zeta_\ell$.
+  \STATE Compute its Kummer constant: $(\alpha'_\ell)^\ell=1\otimes\a'_\ell$.
   \STATE Compute $\kappa$ a $\ell$-th root of $(\zeta_{p^a-1})^a/\a'_\ell$.
   \STATE Set $\alpha_{\ell}=(1\otimes\kappa)\alpha'_\ell$.
   \STATE Compute $P_\ell$ the minimal polynomial of $\first{\alpha_{\ell}}{\zeta_\ell}$ over $\F_{p}$.
