@@ -769,7 +769,7 @@ while $\embedalg{m}{p^b-1}((\alpha_m)^{\frac{m}{\ell}})=(\alpha_{p^b-1})^{\frac{
 and we conclude with Proposition~\ref{key}
 \end{proof}
 \begin{proposition}
-\label{standard_embeddings_compatibles}
+\label{standard_K_embeddings_compatibles}
 Standard Kummer embeddings are compatible with composition:
 if $(A_\ell,\alpha_\ell)$, $(A_m,\alpha_m)$, and $(A_n,\alpha_n)$ are decorated Kummer algebras
 with $\ell\,|\,m\,|\,n$, the corresponding standard embeddings
@@ -796,19 +796,35 @@ we see indeed this common image
 is $\norm_{c/a}(\alpha_{p^c-1})^{\frac{p^a-1}{\ell}}$.
 \end{proof}
 
+By a \emph{decorated finite field} (of degree $\ell$, an integer prime to $p$),
+we mean a pair $(\F_{p^\ell},\alpha_\ell)$,
+where $\F_{p^\ell}$ is a (blackbox) finite field,
+and $\alpha_\ell$ a standard solution of~\eqref{h90} in the corresponding
+Kummer algebra $A_\ell=\F_{p^\ell}\otimes\F_{p}(\zeta_\ell)$.
+
+We can finally state:
 \begin{algorithm}
   \caption{(standard, compatible Allombert)}
   \label{algo:std_embed}
   \begin{algorithmic}[1]
-    \REQUIRE {blackbox $\F_{p^\ell}$, $\F_{p^m}$, for $\ell\,|\,m$ integers prime to $p$.}
+    \REQUIRE {decorated finite fields $(\F_{p^\ell},\alpha_\ell)$, $(\F_{p^m},\alpha_m)$, for $\ell\,|\,m$ integers prime to $p$.}
     \ENSURE {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
       defines a standard embedding $\embed{\ell}{m}:\F_{p^\ell}\hookrightarrow\F_{p^m}$,
       compatible with composition.}
-  \STATE Call Algorithm~\ref{algo:decoration} to get $(A_\ell,\alpha_\ell)$, $(A_m,\alpha_m)$, and $\first{\alpha_\ell}{\zeta_\ell}$.
   \STATE Compute $\kappa=(\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)\ell}}$ where $a=\nu(\ell)$, $b=\nu(m)$.
   \STATE Return $\first{\alpha_\ell}{\zeta_\ell}$ and $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{(\zeta_m)^{\frac{m}{\ell}}}$.
   \end{algorithmic}
 \end{algorithm}
+\begin{proposition}
+\label{standard_ff_embeddings_compatibles}
+Standard finite field embeddings are compatible with composition:
+if $(\F_{p^\ell},\alpha_\ell)$, $(\F_{p^m},\alpha_m)$, and $(\F_{p^n},\alpha_n)$ are decorated finite fields
+with $\ell\,|\,m\,|\,n$, the corresponding standard embeddings
+satisfy $\embed{\ell}{n}=\embed{m}{n}\circ\embed{\ell}{m}$.
+\end{proposition}
+\begin{proof}
+Corollary~\ref{Phipsi} and Proposition~\ref{standard_K_embeddings_compatibles}
+\end{proof}
 \section{Poor Artin-Schreier}
 \label{sec:A-S}
 
