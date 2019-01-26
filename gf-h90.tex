@@ -461,19 +461,20 @@ and since $\first{\alpha_{\ell}}{\zeta_\ell}$ generates $\F_{p^\ell}$, this uniq
 
 We can now state and prove Allombert's algorithm.
 
-\begin{algorithm_endline}
-  {Allombert's}
-  {blackbox $\F_{p^\ell}, \F_{p^m}$, with $\ell\,|\,m$ not divisible by $p$.}
-  {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
-  defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.}
-  {algo:allombert}
-\item Prepare the Kummer algebras $A_\ell$ and $A_m$.
-\item Find $\alpha_\ell\in A_\ell$, $\alpha_m\in A_m$ nonzero solutions of \eqref{h90} for $\zeta_\ell$
-  and $\zeta_m$ respectively.
-\item Compute $\kappa$ a $\ell$-th root of $\embedcyc{\ell}{m}(\a_\ell)/\a_m$.
-\item Return $\first{\alpha_{\ell}}{\zeta_\ell}$ and $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{(\zeta_m)^{\frac{m}{\ell}}}$.
-\vspace{.5\baselineskip}
-\end{algorithm_endline}
+\begin{algorithm}
+  \caption{Allombert's}
+  \label{algo:allombert}
+  \begin{algorithmic}[1]
+    \REQUIRE {blackbox $\F_{p^\ell}, \F_{p^m}$, with $\ell\,|\,m$ not divisible by $p$.}
+    \ENSURE {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
+      defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.}
+  \STATE Prepare the Kummer algebras $A_\ell$ and $A_m$.
+  \STATE Find $\alpha_\ell\in A_\ell$, $\alpha_m\in A_m$ nonzero solutions of \eqref{h90} for $\zeta_\ell$
+    and $\zeta_m$ respectively.
+  \STATE Compute $\kappa$ a $\ell$-th root of $\embedcyc{\ell}{m}(\a_\ell)/\a_m$.
+  \STATE Return $\first{\alpha_{\ell}}{\zeta_\ell}$ and $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{(\zeta_m)^{\frac{m}{\ell}}}$.
+  \end{algorithmic}
+\end{algorithm}
 
 \begin{proposition}
   Algorithm~\ref{algo:allombert} is correct: it returns elements that define an
@@ -581,20 +582,21 @@ we get $\a_\ell=\eta^\ell\a_{p^a-1}$, and
 thus the standard $\alpha_\ell\in A_\ell$ are the $(1\otimes\lambda\zeta_\ell^u)\alpha'_\ell$, for $0\leq u<\ell$.
 \end{proof}
 This allows:
-\begin{algorithm_endline}
-  {decoration-standardization}
-  {blackbox $\F_{p^\ell}$, for $\ell$ an integer not divisible by $p$.}
-  {$(A_\ell,\alpha_\ell)$ decorated, $P_\ell$ irreducible polynomial of degree $\ell$,
-  and $s\in\F_{p^\ell}$ a generating element inducing $\F_{p^\ell}\simeq\F_{p}[T]/(P_\ell)$.}
-  {algo:decoration}
-\item Prepare the Kummer algebra $A_\ell$.
-\item Find $\alpha'_\ell\in A_\ell$ nonzero solution of \eqref{h90} for $\zeta_\ell$.
-\item Compute $\kappa$ a $\ell$-th root of $(\zeta_{p^a-1})^a/\a'_\ell$.
-\item Set $\alpha_{\ell}=(1\otimes\kappa)\alpha'_\ell$.
-\item Compute $P_\ell$ the minimal polynomial of $\first{\alpha_{\ell}}{\zeta_\ell}$ over $\F_{p}$.
-\item Return $(A_\ell,\alpha_\ell)$, $P_\ell$, and $\first{\alpha_\ell}{\zeta_\ell}$.
-\vspace{.5\baselineskip}
-\end{algorithm_endline}
+\begin{algorithm}
+  \caption{decoration-standardization}
+  \label{algo:decoration}
+  \begin{algorithmic}[1]
+    \REQUIRE {blackbox $\F_{p^\ell}$, for $\ell$ an integer not divisible by $p$.}
+    \ENSURE {$(A_\ell,\alpha_\ell)$ decorated, $P_\ell$ irreducible polynomial of degree $\ell$,
+      and $s\in\F_{p^\ell}$ a generating element inducing $\F_{p^\ell}\simeq\F_{p}[T]/(P_\ell)$.}
+  \STATE Prepare the Kummer algebra $A_\ell$.
+  \STATE Find $\alpha'_\ell\in A_\ell$ nonzero solution of \eqref{h90} for $\zeta_\ell$.
+  \STATE Compute $\kappa$ a $\ell$-th root of $(\zeta_{p^a-1})^a/\a'_\ell$.
+  \STATE Set $\alpha_{\ell}=(1\otimes\kappa)\alpha'_\ell$.
+  \STATE Compute $P_\ell$ the minimal polynomial of $\first{\alpha_{\ell}}{\zeta_\ell}$ over $\F_{p}$.
+  \STATE Return $(A_\ell,\alpha_\ell)$, $P_\ell$, and $\first{\alpha_\ell}{\zeta_\ell}$.
+  \end{algorithmic}
+\end{algorithm}
 Algorithm~\ref{algo:decoration} is correct: indeed Proposition~\ref{standardexiste} ensures that
 a standard $\alpha_{\ell}$ exists, and thus, $\alpha'_\ell=(1\otimes\kappa^{-1})\alpha_{\ell}$
 for some $\kappa\in\F_{p}(\zeta_\ell)$, so $(\zeta_{p^a-1})^a/\a'_\ell=\kappa^\ell$ is a $\ell$-th power.
