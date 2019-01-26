@@ -311,12 +311,12 @@ We make an extension of scalars and work in the
   A_\ell = \F_{p^\ell}\otimes\F_{p}(\zeta_\ell),
 \]
 where $\otimes$ is tensor product over $\F_{p}$, and $\zeta_\ell$ is a primitive $\ell$-th root of unity. We
-call $\F_{p}(\zeta_\ell)$ the \emph{scalar part} of $A_\ell$, and
+call $\F_{p}(\zeta_\ell)$ the \emph{field of scalars} of $A_\ell$, and
 we define the \emph{level} of $A_\ell$ as
 \[
   \lambda(\ell) = \omega_{(\mathbb{Z}/\ell\mathbb{Z})^\times}(p) = [\F_{p}(\zeta_\ell):\F_{p}],
 \]
-that is, the degree of its scalar part.
+that is, the degree of its field of scalars.
 
 Now $\sigma\otimes1$ is a $1\otimes\F_{p}(\zeta_\ell)$-linear endomorphism of $A_\ell$
 with $\ell$ distinct eigenvalues, namely the powers of $1\otimes\zeta_\ell$.
@@ -337,8 +337,7 @@ Then $1,\alpha_\ell,\cdots,(\alpha_\ell)^{\ell-1}$ are eigenvectors for distinct
 form a basis of $A_\ell$ over $1\otimes\F_{p}(\zeta_{\ell})$,
 while
 \[ (\alpha_\ell)^\ell = 1\otimes\a_\ell \]
-for a certain scalar constant $\a_\ell=\a(\alpha_\ell)\in\F_{p}(\zeta_\ell)$,
-nonzero since $A_\ell$ does not have nilpotents.
+for a certain scalar constant $\a_\ell=\a(\alpha_\ell)\in\F_{p}(\zeta_\ell)$.
 This proves:
 \begin{proposition}
 \label{alphagen}
@@ -346,6 +345,11 @@ Any such $\alpha_\ell$ is a generating element for $A_\ell$ as an algebra over $
 inducing an isomorphism
 \[ A_\ell\simeq \F_{p}(\zeta_{\ell})[T]/(T^\ell-\a_\ell). \]
 \end{proposition}
+
+Since $A_\ell$ is known to be an \'etale algebra, we also note that this implies
+that $\a_\ell$ is nonzero, which in turn implies
+that $\alpha_\ell$ in \emph{invertible} in $A_\ell$: $\;(\alpha_\ell)^{-1} = (1\otimes\a_\ell^{-1})(\alpha_\ell)^{\ell-1}$.
+
 
 We will make frequent use of the following:
 \begin{lemma}
@@ -375,7 +379,7 @@ Clear.
 \end{proof}
 
 Now we consider Kummer algebras of various degrees.
-Using, for instance, Conway polynomials, we assume that the scalar parts are compatibly embedded:
+Using, for instance, Conway polynomials, we assume that the fields of scalars are compatibly embedded:
 for $\ell\,|\,m$ not divisible by $p$, we have the embedding
 \[
 \begin{array}{cccc}
@@ -400,7 +404,7 @@ such that:
 
 \begin{proposition}
 \label{Phialpha}
-Let $\alpha_\ell\in A_\ell$ be a solution of~\eqref{h90} for $\zeta_\ell$, and set $\a_\ell=\a(\alpha_\ell)\in\F_{p}(\zeta_\ell)$.
+Let $\alpha_\ell\in A_\ell$ be a nonzero solution of~\eqref{h90} for $\zeta_\ell$, and set $\a_\ell=\a(\alpha_\ell)\in\F_{p}(\zeta_\ell)$.
 Then, there is a $1$-to-$1$ correspondence between Kummer embeddings $\Phi:A_\ell\hookrightarrow A_m$ and solutions $\hat{\alpha}\in A_m$
 of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$ that satisfy $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$,
 given by \[ \Phi\quad\longleftrightarrow\quad\hat{\alpha}=\Phi(\alpha_\ell). \]
@@ -432,9 +436,9 @@ The other assertions are clear.
 
 \begin{corollary}
 \label{alphapsi}
-Let $\alpha_\ell\in A_\ell$ be a solution of~\eqref{h90} for $\zeta_\ell$,
+Let $\alpha_\ell\in A_\ell$ be a nonzero solution of~\eqref{h90} for $\zeta_\ell$,
 and $\hat{\alpha}\in A_m$ a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$
-that satisfy $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$.
+that satisfies $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$.
 Then:
 \begin{itemize}
 \item $\hat{\alpha}\in\F_{p^m}\otimes\F_{p}((\zeta_m)^{\frac{m}{\ell}})\;\subset\;A_m$
@@ -456,13 +460,13 @@ We can now state and prove Allombert's algorithm.
 
 \begin{algorithm_endline}
   {Allombert's}
-  {$\F_{p^\ell}, \F_{p^m}$, with $\ell\,|\,m$.}
+  {blackbox $\F_{p^\ell}, \F_{p^m}$, with $\ell\,|\,m$ not divisible by $p$.}
   {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
   defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.}
   {algo:allombert}
 \item Compute the Kummer algebras $A_\ell$ and $A_m$.
-\item Find a solution $\alpha_\ell\in A_\ell$ of~\eqref{h90} for $\zeta_\ell$
-  and a solution $\alpha_m\in A_m$ of~\eqref{h90} for $\zeta_m$.
+\item Find $\alpha_\ell\in A_\ell$, $\alpha_m\in A_m$ nonzero solutions of \eqref{h90} for $\zeta_\ell$
+  and $\zeta_m$ respectively.
 \item Compute $\kappa$ a $\ell$-th root of $\embedcyc{\ell}{m}(\a_\ell)/\a_m$.
 \item Return $\first{\alpha_{\ell}}{\zeta_\ell}$ and $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{(\zeta_m)^{\frac{m}{\ell}}}$.
 \vspace{.5\baselineskip}
@@ -483,65 +487,102 @@ Now we can replace $\hat{\alpha}$
 with $(1\otimes(\zeta_{m})^{\frac{um}{\ell}})(\hat{\alpha})=(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}$
 and conclude with Corollary~\ref{alphapsi}.
 \end{proof}
-From this proof and Proposition~\ref{depend}, we remark that another choice of $l$-th root $\kappa$
+From this proof and Proposition~\ref{depend}, we remark that another choice of the $l$-th root $\kappa$
 only changes $\psi$ by a power of $\sigma$.
     
-\section{Compatible solutions of H90}
+\section{Standard solutions of (H90)}
 \label{sec:compatibleH90}
 
 There are two points in Algorithm~\ref{algo:allombert} on which we would like to improve:
 \begin{description}
 \item[\emph{Uniqueness:}] As mentioned, the element $\first{\alpha_{\ell}}{\zeta_\ell}$ is a generating element for $\F_{p^{\ell}}$,
-or equivalently, we get a defining irreducible polynomial of degree $\ell$.
+or equivalently, it provides a defining irreducible polynomial of degree $\ell$.
 However this polynomial depends on the choice of $\alpha_{\ell}$
 (even though only through~$\a_\ell$, cf. Proposition~\ref{depend}).
-\item[\emph{Compatibility:}] The embedding $\embed{\ell}{m}$ depends a constant $\kappa=\kappa_{\ell,m}$,
-which itself depends on the choice of $\alpha_\ell,\alpha_m$ and of a $\ell$-th root extraction.
+\item[\emph{Compatibility:}] The embedding $\psi$ depends on a constant $\kappa=\kappa_{\ell,m}$,
+which itself depends on the choice of $\alpha_\ell,\alpha_m$ (and of a $\ell$-th root extraction).
 Thus, given a certain number of finite fields, in order to ensure compatibility of the various
-embeddings between them, one has to keep track of all these constants, which grows \emph{quadratically}
-with the number of fields.
+embeddings between them, one has to keep track of all these constants $\kappa$,
+which grows \emph{quadratically} with the number of fields.
 \end{description}
 
+It would be very nice if one could always force $\kappa=1$, that is, if $\alpha_\ell,\alpha_m$
+and $\Phi:A_\ell\hookrightarrow A_m$
+could be chosen so that $\Phi(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
+By Proposition~\ref{Phialpha} this happens precisely when $\a_m=\embedcyc{\ell}{m}(\a_\ell)$,
+so necessarily $\a_m$ lies in the subfield $\F_{p}((\zeta_m)^{\frac{m}{\ell}})$ of $\F_{p}(\zeta_m)$.
+Possibly this condition could fail if $A_\ell$ and $A_m$ do not have the same field of scalars.
+This motivates:
+\begin{definition}
+\label{complete}
+A Kummer algebra is \emph{complete} if it is of the largest degree for a given level.
+Thus, the complete Kummer algebra of level $a$ is $A_{p^a-1}$.
+\end{definition}
+\begin{lemma}
+\label{Kummer_bizarre}
+For any $\alpha_{p^a-1}\in A_{p^a-1}$ nonzero solution of \eqref{h90} for $\zeta_{p^a-1}$,
+we have $\a_{p^a-1}=(\zeta_{p^a-1})^a$.
+\end{lemma}
+\begin{proof}
+From Lemma~\ref{FrobFrob} and the fact that $\sigma^a$ is trivial on $\F_{p}(\zeta_{p^a-1})\simeq\F_{p^a}$ we get
+\begin{equation*}
+\begin{split}
+(\alpha_{p^a-1})^{p^a}=(\sigma^a\otimes\sigma^a)(\alpha_{p^a-1})&=(\sigma^a\otimes1)(\alpha_{p^a-1})\\
+&=(1\otimes\zeta_{p^a-1})^a\alpha_{p^a-1}.
+\end{split}
+\end{equation*}
+We conclude since $\alpha_{p^a-1}$ is invertible.
+\end{proof}
+\begin{definition}
+\label{alphastandard}
+Let $l$ be an integer not divisible by $p$.
+We say a solution $\alpha_\ell\in A_\ell$ of~\eqref{h90} for $\zeta_\ell$ is \emph{standard}
+if it satisfies
+\[ \a_{\ell}=(\zeta_{p^a-1})^a \]
+where $a=\lambda(\ell)$ is the level of $A_\ell$.
+\end{definition}
+Thus Lemma~\ref{Kummer_bizarre} asserts all nonzero $\alpha_{p^a-1}$ are standard.
+\begin{proposition}
+\label{embedincomplete}
+Let $\ell\,|\,m$ not divisible by $p$ be such that $A_\ell$ and $A_m$ have the same level $a=\lambda(\ell)=\lambda(m)$.
+Assume $A_\ell$ and $A_m$ come equipped with standard $\alpha_\ell$ and $\alpha_m$, respectively.
+Then there is a unique Kummer embedding $\embedalg{l}{m}:A_\ell\hookrightarrow A_m$
+such that $\embedalg{l}{m}(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
+\end{proposition}
+\begin{proof}
+Proposition~\ref{Phialpha} with $\hat{\alpha}=(\alpha_m)^{\frac{m}{\ell}}$.
+\end{proof}
+Most often we will apply Proposition~\ref{embedincomplete} with $m=p^a-1$.
+\begin{proposition}
+\label{standardexiste}
+Let $l$ be an integer not divisible by $p$.
+Then $A_\ell$ admits a standard $\alpha_\ell$,
+unique up to a $\ell$-th root of unity.
+\end{proposition}
+\begin{proof}
+Let $\alpha'_\ell$ be any nonzero solution~\eqref{h90} for $\zeta_\ell$.
+Set $a=\lambda(\ell)$, pick any $\alpha_{p^a-1}\in A_{p^a-1}$ standard (Lemma~\ref{Kummer_bizarre}),
+and pick any Kummer embedding $\Phi:A_\ell\hookrightarrow A_{p^a-1}$ (Proposition~\ref{Phipsi}).
+Then $\Phi(\alpha'_\ell)$ and $(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}$ are two nonzero solutions~\eqref{h90}
+for $\zeta_\ell=(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}}$ in $A_{p^a-1}$, thus there is a scalar $\lambda\in\F_{p}(\zeta_\ell)=\F_{p}(\zeta_{p^a-1})$
+such that \[(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}=(1\otimes\lambda)\Phi(\alpha'_\ell).\]
+Setting $\alpha_\ell=(1\otimes\lambda\eta)\alpha'_\ell\in A_\ell$ for $\eta\in\F_{p}(\zeta_\ell)$,
+we get $\a_\ell=\eta^\ell\a_{p^a-1}$, and
+thus the standard $\alpha_\ell\in A_\ell$ are the $(1\otimes\lambda\zeta_\ell^u)\alpha'_\ell$, for $0\leq u<\ell$.
+\end{proof}
+\begin{algorithm_endline}
+  {standardization}
+  {blackbox $\F_{p^\ell}$, for $\ell$ an integer not divisible by $p$.}
+  {$\alpha_\ell\in A_\ell$ standard, $P$ a standard irreducible polynomial of degree $\ell$,
+  and $s\in\F_{p^\ell}$ a generating element inducing $\F_{p^\ell}\simeq\F_{p}[T]/(P)$.}
+  {algo:standard}
+\item Compute the Kummer algebras $A_\ell$ and $A_m$.
+\item Find $\alpha_\ell\in A_\ell$ a standard solution of \eqref{h90} for $\zeta_\ell$.
+\item Compute $P$ the minimal polynomial of $\first{\alpha_{\ell}}{\zeta_\ell}$ over $\F_{p}$.
+\item Return $\alpha_{\ell}$, $P$, and $\first{\alpha_{\ell}}{\zeta_\ell}$.
+\vspace{.5\baselineskip}
+\end{algorithm_endline}
 
-relies on solutions $\alpha_\ell,\alpha_m$ of~\eqref{h90},
-we see that in order to produce compatible embeddings between various finite fields,
-we will need solutions of~\eqref{h90} in the various Kummer algebras involved,
-that satisfy some compatiblity conditions.
-
-Here we somehow start from the end and assume that all our Kummer algebras are
-embedded in $A_\infty=\bar{\F}_{p}\otimes\F_{p}(\zeta_\infty)$.
-This will allow us to prove the existence (at least in an abstract, mathematical way)
-of a lattice of solutions $(\alpha_\ell)_{p{\nmid}\ell}$ that satisfy such ``nice''
-compatibility relations. A key point is that these compatibility relations should respect
-the fact that $\alpha_\ell$ belongs to the subalgebra $A_\ell$.
-This forces us to proceed in several steps.
-
-First we say that a Kummer algebra is \emph{complete} if it is the one of largest degree
-for a given level. Thus, the complete Kummer algebra of degree $a$ is $A_{p^a-1}$.
-%Sometimes we will also say that $\ell=p^a-1$ is a complete degree.
-For $a|b$ we have $p^a-1|p^b-1$, and we will ask for \emph{norm-compatibility}
-between $\alpha_{p^a-1}$ and $\alpha_{p^b-1}$.
-
-On the other hand, suppose $\ell|m$ are such that $A_\ell$ and $A_m$ have the same level.
-Then we will ask for \emph{power-compatibility} between $\alpha_{\ell}$ and $\alpha_{m}$.
-
-For general $\ell|m$ we will use a combination of both, but this
-
-PAS FINI
-
-
-In order to prove the existence of a compatible lattice of finite fields,
-we construct another structure: a norm-compatible lattice of
-Kummer algebras. Our goal is to compute a solution $\alpha_\ell\in A_\ell$
-of~\eqref{h90} for the root $\zeta_\ell$ for all $\ell\in\N$, and,
-whenever we have $(\ell, m)\in\N^2$ with $\ell\,|\,m$, that there exists
-some easy-to-compute map $f$ such that $f(\alpha_m) =
-\embedalg{\ell}{m}(\alpha_\ell)$. After that, we define our embedding
-$\embed{\ell}{m}$ as the map sending $\first{\alpha_\ell}{\zeta_\ell}$ to
-$\first{f(\alpha_m)}{(\zeta_m)^{\frac{m}{\ell}}}$. For simplicity, we assume in the
-remaining part of this section that all our Kummer algebras are subsets of
-$\bar{\F}_{p}\otimes\bar{\F}_p$, so our goal becomes to find a map
-$f$ with $f(\alpha_m) = \alpha_\ell$.
 
 \subsection{Complete algebras}
 
@@ -672,7 +713,7 @@ $a$, then we define $\alpha_\ell = (\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}$.
   root $\zeta_\ell$. We also have $\alpha_\ell\in A_\ell$.
 \end{proposition}
 \begin{proof}
-We still assume that the scalar parts of our algebras are compatibly
+We still assume that the fields of scalars of our algebras are compatibly
 embedded, so we have $(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}} = \zeta_\ell$,
 moreover
 \begin{align*}
@@ -794,8 +835,8 @@ equation
 \end{equation}
 with $\zeta_\ell=(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}}$.
 
-\subsection{Poor Artin-Schreier}
-
+\section{Poor Artin-Schreier}
+\label{sec:A-S}
 
 
 
