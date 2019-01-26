@@ -3,30 +3,6 @@
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
-\newcounter{algo}
-
-\newenvironment{algorithm_endline}[4]{\small\begin{center}\begin{minipage}{0.48\textwidth}
-      \refstepcounter{algo}
-      \label{#4}
-      \sf
-      \rule{\textwidth}{0.2pt}\\
-      \makebox[\textwidth][c]{Algorithm~\arabic{algo}:~\textbf{#1}}\\
-      \rule[0.5\baselineskip]{\textwidth}{0.2pt}\\
-
-      \vspace{-12pt}
-
-      \parbox{\textwidth}{\textbf{Input:} #2}
-      \parbox{\textwidth}{\textbf{Output:} #3}
-
-\vspace{-7pt}
-
-      \begin{enumerate}}{\end{enumerate}
-      \vspace{-11pt}
-      \rule{\textwidth}{0.2pt}
-\end{minipage}\end{center}
-%\vspace{-0.5cm}
-}
-
 \def\Z {\ensuremath{\mathbb{Z}}}
 \def\F {\ensuremath{\mathbb{F}}}
 \def\N {\ensuremath{\mathbb{N}}}
