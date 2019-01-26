@@ -16,6 +16,8 @@
   \affaddr{Universit\'e Paris Saclay -- UVSQ, LMV}\\
   \email{luca.de-feo@uvsq.fr}
   \alignauthor Hugues Randriam
+  \affaddr{LTCI T\'el\'ecom ParisTech}\\
+  \email{luca.de-feo@uvsq.fr}
   \alignauthor \'Edouard Rousseau
 }
 
@@ -315,7 +317,7 @@ where $\otimes$ is tensor product over $\F_{p}$, and $\zeta_\ell$ is a primitive
 call $\F_{p}(\zeta_\ell)$ the \emph{field of scalars} of $A_\ell$, and
 we define the \emph{level} of $A_\ell$ as
 \[
-  \lambda(\ell) = \omega_{(\mathbb{Z}/\ell\mathbb{Z})^\times}(p) = [\F_{p}(\zeta_\ell):\F_{p}],
+  \nu(\ell) = \omega_{(\mathbb{Z}/\ell\mathbb{Z})^\times}(p) = [\F_{p}(\zeta_\ell):\F_{p}],
 \]
 that is, the degree of its field of scalars.
 
@@ -363,7 +365,7 @@ In this generality we also introduce the following notation: if $\eta\in L$ has 
 then any $\beta\in K\otimes\F_{p}(\eta)\subset K\otimes L$ decomposes uniquely as $\beta = \sum_{i =  0}^{d-1}y_i\otimes\eta^i$,
 and we set  \[ \first{\beta}{\eta}=y_0. \]
 In particular, back to $A_\ell$, if we write
-$\alpha_\ell = \sum_{i =  0}^{a-1}x_i\otimes\zeta_{\ell}^i$ where $a=\lambda(\ell)$,
+$\alpha_\ell = \sum_{i =  0}^{a-1}x_i\otimes\zeta_{\ell}^i$ where $a=\nu(\ell)$,
 it is shown in~\cite{Allombert02} that $x_0=\first{\alpha_\ell}{\zeta_\ell}$ is a generating element for the extension
 $\F_{p^\ell}/\F_{p}$.
 
@@ -462,10 +464,10 @@ and since $\first{\alpha_{\ell}}{\zeta_\ell}$ generates $\F_{p^\ell}$, this uniq
 We can now state and prove Allombert's algorithm.
 
 \begin{algorithm}
-  \caption{Allombert's}
+  \caption{(Allombert's)}
   \label{algo:allombert}
   \begin{algorithmic}[1]
-    \REQUIRE {blackbox $\F_{p^\ell}, \F_{p^m}$, with $\ell\,|\,m$ not divisible by $p$.}
+    \REQUIRE {blackbox $\F_{p^\ell}, \F_{p^m}$, for $\ell\,|\,m$ integers prime to $p$.}
     \ENSURE {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
       defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.}
   \STATE Prepare the Kummer algebras $A_\ell$ and $A_m$.
@@ -557,7 +559,7 @@ Let $l$ be an integer not divisible by $p$.
 We say a solution $\alpha_\ell\in A_\ell$ of~\eqref{h90} for $\zeta_\ell$ is \emph{standard}
 if it satisfies
 \[ \a_{\ell}=(\zeta_{p^a-1})^a \]
-where $a=\lambda(\ell)$ is the level of $A_\ell$.
+where $a=\nu(\ell)$ is the level of $A_\ell$.
 
 By a \emph{decorated} Kummer algebra we mean a pair
 \[ (A_\ell,\alpha_{\ell}) \]
@@ -572,7 +574,7 @@ Moreover, this $\alpha_\ell$ is unique up to a $\ell$-th root of unity.
 \end{proposition}
 \begin{proof}
 Let $\alpha'_\ell$ be any nonzero solution of~\eqref{h90} for $\zeta_\ell$.
-Set $a=\lambda(\ell)$, pick any $\alpha_{p^a-1}\in A_{p^a-1}$ standard (Lemma~\ref{Kummer_bizarre}),
+Set $a=\nu(\ell)$, pick any $\alpha_{p^a-1}\in A_{p^a-1}$ standard (Lemma~\ref{Kummer_bizarre}),
 and pick any Kummer embedding $\Phi:A_\ell\hookrightarrow A_{p^a-1}$ (Proposition~\ref{Phipsi}).
 Then $\Phi(\alpha'_\ell)$ and $(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}$ are two nonzero solutions of~\eqref{h90}
 for $\zeta_\ell=(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}}$ in $A_{p^a-1}$, thus there is a scalar $\lambda\in\F_{p}(\zeta_\ell)=\F_{p}(\zeta_{p^a-1})$
@@ -583,10 +585,10 @@ thus the standard $\alpha_\ell\in A_\ell$ are the $(1\otimes\lambda\zeta_\ell^u)
 \end{proof}
 This allows:
 \begin{algorithm}
-  \caption{decoration-standardization}
+  \caption{(decoration-standardization)}
   \label{algo:decoration}
   \begin{algorithmic}[1]
-    \REQUIRE {blackbox $\F_{p^\ell}$, for $\ell$ an integer not divisible by $p$.}
+    \REQUIRE {blackbox $\F_{p^\ell}$, for $\ell$ an integer prime to $p$.}
     \ENSURE {$(A_\ell,\alpha_\ell)$ decorated, $P_\ell$ irreducible polynomial of degree $\ell$,
       and $s\in\F_{p^\ell}$ a generating element inducing $\F_{p^\ell}\simeq\F_{p}[T]/(P_\ell)$.}
   \STATE Prepare the Kummer algebra $A_\ell$.
@@ -603,19 +605,19 @@ for some $\kappa\in\F_{p}(\zeta_\ell)$, so $(\zeta_{p^a-1})^a/\a'_\ell=\kappa^\e
 
 By Proposition~\ref{depend}, we also note that $P_\ell$ only depends on $\a_{\ell}=(\zeta_{p^a-1})^a$,
 and thus it only depends on the chosen primitive polynomial of order $p^a-1$,
-e.g. the Conway polynomial of degree $a=\lambda(\ell)$.
+e.g. the Conway polynomial of degree $a=\nu(\ell)$.
 In this sense, $P_\ell$ gives a standard definition of $\F_{p^\ell}$.
 
 By design, decorated Kummer algebras of the same level admit standard Kummer embeddings,
 under which the corresponding standard solutions of~\eqref{h90} are power-compatible:
 \begin{proposition}
 \label{embedincomplete}
-Let $\ell\,|\,m$ not divisible by $p$ be such $\lambda(\ell)=\lambda(m)=a$.
+Let $\ell\,|\,m$ not divisible by $p$ be such $\nu(\ell)=\nu(m)=a$.
 Let $(A_\ell,\alpha_\ell)$, $(A_m,\alpha_m)$ be decorated Kummer algebras
 of degree $\ell,m$ respectively, and of the same level $a$.
 Then there is a unique Kummer embedding
-\[ \embedalg{l}{m}:A_\ell\hookrightarrow A_m \]
-such that $\embedalg{l}{m}(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
+\[ \embedalg{\ell}{m}:A_\ell\hookrightarrow A_m \]
+such that $\embedalg{\ell}{m}(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
 \end{proposition}
 \begin{proof}
 Special case of Lemma~\ref{power_compatibily}.
@@ -627,7 +629,7 @@ between decorated Kummer algebras of different levels cannot have this power-com
 However, at least between complete decorated algebras, we can request some \emph{norm}-compatibility
 instead.
 
-Let $A_m$ be a Kummer algebra of level $b=\lambda(m)$, so
+Let $A_m$ be a Kummer algebra of level $b=\nu(m)$, so
 \[ A_m=\F_{p^m}\otimes\F_{p}(\zeta_m)=\F_{p^m}\otimes\F_{p^b} \]
 where we used compatible roots of unity, so $\F_{p^b}=\F_{p}(\zeta_{p^b-1})$
 and $\zeta_m=(\zeta_{p^b-1})^{\frac{p^b-1}{m}}$.
@@ -639,7 +641,7 @@ where $\F_{p^a}=\F_{p}((\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}})$, with
 
 \begin{definition}
 \label{def:norm}
-Given a Kummer algebra $A_n$, and integers $a\,|\,b\,|\,\lambda(n)$, we define
+Given a Kummer algebra $A_n$, and integers $a\,|\,b\,|\,\nu(n)$, we define
 \[
 \begin{array}{cccc}
   \norm_{b/a,A_n}: & (A_n)^{1\otimes\sigma^b} & \to & (A_n)^{1\otimes\sigma^a} \\
@@ -695,30 +697,30 @@ norm-compatible embedding between decorated complete algebras
 of dividing levels.
  
 Now consider general $\ell\,|\,m$ not divisible by $p$,
-set $a=\lambda(\ell)$, $b=\lambda(m)$, and consider the diagram
+set $a=\nu(\ell)$, $b=\nu(m)$, and consider the diagram
 \begin{equation*}
 \label{3cotes}
 \begin{CD}
 (A_{p^a-1},\alpha_{p^a-1}) @>{\embedalg{p^a-1}{p^b-1}}>> (A_{p^b-1},\alpha_{p^b-1}) \\
-@A{\embedalg{l}{p^a-1}}AA @AA{\embedalg{m}{p^b-1}}A\\
+@A{\embedalg{\ell}{p^a-1}}AA @AA{\embedalg{m}{p^b-1}}A\\
 (A_\ell,\alpha_\ell) @. (A_m,\alpha_m)
 \end{CD}
 \end{equation*}
 of standard embeddings of decorated algebras.
 \begin{lemma}
 In this setting, there exists a unique Kummer embedding
-\[ \embedalg{l}{m}:A_\ell\hookrightarrow A_m \]
+\[ \embedalg{\ell}{m}:A_\ell\hookrightarrow A_m \]
 that makes the diagram commute.
 \end{lemma}
 \begin{proof}
-Consider $\hat{\hat\alpha}=\embedalg{p^a-1}{p^b-1}\circ\embedalg{l}{p^a-1}(\alpha_\ell)\in A_{p^b-1}$.
+Consider $\hat{\hat\alpha}=\embedalg{p^a-1}{p^b-1}\circ\embedalg{\ell}{p^a-1}(\alpha_\ell)\in A_{p^b-1}$.
 Then $\hat{\hat\alpha}$ is invariant under $\sigma^\ell\otimes1$ and
 under $1\otimes\sigma^a$ (because $\alpha_\ell$ is),
 thus, a fortiori, invariant under $\sigma^m\otimes1$ and
 under $1\otimes\sigma^b$, which means it lies in the image
 of $\embedalg{m}{p^b-1}$.
 We can then set $\hat\alpha=(\embedalg{m}{p^b-1})^{-1}(\hat{\hat\alpha})$.
-If $\embedalg{l}{m}$ exists, then necessarily it maps $\alpha_\ell$
+If $\embedalg{\ell}{m}$ exists, then necessarily it maps $\alpha_\ell$
 to $\hat\alpha$.
 However, chasing in the diagram, it is easily seen that $\hat\alpha$ is
 a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$ that
@@ -727,8 +729,86 @@ and we conclude with Proposition~\ref{Phialpha}.
 \end{proof}
 This existence result is ``constructive'', but impractical,
 since it requires computations in the possibly very large algebra $A_{p^b-1}$.
-However,
+However, as in Algorithm~\ref{algo:allombert}, one should be able
+to write $\hat{\alpha}=(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}$
+for some $\kappa\in\F_{p^b}$. Moreover $\hat{\alpha}$ is uniquely
+determined by our data, thus, so should $\kappa$.
+Now our aim is to give an explicit expression for this $\kappa=\kappa_{\ell,m}$.
+We start with the case of complete algebras.
+\begin{proposition}
+\label{key}
+In the complete algebra $A_{p^b-1}$ we have
+\[ (\alpha_{p^b-1})^{\frac{p^b-1}{p^a-1}}=(1\otimes\zeta_{p^b-1})^{\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)^2}}\norm_{b/a}(\alpha_{p^b-1}).\]
+\end{proposition}
+\begin{proof}
+Using first Lemma~\eqref{FrobFrob}, and then~\eqref{h90}, we get:
+\begin{equation*}
+\begin{split}
+\frac{(\alpha_{p^b-1})^{\frac{p^b-1}{p^a-1}}}{\norm_{b/a}(\alpha_{p^b-1})}&=\prod_{0\leq j<\frac{b}{a}}\frac{(\sigma^{ja}\otimes\sigma^{ja})(\alpha_{p^b-1})}{(1\otimes\sigma^{ja})(\alpha_{p^b-1})}\\
+&=\prod_{0\leq j<\frac{b}{a}}(1\otimes\sigma^{ja})\left(\frac{(\sigma^{ja}\otimes 1)(\alpha_{p^b-1})}{\alpha_{p^b-1}}\right)\\
+&=\prod_{0\leq j<\frac{b}{a}}(1\otimes\sigma^{ja})(1\otimes\zeta_{p^b-1})^{ja}\\
+&=(1\otimes\zeta_{p^b-1})^{\sum_{0\leq j<\frac{b}{a}}jap^{ja}}.
+\end{split}
+\end{equation*}
+We conclude thanks to the identity
+\[ \sum_{0\leq j<n}jT^j=T\frac{d}{dT}\!\left(\frac{T^n-1}{T-1}\right)=\frac{(n-1)T^{n+1}-nT^n+T}{(T-1)^2}. \]
+\end{proof}
+\begin{corollary}
+\label{explicit_general_standard_embedding}
+Let $(A_\ell,\alpha_\ell)$ and $(A_m,\alpha_m)$ be decorated Kummer algebras,
+of respective degrees $\ell\,|\,m$ prime to $p$.
+Then the standard Kummer embedding $\embedalg{\ell}{m}:A_\ell\hookrightarrow A_m$
+is defined by the assignation
+\[ \qquad\alpha_\ell\;\mapsto\;(1\otimes\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)\ell}}(\alpha_m)^{\frac{m}{\ell}}. \]
+\end{corollary}
+\begin{proof}
+It suffices to check that $\embedalg{p^a-1}{p^b-1}\circ\embedalg{\ell}{p^a-1}(\alpha_\ell)$
+and the image of the right-hand-side under $\embedalg{m}{p^b-1}$ coincide in $A_{p^b-1}$.
+However, we have $\embedalg{p^a-1}{p^b-1}\circ\embedalg{\ell}{p^a-1}(\alpha_\ell)=\norm_{b/a}(\alpha_{p^b-1})^{\frac{p^a-1}{\ell}}$,
+while $\embedalg{m}{p^b-1}((\alpha_m)^{\frac{m}{\ell}})=(\alpha_{p^b-1})^{\frac{p^b-1}{\ell}}$,
+and we conclude with Proposition~\ref{key}
+\end{proof}
+\begin{proposition}
+\label{standard_embeddings_compatibles}
+Standard Kummer embeddings are compatible with composition:
+if $(A_\ell,\alpha_\ell)$, $(A_m,\alpha_m)$, and $(A_n,\alpha_n)$ are decorated Kummer algebras
+with $\ell\,|\,m\,|\,n$, the corresponding standard embeddings
+satisfy $\embedalg{\ell}{n}=\embedalg{m}{n}\circ\embedalg{\ell}{m}$.
+\end{proposition}
+\begin{proof}
+We have to show $\embedalg{\ell}{n}(\alpha_\ell)=\embedalg{m}{n}(\embedalg{\ell}{m}(\alpha_\ell))$.
+Nothing but a pleasant computation with the explicit constants given 
+by Corollary~\ref{explicit_general_standard_embedding}.
 
+Alternatively, set $a=\nu(\ell),b=\nu(m),c=\nu(n)$, and decorate $A_{p^a-1},A_{p^b-1},A_{p^c-1}$.
+It suffices to show that $\embedalg{\ell}{n}(\alpha_\ell)$
+and $\embedalg{m}{n}(\embedalg{\ell}{m}(\alpha_\ell))$ have the same image under $\embedalg{n}{p^c-1}$
+in $A_{p^c-1}$.
+Chasing in the diagram
+\begin{equation*}
+\begin{CD}
+A_{p^a-1} @>>> A_{p^b-1} @>>> A_{p^c-1} \\
+@AAA @AAA @AAA\\
+A_\ell @>>> A_m @>>> A_n
+\end{CD}
+\end{equation*}
+we see indeed this common image
+is $\norm_{c/a}(\alpha_{p^c-1})^{\frac{p^a-1}{\ell}}$.
+\end{proof}
+
+\begin{algorithm}
+  \caption{(standard, compatible Allombert)}
+  \label{algo:std_embed}
+  \begin{algorithmic}[1]
+    \REQUIRE {blackbox $\F_{p^\ell}$, $\F_{p^m}$, for $\ell\,|\,m$ integers prime to $p$.}
+    \ENSURE {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
+      defines a standard embedding $\embed{\ell}{m}:\F_{p^\ell}\hookrightarrow\F_{p^m}$,
+      compatible with composition.}
+  \STATE Call Algorithm~\ref{algo:decoration} to get $(A_\ell,\alpha_\ell)$, $(A_m,\alpha_m)$, and $\first{\alpha_\ell}{\zeta_\ell}$.
+  \STATE Compute $\kappa=(\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)\ell}}$ where $a=\nu(\ell)$, $b=\nu(m)$.
+  \STATE Return $\first{\alpha_\ell}{\zeta_\ell}$ and $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{(\zeta_m)^{\frac{m}{\ell}}}$.
+  \end{algorithmic}
+\end{algorithm}
 \section{Poor Artin-Schreier}
 \label{sec:A-S}
 
