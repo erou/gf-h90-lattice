@@ -715,7 +715,7 @@ In this setting, there exists a unique Kummer embedding
 that makes the diagram commute.
 \end{lemma}
 \begin{proof}
-Consider $\hat{\hat\alpha}=\embedalg{p^a-1}{p^b-1}\circ\embedalg{\ell}{p^a-1}(\alpha_\ell)\in A_{p^b-1}$.
+Consider $\hat{\hat\alpha}=\embedalg{p^a-1}{p^b-1}(\embedalg{\ell}{p^a-1}(\alpha_\ell))\in A_{p^b-1}$.
 Then $\hat{\hat\alpha}$ is invariant under $\sigma^\ell\otimes1$ and
 under $1\otimes\sigma^a$ (because $\alpha_\ell$ is),
 thus, a fortiori, invariant under $\sigma^m\otimes1$ and
@@ -743,7 +743,7 @@ In the complete algebra $A_{p^b-1}$ we have
 \[ (\alpha_{p^b-1})^{\frac{p^b-1}{p^a-1}}=(1\otimes\zeta_{p^b-1})^{\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)^2}}\norm_{b/a}(\alpha_{p^b-1}).\]
 \end{proposition}
 \begin{proof}
-Using first Lemma~\eqref{FrobFrob}, and then~\eqref{h90}, we get:
+Using first Lemma~\ref{FrobFrob}, and then~\eqref{h90}, we get:
 \begin{equation*}
 \begin{split}
 \frac{(\alpha_{p^b-1})^{\frac{p^b-1}{p^a-1}}}{\norm_{b/a}(\alpha_{p^b-1})}&=\prod_{0\leq j<\frac{b}{a}}\frac{(\sigma^{ja}\otimes\sigma^{ja})(\alpha_{p^b-1})}{(1\otimes\sigma^{ja})(\alpha_{p^b-1})}\\
@@ -764,9 +764,9 @@ is defined by the assignation
 \[ \qquad\alpha_\ell\;\mapsto\;(1\otimes\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)\ell}}(\alpha_m)^{\frac{m}{\ell}}. \]
 \end{corollary}
 \begin{proof}
-It suffices to check that $\embedalg{p^a-1}{p^b-1}\circ\embedalg{\ell}{p^a-1}(\alpha_\ell)$
+It suffices to check that $\embedalg{p^a-1}{p^b-1}(\embedalg{\ell}{p^a-1}(\alpha_\ell))$
 and the image of the right-hand-side under $\embedalg{m}{p^b-1}$ coincide in $A_{p^b-1}$.
-However, we have $\embedalg{p^a-1}{p^b-1}\circ\embedalg{\ell}{p^a-1}(\alpha_\ell)=\norm_{b/a}(\alpha_{p^b-1})^{\frac{p^a-1}{\ell}}$,
+However, we have $\embedalg{p^a-1}{p^b-1}(\embedalg{\ell}{p^a-1}(\alpha_\ell))=\norm_{b/a}(\alpha_{p^b-1})^{\frac{p^a-1}{\ell}}$,
 while $\embedalg{m}{p^b-1}((\alpha_m)^{\frac{m}{\ell}})=(\alpha_{p^b-1})^{\frac{p^b-1}{\ell}}$,
 and we conclude with Proposition~\ref{key}
 \end{proof}
@@ -778,8 +778,8 @@ with $\ell\,|\,m\,|\,n$, the corresponding standard embeddings
 satisfy $\embedalg{\ell}{n}=\embedalg{m}{n}\circ\embedalg{\ell}{m}$.
 \end{proposition}
 \begin{proof}
-We have to show $\embedalg{\ell}{n}(\alpha_\ell)=\embedalg{m}{n}(\embedalg{\ell}{m}(\alpha_\ell))$.
-Nothing but a pleasant computation with the explicit constants given 
+We have to show $\embedalg{\ell}{n}(\alpha_\ell)=\embedalg{m}{n}(\embedalg{\ell}{m}(\alpha_\ell))$:
+nothing but a pleasant computation with the explicit constants given 
 by Corollary~\ref{explicit_general_standard_embedding}.
 
 Alternatively, set $a=\nu(\ell),b=\nu(m),c=\nu(n)$, and decorate $A_{p^a-1},A_{p^b-1},A_{p^c-1}$.
