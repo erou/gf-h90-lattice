@@ -145,9 +145,7 @@ yields subquadratic (more precisely, $d\le 1.5$) solutions for
 specially constructed (non-unique, non-general) families of
 irreducible polynomials, and even quasi-optimal ones (i.e.,
 $d=1+\varepsilon$) if a quasi-linear modular composition algorithm is
-available (Kedlaya and Umans' algorithm~\cite{KeUm11} is quasi-optimal
-in the binary RAM model, however it is widely considered
-unpractical). %
+available. %
 However these constructions involve counting points of random elliptic
 curves over finite fields, and have thus a rather high polynomial
 dependency in $\log p$; for this reason, they are usually considered
@@ -215,12 +213,76 @@ Finally, in Section~\ref{sec:implementation} we present our
 implementation and compare it to available alternatives.
 
 
-\section{Compatible roots of unity and Conway polynomials}
+\section{Preliminaries}
 \label{sec:conway}
 
-% TODO: copy-pasted from Luca's HDR without editing. Clean and shorten
-% this.
+\paragraph{Fundamental algorithms and complexities}
+Throughout this paper we let $\F_p$ be a prime field, and we measure
+time complexities as a number of arithmetic operations $(+,\times,/)$
+over $\F_p$, and storage as a number of elements of $\F_p$. %
+We let $\M(m)$ denote the number of operations required to multiply
+two polynomials with coefficients in $\F_p$ of degree at most $m$, and
+adopt the usual super-linearity assumptions on the function $\M$
+(see~\cite[Ch.~8.3]{vzGG}).
 
+Any finite extension $\F_{p^m}$ can be represented as the quotient of
+$\F_p[X]$ by an irreducible polynomial of degree $m$. %
+The algorithms we present in the next sections need not assume any
+particular representation for finite fields, however when analyzing
+their complexities we will assume this representation. %
+Then, multiplications in $\F_{p^m}$ can be carried out using
+$O(\M(m))$ operations, and inversions using $O(\M(m)\log(m))$.
+
+We will extensively use a few standard routines, that we recall
+briefly. %
+Brent and Kung's algorithm~\cite{brent+kung} computes the
+\textbf{modular composition} $f(g)\bmod h$ of three polynomials
+$f,g,h\in\F_p[X]$ of degree at most $m$ using
+$O\bigl(m^{(\omega+1)/2)}\bigr)$ operations, where $\omega$ is the
+\emph{exponent of linear algebra} over $\F_p$. %
+The Kedlaya--Umans algorithm~\cite{KeUm11} solves the same problem,
+and has better complexity in the binary RAM model, however it is
+widely considered impractical, we shall thus not consider it in our
+complexity estimates.
+
+By applying \emph{transposition
+  techniques}~\cite{burgisser+clausen-shokrollahi,bostan+lecerf+schost:tellegen}
+to Brent and Kung's algorithm, Shoup~\cite{shoup94,shoup99} derived an
+algorithm to compute \textbf{minimal polynomials} of arbitrary
+elements of $\F_{p^m}$, having the same complexity
+$O\bigl(m^{(\omega+1)/2)}\bigr)$. %
+Kedlaya and Umans' improvements also apply to Shoup's minimal
+polynomial algorithm, with the same practical limitations.
+
+Shoup's techniques can also be applied to \textbf{evaluate embeddings
+  of finite fields}. %
+Let $\F_{p^\ell},\F_{p^m}$ be a pair of finite fields related by an
+embedding $\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$, and let a
+generator $\alpha_\ell$ of $\F_{p^\ell}$ and its image
+$\phi(\alpha_\ell)$ in $\F_{p^m}$ be given. %
+Given these data, for any element $x\in\F_{p^\ell}$ it is possible to
+compute its image $\phi(x)$ using $O\bigl(m^{(\omega+1)/2)}\bigr)$
+operations; similarly, given an element $y=\phi(x)$ in $\F_{p^m}$, it
+is possible to recover $x$ in the same asymptotic number of
+operations. %
+The relevant algorithms are reviewed in~\cite[Sec.~6]{ffisom-long};
+note that, for specially constructed generators $\alpha_\ell$, more
+efficient algorithms may
+exist~\cite{df+schost12,DoSc12,DeDoSc13,DeDoSc2014}.
+
+The present work focuses on algorithms to \textbf{compute embeddings
+  of finite fields}, i.e., algorithms that, given finite fields
+$\F_{p^\ell},\F_{p^m}$ with $\ell\,|\,m$, find an embedding
+$\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$, a generator $\alpha_\ell$
+of $\F_{p^\ell}$, and its image $\phi(\alpha_\ell)$. %
+An extensive review of known algorithms is given
+in~\cite{brieulle2018computing}; here we shall only be interested in
+the Lenstra--Allombert isomorphism
+algorithm~\cite{LenstraJr91,Allombert02}, and its adaptation to
+compatible lattices of finite fields.
+
+
+\paragraph{Conway polynomials and compatible cyclotomic lattices}
 One of the most famous constructions is that of \emph{Conway
   polynomials}. %
 The main feature of Conway polynomials is \emph{norm compatibility}:
@@ -840,4 +902,4 @@ Corollary~\ref{Phipsi} and Proposition~\ref{standard_K_embeddings_compatibles}
 
 \end{document}
 
-% LocalWords:  embeddings computable Frobenius Lenstra
+% LocalWords:  embeddings computable Frobenius Lenstra cyclotomic
