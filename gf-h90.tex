@@ -2,6 +2,7 @@
 
 \usepackage{hyperref}
 \usepackage{macros}
+\usepackage{amscd}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}[theorem]{Proposition}
@@ -690,8 +691,41 @@ its decorated complete algebra,
 and in Proposition~\ref{embedcomplete}, a standard
 norm-compatible embedding between decorated complete algebras
 of dividing levels.
-
-
+ 
+Now consider general $\ell\,|\,m$ not divisible by $p$,
+set $a=\lambda(\ell)$, $b=\lambda(m)$, and consider the diagram
+\begin{equation*}
+\label{3cotes}
+\begin{CD}
+(A_{p^a-1},\alpha_{p^a-1}) @>{\embedalg{p^a-1}{p^b-1}}>> (A_{p^b-1},\alpha_{p^b-1}) \\
+@A{\embedalg{l}{p^a-1}}AA @AA{\embedalg{m}{p^b-1}}A\\
+(A_\ell,\alpha_\ell) @. (A_m,\alpha_m)
+\end{CD}
+\end{equation*}
+of standard embeddings of decorated algebras.
+\begin{lemma}
+In this setting, there exists a unique Kummer embedding
+\[ \embedalg{l}{m}:A_\ell\hookrightarrow A_m \]
+that makes the diagram commute.
+\end{lemma}
+\begin{proof}
+Consider $\hat{\hat\alpha}=\embedalg{p^a-1}{p^b-1}\circ\embedalg{l}{p^a-1}(\alpha_\ell)\in A_{p^b-1}$.
+Then $\hat{\hat\alpha}$ is invariant under $\sigma^\ell\otimes1$ and
+under $1\otimes\sigma^a$ (because $\alpha_\ell$ is),
+thus, a fortiori, invariant under $\sigma^m\otimes1$ and
+under $1\otimes\sigma^b$, which means it lies in the image
+of $\embedalg{m}{p^b-1}$.
+We can then set $\hat\alpha=(\embedalg{m}{p^b-1})^{-1}(\hat{\hat\alpha})$.
+If $\embedalg{l}{m}$ exists, then necessarily it maps $\alpha_\ell$
+to $\hat\alpha$.
+However, chasing in the diagram, it is easily seen that $\hat\alpha$ is
+a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$ that
+satisfies $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$,
+and we conclude with Proposition~\ref{Phialpha}.
+\end{proof}
+This existence result is constructive, but impractical,
+since it requires computations in the possibly very large algebra $A_{p^b-1}$.
+However,
 
 \section{Poor Artin-Schreier}
 \label{sec:A-S}
