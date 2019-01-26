@@ -7,13 +7,13 @@ int main() {
   fq_nmod_t a, g, aa, aaa, temp;
   nmod_poly_t modulus;
   fmpz_t p;
-  int primes[5] = {2, 11, 23, 31, 59};
-  int degrees[4] = {3, 7, 15, 13};
+  int primes[5] = {2, 7, 11, 31, 59};
+  int degrees[4] = {2, 7, 11, 15};
   slong deg, deg1, deg2;
   
   flint_printf("Testing basis change\n");
   flint_randinit(state);
-  for (int i = 1 ; i < 20 ; i++) {
+  for (int i = 1 ; i < 40 ; i++) {
     fmpz_init(p);
     fmpz_set_si(p, primes[i % 5]);
     deg1 = degrees[i % 4];
@@ -77,7 +77,7 @@ int main() {
       fq_nmod_print_pretty(aaa, ctx);
       flint_printf("\n");      
     } else {
-      flint_printf(".%d,%d.", deg, deg2);
+      flint_printf(".%d,%d,%d.", deg, deg2, deg1 % primes[i%5]);
     }
 
     

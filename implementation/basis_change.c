@@ -12,7 +12,7 @@ void monomial_to_dual(mp_limb_t *dual, const nmod_poly_t a, const fq_nmod_ctx_t 
   slong m = nmod_poly_degree(ctx->modulus);
   
   nmod_poly_derivative(temp, ctx->modulus);
-  nmod_poly_mulmod(temp, temp, a, ctx->modulus);
+  fq_nmod_mul(temp, temp, a, ctx);
   nmod_poly_reverse(temp, temp, m);
   nmod_poly_mullow(temp, temp, ctx->inv, m);
   
@@ -22,34 +22,83 @@ void monomial_to_dual(mp_limb_t *dual, const nmod_poly_t a, const fq_nmod_ctx_t 
   nmod_poly_clear(temp);
 }
 
-/**
- * Computes the representation of the given dual {@code dual}
- * in monomial basis modulo {@code modulus} 
- */
-void dual_to_monomial(nmod_poly_t result, const mp_limb_t *dual, const nmod_poly_t modulus) {
+void dual_to_monomial_precomp_deriv_inv(nmod_poly_t result, const mp_limb_t *dual,
+					const fq_nmod_ctx_t ctx, const nmod_poly_t deriv_inv) {
   nmod_poly_t temp1;
   nmod_poly_t temp2;
-  nmod_poly_init(temp1, modulus->mod.n);
-  nmod_poly_init(temp2, modulus->mod.n);
+  nmod_poly_init(temp1, ctx->modulus->mod.n);
+  nmod_poly_init(temp2, ctx->modulus->mod.n);
 
-  slong m = nmod_poly_degree(modulus);
+  slong m = nmod_poly_degree(ctx->modulus);
   for (slong i = 0; i < m; i++)
     nmod_poly_set_coeff_ui(temp1, i, dual[i]);
   
-  nmod_poly_reverse(temp2, modulus, m + 1);
+  nmod_poly_reverse(temp2, ctx->modulus, m + 1);
   nmod_poly_mullow(temp1, temp1, temp2, m);
   
   nmod_poly_reverse(temp2, temp1, m);
   
-  // compute 1 / modulus'
-  // This could be precomputed
-  nmod_poly_derivative(temp1, modulus);
-  nmod_poly_invmod(temp1, temp1, modulus);
-  
-  nmod_poly_mulmod(result, temp1, temp2, modulus);
+  fq_nmod_mul(result, deriv_inv, temp2, ctx);
   
   nmod_poly_clear(temp1);
   nmod_poly_clear(temp2);
+}
+
+/**
+ * Computes the representation of the given dual {@code dual}
+ * in monomial basis modulo {@code ctx} 
+ */
+void dual_to_monomial(nmod_poly_t result, const mp_limb_t *dual, const fq_nmod_ctx_t ctx) {
+  nmod_poly_t deriv_inv;
+
+  nmod_poly_init(deriv_inv, ctx->modulus->mod.n);
+  // compute 1 / modulus'
+  nmod_poly_derivative(deriv_inv, ctx->modulus);
+  fq_nmod_inv(deriv_inv, deriv_inv, ctx);
+
+  dual_to_monomial_precomp_deriv_inv(result, dual, ctx, deriv_inv);
+
+  nmod_poly_clear(deriv_inv);
+}
+
+/*
+ * See doc for change_basis_inverse.
+ *
+ * Takes two additional precomputed arguments:
+ *
+ * - to_deriv_inv is 1/P' mod P, where P is the modulus of ctx_to,
+ *
+ * - an optional trace_one element, that is multiplied by a prior to
+ *   conversion.
+ */
+void change_basis_inverse_precomp(fq_nmod_t res,
+				  const fq_nmod_t a, const fq_nmod_t g,
+				  const fq_nmod_ctx_t ctx_from, const fq_nmod_ctx_t ctx_to,
+				  const fq_nmod_t to_deriv_inv, const fq_nmod_t trace_one) {
+  slong degree = fq_nmod_ctx_degree(ctx_from);
+  
+  mp_limb_t *dual = _nmod_vec_init(degree); //new mp_limb_t[degree];
+  for (slong i = 0; i < degree; i++)
+    dual[i] = 0;
+
+  // compute the dual basis image of a
+  if (trace_one) {
+    fq_nmod_t temp;
+    fq_nmod_init(temp, ctx_from);
+    fq_nmod_mul(temp, a, trace_one, ctx_from);
+    monomial_to_dual(dual, temp, ctx_from);
+    fq_nmod_clear(temp, ctx_from);
+  } else {
+    monomial_to_dual(dual, a, ctx_from);
+  }
+  
+  // compute the power projection <dual, ctx_to>
+  project_powers(dual, dual, degree, g, ctx_from->modulus, ctx_from->inv);
+
+  // compute result such that result(f) = g
+  dual_to_monomial_precomp_deriv_inv(res, dual, ctx_to, to_deriv_inv);
+
+  _nmod_vec_clear(dual);
 }
 
 /*
@@ -63,29 +112,42 @@ void dual_to_monomial(nmod_poly_t result, const mp_limb_t *dual, const nmod_poly
 void change_basis_inverse(fq_nmod_t res,
 			  const fq_nmod_t a, const fq_nmod_t g,
 			  const fq_nmod_ctx_t ctx_from, const fq_nmod_ctx_t ctx_to) {
+  nmod_poly_t deriv_inv;
+
+  nmod_poly_init(deriv_inv, ctx_to->modulus->mod.n);
+  // compute 1 / modulus'
+  nmod_poly_derivative(deriv_inv, ctx_to->modulus);
+  fq_nmod_inv(deriv_inv, deriv_inv, ctx_to);
+
+  // correct scalar for proper embeddings
   slong degree = fq_nmod_ctx_degree(ctx_from);
   slong deg_low = fq_nmod_ctx_degree(ctx_to);
   fmpz_t deg_ratio;
-  
-  mp_limb_t *dual = malloc(degree * sizeof(mp_limb_t)); //new mp_limb_t[degree];
-  for (slong i = 0; i < degree; i++)
-    dual[i] = 0;
+  if (degree / deg_low > 1) {
+    fq_nmod_t trace_one;
+    fq_nmod_init(trace_one, ctx_from);
+    fmpz_init_set_ui(deg_ratio, degree / deg_low);
+    if (fmpz_invmod(deg_ratio, deg_ratio, &(ctx_to->p))) {
+      fq_nmod_set_fmpz(trace_one, deg_ratio, ctx_from);
+    } else {
+      fq_nmod_t x_trace;
+      fq_nmod_init(x_trace, ctx_to);
+      fq_nmod_one(trace_one, ctx_from);
+      do {
+	nmod_poly_shift_left(trace_one, trace_one, 1);
+	change_basis_inverse_precomp(x_trace, trace_one, g, ctx_from, ctx_to, deriv_inv, NULL);
+      } while(fq_nmod_is_zero(x_trace, ctx_to));
+      change_basis_direct(x_trace, x_trace, ctx_to, g, ctx_from);
+      fq_nmod_div(trace_one, trace_one, x_trace, ctx_from);
+      fq_nmod_clear(x_trace, ctx_from);
+    }
+    change_basis_inverse_precomp(res, a, g, ctx_from, ctx_to, deriv_inv, trace_one);
+    fq_nmod_clear(trace_one, ctx_from);
+  } else {
+    change_basis_inverse_precomp(res, a, g, ctx_from, ctx_to, deriv_inv, NULL);
+  }
 
-  // compute the dual basis image of a
-  monomial_to_dual(dual, a, ctx_from);
-  
-  // compute the power projection <dual, ctx_to>
-  project_powers(dual, dual, degree, g, ctx_from->modulus, ctx_from->inv);
-
-  // compute result such that result(f) = g
-  dual_to_monomial(res, dual, ctx_to->modulus);
-
-  // correct scalar for proper embeddings
-  fmpz_init_set_ui(deg_ratio, degree / deg_low);
-  fmpz_invmod(deg_ratio, deg_ratio, &(ctx_to->p));
-  fq_nmod_mul_fmpz(res, res, deg_ratio, ctx_to);
-  
-  _nmod_vec_clear(dual);
+  nmod_poly_clear(deriv_inv);
 }
 
 /*
