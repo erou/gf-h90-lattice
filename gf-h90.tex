@@ -464,7 +464,7 @@ We can now state and prove Allombert's algorithm.
   {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
   defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.}
   {algo:allombert}
-\item Compute the Kummer algebras $A_\ell$ and $A_m$.
+\item Prepare the Kummer algebras $A_\ell$ and $A_m$.
 \item Find $\alpha_\ell\in A_\ell$, $\alpha_m\in A_m$ nonzero solutions of \eqref{h90} for $\zeta_\ell$
   and $\zeta_m$ respectively.
 \item Compute $\kappa$ a $\ell$-th root of $\embedcyc{\ell}{m}(\a_\ell)/\a_m$.
@@ -509,14 +509,26 @@ which grows \emph{quadratically} with the number of fields.
 It would be very nice if one could always force $\kappa=1$, that is, if $\alpha_\ell,\alpha_m$
 and $\Phi:A_\ell\hookrightarrow A_m$
 could be chosen so that $\Phi(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
-By Proposition~\ref{Phialpha} this happens precisely when $\a_m=\embedcyc{\ell}{m}(\a_\ell)$,
-so necessarily $\a_m$ lies in the subfield $\F_{p}((\zeta_m)^{\frac{m}{\ell}})$ of $\F_{p}(\zeta_m)$.
+\begin{lemma}
+\label{power_compatibily}
+Let $\alpha_\ell\in A_\ell$, $\alpha_m\in A_m$ be nonzero solutions of \eqref{h90} for $\zeta_\ell$
+and $\zeta_m$ respectively. Then, there is a Kummer embedding $\Phi:A_\ell\hookrightarrow A_m$
+such that $\Phi(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$ if and only if $\a_m=\embedcyc{\ell}{m}(\a_\ell)$.
+
+Moreover, if so, then this $\Phi$ is unique.
+\end{lemma}
+\begin{proof}
+Proposition~\ref{Phialpha} with $\hat{\alpha}=(\alpha_m)^{\frac{m}{\ell}}$.
+\end{proof}
+Observe that if Lemma~\ref{power_compatibily} is satisfied,
+necessarily $\a_m$ lies in the subfield $\F_{p}((\zeta_m)^{\frac{m}{\ell}})$ of $\F_{p}(\zeta_m)$.
 Possibly this condition could fail if $A_\ell$ and $A_m$ do not have the same field of scalars.
 This motivates:
 \begin{definition}
 \label{complete}
 A Kummer algebra is \emph{complete} if it is of the largest degree for a given level.
-Thus, the complete Kummer algebra of level $a$ is $A_{p^a-1}$.
+Thus, the complete Kummer algebra of level $a$ is
+\[ A_{p^a-1}=\F_{p^{p^a-1}}\otimes\F_{p}(\zeta_{p^a-1}). \]
 \end{definition}
 \begin{lemma}
 \label{Kummer_bizarre}
@@ -540,203 +552,120 @@ We say a solution $\alpha_\ell\in A_\ell$ of~\eqref{h90} for $\zeta_\ell$ is \em
 if it satisfies
 \[ \a_{\ell}=(\zeta_{p^a-1})^a \]
 where $a=\lambda(\ell)$ is the level of $A_\ell$.
+
+By a \emph{decorated} Kummer algebra we mean a pair
+\[ (A_\ell,\alpha_{\ell}) \]
+with such $\alpha_\ell$ standard.
 \end{definition}
-Thus Lemma~\ref{Kummer_bizarre} asserts all nonzero $\alpha_{p^a-1}$ are standard.
-\begin{proposition}
-\label{embedincomplete}
-Let $\ell\,|\,m$ not divisible by $p$ be such that $A_\ell$ and $A_m$ have the same level $a=\lambda(\ell)=\lambda(m)$.
-Assume $A_\ell$ and $A_m$ come equipped with standard $\alpha_\ell$ and $\alpha_m$, respectively.
-Then there is a unique Kummer embedding $\embedalg{l}{m}:A_\ell\hookrightarrow A_m$
-such that $\embedalg{l}{m}(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
-\end{proposition}
-\begin{proof}
-Proposition~\ref{Phialpha} with $\hat{\alpha}=(\alpha_m)^{\frac{m}{\ell}}$.
-\end{proof}
-Most often we will apply Proposition~\ref{embedincomplete} with $m=p^a-1$.
+For complete algebras, Lemma~\ref{Kummer_bizarre} asserts that all nonzero $\alpha_{p^a-1}$ are standard.
 \begin{proposition}
 \label{standardexiste}
 Let $l$ be an integer not divisible by $p$.
-Then $A_\ell$ admits a standard $\alpha_\ell$,
-unique up to a $\ell$-th root of unity.
+Then $A_\ell$ can be decorated, i.e. it admits a standard $\alpha_\ell$.
+Moreover, this $\alpha_\ell$ is unique up to a $\ell$-th root of unity.
 \end{proposition}
 \begin{proof}
-Let $\alpha'_\ell$ be any nonzero solution~\eqref{h90} for $\zeta_\ell$.
+Let $\alpha'_\ell$ be any nonzero solution of~\eqref{h90} for $\zeta_\ell$.
 Set $a=\lambda(\ell)$, pick any $\alpha_{p^a-1}\in A_{p^a-1}$ standard (Lemma~\ref{Kummer_bizarre}),
 and pick any Kummer embedding $\Phi:A_\ell\hookrightarrow A_{p^a-1}$ (Proposition~\ref{Phipsi}).
-Then $\Phi(\alpha'_\ell)$ and $(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}$ are two nonzero solutions~\eqref{h90}
+Then $\Phi(\alpha'_\ell)$ and $(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}$ are two nonzero solutions of~\eqref{h90}
 for $\zeta_\ell=(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}}$ in $A_{p^a-1}$, thus there is a scalar $\lambda\in\F_{p}(\zeta_\ell)=\F_{p}(\zeta_{p^a-1})$
 such that \[(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}=(1\otimes\lambda)\Phi(\alpha'_\ell).\]
 Setting $\alpha_\ell=(1\otimes\lambda\eta)\alpha'_\ell\in A_\ell$ for $\eta\in\F_{p}(\zeta_\ell)$,
 we get $\a_\ell=\eta^\ell\a_{p^a-1}$, and
 thus the standard $\alpha_\ell\in A_\ell$ are the $(1\otimes\lambda\zeta_\ell^u)\alpha'_\ell$, for $0\leq u<\ell$.
 \end{proof}
+This allows:
 \begin{algorithm_endline}
-  {standardization}
+  {decoration-standardization}
   {blackbox $\F_{p^\ell}$, for $\ell$ an integer not divisible by $p$.}
-  {$\alpha_\ell\in A_\ell$ standard, $P$ a standard irreducible polynomial of degree $\ell$,
-  and $s\in\F_{p^\ell}$ a generating element inducing $\F_{p^\ell}\simeq\F_{p}[T]/(P)$.}
-  {algo:standard}
-\item Compute the Kummer algebras $A_\ell$ and $A_m$.
-\item Find $\alpha_\ell\in A_\ell$ a standard solution of \eqref{h90} for $\zeta_\ell$.
-\item Compute $P$ the minimal polynomial of $\first{\alpha_{\ell}}{\zeta_\ell}$ over $\F_{p}$.
-\item Return $\alpha_{\ell}$, $P$, and $\first{\alpha_{\ell}}{\zeta_\ell}$.
+  {$(A_\ell,\alpha_\ell)$ decorated, $P_\ell$ irreducible polynomial of degree $\ell$,
+  and $s\in\F_{p^\ell}$ a generating element inducing $\F_{p^\ell}\simeq\F_{p}[T]/(P_\ell)$.}
+  {algo:decoration}
+\item Prepare the Kummer algebra $A_\ell$.
+\item Find $\alpha'_\ell\in A_\ell$ nonzero solution of \eqref{h90} for $\zeta_\ell$.
+\item Compute $\kappa$ a $\ell$-th root of $(\zeta_{p^a-1})^a/\a'_\ell$.
+\item Set $\alpha_{\ell}=(1\otimes\kappa)\alpha'_\ell$.
+\item Compute $P_\ell$ the minimal polynomial of $\first{\alpha_{\ell}}{\zeta_\ell}$ over $\F_{p}$.
+\item Return $(A_\ell,\alpha_\ell)$, $P_\ell$, and $\first{\alpha_\ell}{\zeta_\ell}$.
 \vspace{.5\baselineskip}
 \end{algorithm_endline}
+Algorithm~\ref{algo:decoration} is correct: indeed Proposition~\ref{standardexiste} ensures that
+a standard $\alpha_{\ell}$ exists, and thus, $\alpha'_\ell=(1\otimes\kappa^{-1})\alpha_{\ell}$
+for some $\kappa\in\F_{p}(\zeta_\ell)$, so $(\zeta_{p^a-1})^a/\a'_\ell=\kappa^\ell$ is a $\ell$-th power.
 
+By Proposition~\ref{depend}, we also note that $P_\ell$ only depends on $\a_{\ell}=(\zeta_{p^a-1})^a$,
+and thus it only depends on the chosen primitive polynomial of order $p^a-1$,
+e.g. the Conway polynomial of degree $a=\lambda(\ell)$.
+In this sense, $P_\ell$ gives a standard definition of $\F_{p^\ell}$.
 
-\subsection{Complete algebras}
+By design, decorated Kummer algebras of the same level admit standard Kummer embeddings,
+under which the corresponding standard solutions of~\eqref{h90} are power-compatible:
+\begin{proposition}
+\label{embedincomplete}
+Let $\ell\,|\,m$ not divisible by $p$ be such $\lambda(\ell)=\lambda(m)=a$.
+Let $(A_\ell,\alpha_\ell)$, $(A_m,\alpha_m)$ be decorated Kummer algebras
+of degree $\ell,m$ respectively, and of the same level $a$.
+Then there is a unique Kummer embedding
+\[ \embedalg{l}{m}:A_\ell\hookrightarrow A_m \]
+such that $\embedalg{l}{m}(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
+\end{proposition}
+\begin{proof}
+Special case of Lemma~\ref{power_compatibily}.
+\end{proof}
+Most often we will apply Proposition~\ref{embedincomplete} with $m=p^a-1$.
 
-For $a, b$ two integers with $a\,|\,b$, and $A$ a Kummer
-algebra, we define
+On the other hand, because of Lemma~\ref{power_compatibily}, a Kummer embedding
+between decorated Kummer algebras of different levels cannot have this power-compatibity.
+However, at least between complete decorated algebras, we can request some \emph{norm}-compatibility
+instead.
+
+Let $a\,|\,b$ be two integers. Observe that the subalgebra of the complete algebra $A_{p^b-1}$ invariant under $1\otimes\sigma^a$ is
+\[ (A_{p^b-1})^{1\otimes\sigma^a}=\F_{p^{p^b-1}}\otimes\F_{p}((\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}) \]
+where $(\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}=\operatorname{N}_{\F_{p^b}/\F_{p^a}}(\zeta_{p^b-1})=\embedcyc{a}{b}(\zeta_{p^a-1})$.
+
+\begin{definition}
+\label{def:norm}
+For integers $a\,|\,b\,|\,c$, we define
 \[
 \begin{array}{cccc}
-  \norm_{b/a}: & A & \to & A \\
-  & \gamma & \mapsto & \prod_{j=0}^{b/a-1} (1 \otimes
-  \sigma^{ja})(\gamma).
+  \norm_{b/a}: & (A_{p^c-1})^{1\otimes\sigma^b} & \to & (A_{p^c-1})^{1\otimes\sigma^a} \\
+  & \gamma & \mapsto & \prod_{0\leq j<\frac{b}{a}} (1 \otimes \sigma^{ja})(\gamma).
 \end{array}
 \]
-The ``norms'' $\norm$ are multiplicative:
+\end{definition}
+We view these $\norm_{b/a}$ as ``norms'' on the fields of scalars of the Kummer algebras.
+They are well-defined, i.e. the image of $\norm_{b/a}$ is invariant under $1\otimes\sigma^a$ as specified.
+They are multiplicative:
 \[
-  \forall\gamma, \gamma'\in A,\,\norm_{b/a}(\gamma\gamma')=\norm_{b/a}(\gamma)\norm_{b/a}(\gamma')
+  \norm_{b/a}(\gamma\gamma')=\norm_{b/a}(\gamma)\norm_{b/a}(\gamma'),
 \]
-and transitive: given $a, b, c$ three integers with
-$a\,|\,b\,|\,c$, we have $\norm_{c/a} = \norm_{b/a}\circ\norm_{c/b}$. These maps 
-commute with $\sigma\otimes1$, that will also be important for the construction
-of our lattice. We start by working in algebras of the form $A_{p^n-1}$, for
-$n\in\N$. We call them \emph{complete} algebras because
-$A_{p^n-1}$ is the biggest Kummer algebra of level $n$.
-
+transitive: \[ \norm_{c/a} = \norm_{b/a}\circ\norm_{c/b},\] and they
+commute with $\sigma\otimes1$.
+And by construction, $\norm_{b/a}$ acts on $1\otimes\F_{p^b}$ as $1\otimes\operatorname{N}_{\F_{p^b}/\F_{p^a}}$.
 \begin{proposition}
-  \label{prop:complete-alg}
-  There exists a family of solutions of \eqref{h90}
-  $(\alpha_{p^n-1})_{n\in\N}$, corresponding to the roots of unity
-  $(\zeta_{p^n-1})_{n\in\N}$, such that, for each $a,b\in\N$
-  with $a\,|\,b$, we have
-  \[
-    \norm_{b/a}(\alpha_{p^b-1})=\alpha_{p^a-1}.
-  \]
+\label{embedcomplete}
+Let $a\,|\,b$ be integers,
+and $(A_{p^a-1},\alpha_{p^a-1})$, $(A_{p^b-1},\alpha_{p^b-1})$ decorated complete Kummer algebras
+of level $a,b$ respectively.
+Then there is a unique Kummer embedding
+\[ \embedalg{p^a-1}{p^b-1}:A_{p^a-1}\hookrightarrow A_{p^b-1} \]
+such that $\embedalg{p^a-1}{p^b-1}(\alpha_{p^a-1})=\norm_{b/a}(\alpha_{p^b-1})$.
 \end{proposition}
 \begin{proof}
-
-%TODO: make the proof shorter? Cleaner? Better?
-  % Instead of doing the calculation, we can just say that we can find an element
-  % alpha using the surjectivity of the norm and the fact the solutions are a
-  % dimension 1 vector space
-
-  We prove the result by induction. First, choose any primitive element
-  $\zeta_{p-1}\in\F_{p}$, and a solution $\alpha_{p-1}\in
-  A_{p-1}$ of \eqref{h90} for the root $\zeta_{p-1}$. Then, suppose that we have
-  a family of solutions of \eqref{h90} $(\alpha_{p^n-1})_{n\in \left[ d
-  \right]}$ for the roots
-  $(\zeta_{p^n-1})_{n\in \left[ d \right]}$, where $\left[ d \right]$ is
-  the set of all the divisors of some integer $d\in\N$, and such that for all $a,
-  b\in \left[ d \right]$ with $a\,|\,b$, we have
-  \[
-    \norm_{b/a}(\alpha_{p^b-1})=\alpha_{p^a-1}.
-  \]
-  Let $e\in\N$ such that $d\,|\,e$, consider the
-  finite field extension $\F_{p^{e}}/\F_{p^{d}}$, and
-  let $N:\F_{p^{e}}\to\F_{p^{d}}$ be the corresponding
-  norm. Since $N$ is surjective, we note $y\in\F_{p^{e}}$ such
-  that
-  \[
-    N(y) = \zeta_{p^{d}-1}.
-  \]
-  Because $N(y)=y^{\frac{p^{e}-1}{p^{d}-1}}$, we have that the order of
-  $y$ is $p^{e}-1$, otherwise the order of $N(y)=\zeta_{p^{d}-1}$ could not
-  be $p^{d}-1$. Hence we can define a new root $\zeta_{p^{e}-1}=y$, and we
-  have that
-  \[
-    N(\zeta_{p^{e}-1})=\zeta_{p^{d}-1}.
-  \]
-  Furthermore, the map $\norm_{e/d}$ acts on
-  $1\otimes\F_{p^{e}}$ exactly as $1\otimes N$, so we also have
-  \[
-    \norm_{e/d}(1\otimes\zeta_{p^{e}-1}) = 1\otimes\zeta_{p^{d}-1}.
-  \]
-Now let
-$\beta\in A_{p^{e}-1}$ be any nonzero solution of \eqref{h90} with the root
-$\zeta_{p^{e}-1}$.
-Then we get
-\begin{align*}
-  (\sigma\otimes1)(\norm_{e/d}(\beta)) &= \norm_{e/d}((\sigma\otimes1)(\beta)) \\
-  &= \norm_{e/d}(1\otimes\zeta_{p^{e}-1}) \norm_{e/d}(\beta) \\
-  &= (1\otimes\zeta_{p^{d}-1})\norm_{e/d}(\beta),
-\end{align*}
-meaning that we have
-\[
-  \norm_{e/d}(\beta)=(1\otimes\lambda)\alpha_{p^{d}-1},
-\]
-where $\lambda\in\F_{p^d}$. Since the map
-$\norm_{e/d}$ acts on $1\otimes\F_{p^{e}}$ as the
-usual norm $N$, we can use
-the surjectivity of the norm to ``correct'' our element $\beta$. In the end we
-obtain an element $\alpha_{p^{e}-1}$ such
-that
-\[
-  \norm_{e/d}(\alpha_{p^{e}-1}) = \alpha_{p^{d}-1}.
-\]
-Since our norm-like functions $\norm$ are transitive, we also obtain that
-\[
-  \norm_{b/a}(\alpha_{p^b-1})=\alpha_{p^a-1}
-\]
-for any $a,b\in \left[ d \right]\cup\left\{ e \right\}$ such that
-$a\,|\,b$. Additionnaly, for every divisor $c$ of $e$ that is not already in $\left[
-d \right]$, we define
-\[
-  \alpha_{p^c-1}=\norm_{e/c}(\alpha_{p^{e}-1}).
-\]
-In the end, for any $a, b\in\left[ e \right]$ such that
-$a\,|\,b$ we have that
-\[
-  \norm_{b/a}(\alpha_{p^b-1})=\alpha_{p^a-1}.
-\]
-The result follows by considering any sequence $(d_n)_{n\in\N}$ such
-that for all $n\in\N$, $d_n\,|\,d_{n+1}$ and for all
-$\ell\in\N$, there exists $n_\ell\in\N$ with
-$\ell\,|\,d_{n_\ell}$.
+Set $\hat\alpha=\norm_{b/a}(\alpha_{p^b-1})$.
+Choose an arbitrary Kummer embedding $\Phi:A_{p^a-1}\hookrightarrow A_{p^b-1}$ (Proposition~\ref{Phipsi}),
+and set $\hat\alpha'=\Phi(\alpha_{p^a-1})$, so $(\hat\alpha')^{p^a-1}=1\otimes\embedcyc{p^a-1}{p^b-1}(\a_{p^a-1})$.
+Then $\hat\alpha,\hat\alpha'\in A_{p^b-1}$ are two nonzero solutions of~\eqref{h90}
+for $(\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}$, of order $p^a-1$.
+Thus $\hat\alpha=(1\otimes\lambda)\hat\alpha'$ for some $\lambda\in\F_{p^b}$,
+and \[ (\hat\alpha)^{p^a-1}=1\otimes\lambda^{p^a-1}\embedcyc{p^a-1}{p^b-1}(\a_{p^a-1}). \]
+But both $\hat\alpha,\hat\alpha'$ are invariant under $1\otimes\sigma^a$, so $\lambda$ is invariant under $\sigma^a$,
+i.e. $\lambda^{p^a-1}=1$.
+We conclude with Proposition~\ref{Phialpha}.
 \end{proof}
 
-Proposition~\ref{prop:complete-alg}, together with the transitivity of the
-norms $\norm$,
-shows that we are able to construct a compatible lattice of embeddings between
-complete algebras, and therefore between finite fields of the form
-$\F_{p^{p^n-1}}$ for $n\in\N$.
 
-\subsection{Incomplete algebras}
-
-We have left to define how we deal with \emph{incomplete} algebras (Kummer
-algebras that are not complete). Assume $A_\ell$ is a Kummer algebra of level
-$a$, then we define $\alpha_\ell = (\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}$.
-\begin{proposition}
-  The element $\alpha_\ell\in A_{p^a-1}$ is a solution of~\eqref{h90} for the
-  root $\zeta_\ell$. We also have $\alpha_\ell\in A_\ell$.
-\end{proposition}
-\begin{proof}
-We still assume that the fields of scalars of our algebras are compatibly
-embedded, so we have $(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}} = \zeta_\ell$,
-moreover
-\begin{align*}
-  (\sigma\otimes1)(\alpha_\ell) &=
-  (\alpha\otimes1)((\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}) \\
-  &= (\alpha\otimes1)(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}} \\
-  &= (1\otimes\zeta_\ell)\alpha_\ell
-\end{align*}
-so $\alpha_\ell$ is a solution of~\eqref{h90} for $\zeta_\ell$. Now note that 
-\[
-  (\sigma^k\otimes1)(\alpha_\ell) = (1\otimes\zeta_\ell^k)\alpha_\ell,
-\]
-therefore the smallest integer $k$ such that $\sigma^k\otimes1$ fixes
-$\alpha_\ell$ is $\ell$. Since the elements in
-$A_{p^a-1}=\F_{p^{p^a-1}}\otimes\F_{p^a}$ fixed by
-$\sigma^\ell\otimes1$ are the one in
-$A_\ell = \F_{p^\ell}\otimes\F_{p^a}$, this concludes the
-proof.
-\end{proof}
-If $A_m$ is another Kummer algebra of level $a$, with $\ell\,|\,m$, we then have
-$(\alpha_m)^{\frac{m}{\ell}} = \alpha_\ell$. These relations allow us to construct
-compatible embeddings between Kummer algebra of the same level. We have left to
-construct embeddings between algebras of different levels.
 
 \section{Incrementally constructing lattices}
 \label{sec:construction}
