@@ -67,7 +67,7 @@ void change_basis_inverse(fq_nmod_t res,
   slong deg_low = fq_nmod_ctx_degree(ctx_to);
   fmpz_t deg_ratio;
   
-  mp_limb_t *dual = malloc(degree * sizeof(mp_limb_t)); //new mp_limb_t[degree];
+  mp_limb_t *dual = _nmod_vec_init(degree); //new mp_limb_t[degree];
   for (slong i = 0; i < degree; i++)
     dual[i] = 0;
 
