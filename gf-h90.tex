@@ -967,16 +967,32 @@ Corollary~\ref{Phipsi} and Proposition~\ref{standard_K_embeddings_compatibles}
 
 To demonstrate that our strategy is practical, we implemented it using the
 Julia library Nemo~\cite{Fieker:2017:NCA:3087604.3087611} and the C library
-Flint~\cite{flint}. Critical routines are written in
+Flint~\cite{flint}. The timings in this section are obtained on an Intel Core
+i7-7500U CPU at 2.70GHz, using Nemo 0.11.1
+running on Julia 1.1.0, and Nemo's current version of Flint\footnote{https://github.com/wbhart/flint2}. Critical routines are written in
 C\footnote{\url{https://github.com/erou/gf-h90-lattice/tree/master/implementation}}
 for performance, whereas the high level tasks are performed in Julia. Our code is available as a Julia
 package\footnote{\url{https://github.com/erou/LatticeGFH90.jl}}. Our
-implementation is limited to word-sized characteristics. Since Algorithm~\ref{algo:std_embed} require decorated finite
+implementation is limited to word-sized characteristics. To benefit from the
+great number of precomputed Conway polynomials, we use very small
+characteristics in our benchmarks. We do not see major differences between the
+different possible choices of characteristics, so we choose $p=5$.
+
+Since Algorithm~\ref{algo:std_embed} require decorated finite
 fields, we first measure the time needed by Algorithm~\ref{algo:decoration} to
 perform this task. In fact, the computations in Algorithm~\ref{algo:std_embed}
 take negligible time in comparison with the ones in
 Algorithm~\ref{algo:decoration}. The bottleneck of the decoration is the root
 extraction: this takes almost all the time.
+
+To measure the execution of Algorithm~\ref{algo:decoration}, we let $\ell$ grow
+from $1$ to $200$, and for each $\ell$ not divisible by $p$ such that the $\nu(\ell)$-th Conway
+polynomial is available, we add the time needed to compute the Kummer algebra
+$A_\ell$ and decore it. We obtain a set of decorated Kummer algebras and for
+each pair $(A_\ell, \alpha_\ell), (A_m, \alpha_m)$ of such algebras with
+$\ell\,|\,m$ we measure
+the time needed to embed the corresponding fields $\mathbb{F}_{p^\ell}$ into
+$\mathbb{F}_{p^m}$.
 
 \bibliographystyle{plain}
 \bibliography{gf-h90}
