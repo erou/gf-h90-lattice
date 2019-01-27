@@ -16,13 +16,14 @@
 % Redifine \paragraph to take less space
 \def\paragraph#1{\smallskip\noindent{{\bf \rm #1.}}}
 
-%\newcommand{\embed}[2]{\phi_{\mathbb{F}_{p^{#1}}\hookrightarrow\mathbb{F}_{p^{#2}}}}
 \newcommand{\embed}[2]{{\psi^{\textrm{std}}_{{#1},{#2}}}}
-%\newcommand{\embedcyc}[2]{\phi_{\mathbb{F}_{p}(\zeta_{#1})\hookrightarrow\mathbb{F}_{p}(\zeta_{#2})}}
-\newcommand{\embedcyc}[2]{{\phi^{\mu}_{{#1},{#2}}}}
-%\newcommand{\embedalg}[2]{\Phi_{A_{#1}\hookrightarrow A_{#2}}}
+%\newcommand{\system}{\mathbb{\mu}}
+%\newcommand{\system}{\mathbb{\bbmu}}
+\newcommand{\system}{\mathcal{S}^\mu}
+\newcommand{\embedcyc}[2]{{\phi^{\system}_{{#1},{#2}}}}
 \newcommand{\embedalg}[2]{{\Phi^{\textrm{std}}_{{#1},{#2}}}}
 \newcommand{\first}[2]{\left\lfloor #1 \right\rfloor_{#2}}
+\newcommand{\stda}{\a^{\textrm{std}}}
 
 \renewcommand{\ell}{l}
 

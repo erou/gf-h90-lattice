@@ -311,7 +311,7 @@ test that it has multiplicative order $n$; all other roots in the
 lattice are constructed as powers of this element.
 
 Nevertheless, the most useful cyclotomic lattices are those where $I$
-is the whole set $\N/p\N$. %
+is the whole set $\N\setminus p\N$. % ai-je eu raison de corriger ?
 This bears the question of how to represent $\bar\F_p$. %
 It may seem odd to ask for a representation of $\bar\F_p$ as a
 prerequisite for a construction whose goal is precisely to represent
@@ -351,18 +351,21 @@ One may, for example, factor cyclotomic polynomials over $\F_p$, being
 careful to maintain compatibility. %
 In the next sections we shall not suppose any cyclotomic lattice
 construction in particular, and simply assume that we are given a
-collection of compatible roots of unity $\zeta_m$, and a
-representation of the corresponding finite fields $\F_p(\zeta_m)$ with
+collection of compatible roots of unity.
+That is, formally, we are given a system $\system=\{(K_\ell,\zeta_\ell)\}_{\ell\geq1}$
+where $K_\ell$ is an explicitely represented finite extension of $\F_p$,
+and $\zeta_\ell\in K_\ell$ a generating element that is also a primitive $\ell$-th root
+of unity,
+so \[ K_\ell=\F_p(\zeta_\ell),\quad(\zeta_\ell)^\ell=1, \]
+together with
 explicit embeddings
 \[
 \begin{array}{cccc}
-  \embedcyc{\ell}{m}: & \F_{p}(\zeta_\ell) & \hookrightarrow & \F_{p}(\zeta_m) \\
-  & \zeta_\ell & \mapsto & (\zeta_{m})^{\frac{m}{\ell}},
+  \embedcyc{\ell}{m}: & K_\ell & \hookrightarrow & K_m \\
+  & \zeta_\ell & \mapsto & (\zeta_{m})^{\frac{m}{\ell}}
 \end{array}
 \]
 whenever $l\,|\,m$.
-
-
 
 \section{The Lenstra-Allombert embedding algorithm}
 \label{sec:lenstra}
@@ -468,10 +471,10 @@ Clear.
 \end{proof}
 
 Now we consider Kummer algebras of various degrees.
-Since we assumed the fields of scalars are defined from a system
-of compatible roots of unity (e.g. using Conway polynomials),
+Since we assumed the fields of scalars are defined from a system $\system$
+of compatible roots of unity,
 they are compatibly embedded:
-for $\ell\,|\,m$ not divisible by $p$, we have the embedding
+for $\ell\,|\,m$ prime to $p$, we have the embedding
 \[
 \begin{array}{cccc}
   \embedcyc{\ell}{m}: & \F_{p}(\zeta_\ell) & \hookrightarrow & \F_{p}(\zeta_m) \\
@@ -626,8 +629,8 @@ A Kummer algebra is \emph{complete} if it is of the largest degree for a given l
 \end{definition}
 Thus, the complete Kummer algebra of level $a$ is
 \[ A_{p^a-1}=\F_{p^{p^a-1}}\otimes\F_{p^a} \]
-with field of scalars $\F_{p^a}=\F_{p}(\zeta_{p^a-1})$ given by the corresponding primitive element $\zeta_{p^a-1}$ in our compatible system,
-e.g. defined by the Conway polynomial of degree $a$.
+with field of scalars $\F_{p^a}=\F_{p}(\zeta_{p^a-1})$ given by the corresponding primitive element $\zeta_{p^a-1}$ in our compatible system $\system$,
+e.g. defined by a (pseudo-)Conway polynomial of degree $a$.
 \begin{lemma}
 \label{Kummer_bizarre}
 All nonzero solutions $\alpha_{p^a-1}\in A_{p^a-1}$ of \eqref{h90} for $\zeta_{p^a-1}$,
@@ -645,16 +648,36 @@ We conclude since $\alpha_{p^a-1}$ is invertible.
 \end{proof}
 \begin{definition}
 \label{alphastandard}
-Let $l$ be an integer not divisible by $p$.
-We say a solution $\alpha_\ell\in A_\ell$ of~\eqref{h90} for $\zeta_\ell$ is \emph{standard}
-if it has Kummer constant
-\[ \a_{\ell}=(\zeta_{p^a-1})^a \]
+Let $l$ be an integer prime by $p$.
+We define the \emph{standard} Kummer constant of order $\ell$ as
+\[ \stda_{\ell}=(\embedcyc{l}{p^a-1})^{-1}((\zeta_{p^a-1})^a)\in\F_p(\zeta_\ell) \]
 where $a=\nu(\ell)$ is the level of $A_\ell$.
 
-By a \emph{decorated} Kummer algebra we mean a pair
+We say a solution $\alpha_\ell\in A_\ell$ of~\eqref{h90} for $\zeta_\ell$ is
+standard if its Kummer constant is standard:
+\[ (\alpha_\ell)^\ell=1\otimes\stda_{\ell}. \]
+Then, by a \emph{decorated} Kummer algebra we mean a pair
 \[ (A_\ell,\alpha_{\ell}) \]
 with such $\alpha_\ell$ standard.
 \end{definition}
+Observe that $\embedcyc{l}{p^a-1}$ is an isomorphism when $a=\nu(\ell)$,
+so $\stda_\ell$ is well defined.
+
+It seems that, in order to compute $\stda_\ell$
+so as to check that $\alpha_\ell$ is standard, one has to
+consider the primitive root $\zeta_{p^a-1}$ of order $p^a-1$ in our
+system $\system$.
+When $\system$ is constructed from (pseudo-)Conway polynomials,
+one already needs $\zeta_{p^a-1}$ in order to construct $\zeta_\ell$.
+However for a more general system $\system$, one would like to avoid this cost
+as much as possible.
+Actually, what we really need is only
+precompute $\stda_\ell$ in $\F_p(\zeta_\ell)$,
+and maybe one could devise more efficient ways to deal with this.
+To start with, observe it can also be written
+$\stda_\ell=(\embedcyc{l}{\frac{p^a-1}{d}})^{-1}((\zeta_{\frac{p^a-1}{d}})^{\frac{a}{d}})$,
+where $d=\gcd(a,p^a-1)$, so we only need go to order $\frac{p^a-1}{d}$.
+
 For complete algebras, Lemma~\ref{Kummer_bizarre} asserts that all nonzero $\alpha_{p^a-1}$ are standard.
 \begin{proposition}
 \label{standardexiste}
@@ -667,11 +690,16 @@ Let $\alpha'_\ell$ be any nonzero solution of~\eqref{h90} for $\zeta_\ell$.
 Set $a=\nu(\ell)$, pick any $\alpha_{p^a-1}\in A_{p^a-1}$ standard (Lemma~\ref{Kummer_bizarre}),
 and pick any Kummer embedding $\Phi:A_\ell\hookrightarrow A_{p^a-1}$ (Proposition~\ref{Phipsi}).
 Then $\Phi(\alpha'_\ell)$ and $(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}$ are two nonzero solutions of~\eqref{h90}
-for $\zeta_\ell=(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}}$ in $A_{p^a-1}$, thus there is a scalar $\lambda\in\F_{p}(\zeta_\ell)=\F_{p}(\zeta_{p^a-1})$
-such that \[(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}=(1\otimes\lambda)\Phi(\alpha'_\ell).\]
-Setting $\alpha_\ell=(1\otimes\lambda\eta)\alpha'_\ell\in A_\ell$ for $\eta\in\F_{p}(\zeta_\ell)$,
-we get $\a_\ell=\eta^\ell\a_{p^a-1}$, and
-thus the standard $\alpha_\ell\in A_\ell$ are the $(1\otimes\lambda\zeta_\ell^u)\alpha'_\ell$, for $0\leq u<\ell$.
+for $\embedcyc{l}{p^a-1}(\zeta_\ell)=(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}}$ in $A_{p^a-1}$, thus there is a scalar $\lambda\in\F_{p}(\zeta_{p^a-1})$
+such that
+\begin{equation*}
+(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}=(1\otimes\lambda)\Phi(\alpha'_\ell)=\Phi((1\otimes\tilde\lambda)\alpha'_\ell).
+\end{equation*}
+where $\tilde\lambda=(\embedcyc{l}{p^a-1})^{-1}(\lambda)\in\F_{p}(\zeta_{\ell})$.
+
+Setting $\alpha_\ell=(1\otimes\eta\tilde\lambda)\alpha'_\ell\in A_\ell$ for $\eta\in\F_{p}(\zeta_\ell)$,
+we get $\a_{\ell}=\eta^\ell(\embedcyc{l}{p^a-1})^{-1}(\stda_{p^a-1})=\eta^\ell\stda_\ell$, and
+thus the standard $\alpha_\ell\in A_\ell$ are the $(1\otimes\zeta_\ell^u\tilde\lambda)\alpha'_\ell$, for $0\leq u<\ell$.
 \end{proof}
 This allows:
 
@@ -683,9 +711,10 @@ This allows:
     \ENSURE {$(A_\ell,\alpha_\ell)$ decorated, $P_\ell$ irreducible polynomial of degree $\ell$,
       and $s\in\F_{p^\ell}$ a generating element inducing $\F_{p^\ell}\simeq\F_{p}[T]/(P_\ell)$.}
   \STATE Prepare the Kummer algebra $A_\ell$.
+  \STATE Prepare $\stda_\ell=(\embedcyc{l}{p^a-1})^{-1}((\zeta_{p^a-1})^a)\in\F_p(\zeta_\ell)$.
   \STATE Find $\alpha'_\ell\in A_\ell$ nonzero solution of \eqref{h90} for $\zeta_\ell$.
   \STATE Compute its Kummer constant: $(\alpha'_\ell)^\ell=1\otimes\a'_\ell$.
-  \STATE Compute $\kappa$ a $\ell$-th root of $(\zeta_{p^a-1})^a/\a'_\ell$.
+  \STATE Compute $\kappa$ a $\ell$-th root of $\stda_\ell/\a'_\ell$.
   \STATE Set $\alpha_{\ell}=(1\otimes\kappa)\alpha'_\ell$.
   \STATE Compute $P_\ell$ the minimal polynomial of $\first{\alpha_{\ell}}{\zeta_\ell}$ over $\F_{p}$.
   \STATE Return $(A_\ell,\alpha_\ell)$, $P_\ell$, and $\first{\alpha_\ell}{\zeta_\ell}$.
@@ -694,11 +723,12 @@ This allows:
 
 Algorithm~\ref{algo:decoration} is correct: indeed Proposition~\ref{standardexiste} ensures that
 a standard $\alpha_{\ell}$ exists, and thus, $\alpha'_\ell=(1\otimes\kappa^{-1})\alpha_{\ell}$
-for some $\kappa\in\F_{p}(\zeta_\ell)$, so $(\zeta_{p^a-1})^a/\a'_\ell=\kappa^\ell$ is a $\ell$-th power.
+for some $\kappa\in\F_{p}(\zeta_\ell)$, so $\stda_\ell/\a'_\ell=\kappa^\ell$ is a $\ell$-th power.
 
-By Proposition~\ref{depend}, we also note that $P_\ell$ only depends on $\a_{\ell}=(\zeta_{p^a-1})^a$,
-and thus it only depends on the chosen primitive polynomial of order $p^a-1$,
-e.g. the Conway polynomial of degree $a=\nu(\ell)$.
+By Proposition~\ref{depend}, we also note that $P_\ell$ only depends on $\stda_{\ell}$,
+and thus it only depends on the given system $\system$ of compatible roots,
+possibly up to order $p^{\nu(\ell)}-1$
+(e.g. $P_\ell$ only depends the Conway polynomial of degree $\nu(\ell)$).
 In this sense, $P_\ell$ gives a standard definition of $\F_{p^\ell}$.
 
 By design, decorated Kummer algebras of the same level admit standard Kummer embeddings,
@@ -723,18 +753,18 @@ However, at least between complete decorated algebras, we can request some \emph
 instead.
 
 Let $A_m$ be a Kummer algebra of level $b=\nu(m)$, so
-\[ A_m=\F_{p^m}\otimes\F_{p}(\zeta_m)=\F_{p^m}\otimes\F_{p^b} \]
-where we used compatible roots of unity, so $\F_{p^b}=\F_{p}(\zeta_{p^b-1})$
-and $\zeta_m=(\zeta_{p^b-1})^{\frac{p^b-1}{m}}$.
+\[ A_m=\F_{p^m}\otimes\F_{p}(\zeta_m)\overset{\sim}{\longrightarrow}\F_{p^m}\otimes\F_{p}(\zeta_{p^b-1}) \]
+where the isomorphism is given by $1\otimes\embedcyc{m}{p^b-1}$.
 Then, for an integer $a\,|\,b$,
-observe that the subalgebra of $A_m$ invariant under $1\otimes\sigma^a$ is
-\[ (A_m)^{1\otimes\sigma^a}=\F_{p^m}\otimes\F_{p^a} \]
-where $\F_{p^a}=\F_{p}((\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}})$, with
-\[ (\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}=\operatorname{N}_{\F_{p^b}/\F_{p^a}}(\zeta_{p^b-1})=\embedcyc{a}{b}(\zeta_{p^a-1}). \]
+the subalgebra of $A_m$ invariant under $1\otimes\sigma^a$ is identified
+by this isomorphism with
+\[ (A_m)^{1\otimes\sigma^a}\simeq\F_{p^m}\otimes\F_{p}((\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}) \]
+where $(\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}=\operatorname{N}_{\F_{p^b}/\F_{p^a}}(\zeta_{p^b-1})=\embedcyc{p^a-1}{p^b-1}(\zeta_{p^a-1})$.
 
 \begin{definition}
 \label{def:norm}
 Given a Kummer algebra $A_n$, and integers $a\,|\,b\,|\,\nu(n)$, we define
+the \emph{scalar norm} operator
 \[
 \begin{array}{cccc}
   \norm_{b/a,A_n}: & (A_n)^{1\otimes\sigma^b} & \to & (A_n)^{1\otimes\sigma^a} \\
@@ -742,11 +772,9 @@ Given a Kummer algebra $A_n$, and integers $a\,|\,b\,|\,\nu(n)$, we define
 \end{array}
 \]
 \end{definition}
+This is well-defined, i.e. the image of $\norm_{b/a,A_n}$ is invariant under $1\otimes\sigma^a$ as specified.
 Often the ambiant algebra $A_n$ will be implicit,
 and we will write $\norm_{b/a}$ instead of $\norm_{b/a,A_n}$.
-
-We call these $\norm_{b/a}$ \emph{scalar norm} operators.
-They are well-defined, i.e. the image of $\norm_{b/a}$ is invariant under $1\otimes\sigma^a$ as specified.
 
 By construction, $\norm_{b/a}$ acts on $1\otimes\F_{p^b}^\times$ as $1\otimes\operatorname{N}_{\F_{p^b}/\F_{p^a}}$.
 They are multiplicative:
@@ -824,7 +852,7 @@ This existence result is ``constructive'', but impractical,
 since it requires computations in the possibly very large algebra $A_{p^b-1}$.
 However, as in Algorithm~\ref{algo:allombert}, one should be able
 to write $\hat{\alpha}=(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}$
-for some $\kappa\in\F_{p^b}$. Moreover $\hat{\alpha}$ is uniquely
+for some $\kappa\in\F_{p}(\zeta_m)$. Moreover $\hat{\alpha}$ is uniquely
 determined by our data, thus, so should $\kappa$.
 Now our aim is to give an explicit expression for this $\kappa=\kappa_{\ell,m}$.
 We start with the case of complete algebras.
@@ -852,7 +880,8 @@ Let $(A_\ell,\alpha_\ell)$ and $(A_m,\alpha_m)$ be decorated Kummer algebras,
 of respective degrees $\ell\,|\,m$ prime to $p$.
 Then the standard Kummer embedding $\embedalg{\ell}{m}:A_\ell\hookrightarrow A_m$
 is defined by the assignation
-\[ \qquad\alpha_\ell\;\mapsto\;(1\otimes\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)\ell}}(\alpha_m)^{\frac{m}{\ell}}. \]
+$\alpha_\ell\;\mapsto\;(1\otimes\kappa_{\ell,m})(\alpha_m)^{\frac{m}{\ell}}$, where
+$\kappa_{\ell,m}=(\embedcyc{m}{p^b-1})^{-1}((\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)\ell}})$.
 \end{corollary}
 \begin{proof}
 It suffices to check that $\embedalg{p^a-1}{p^b-1}(\embedalg{\ell}{p^a-1}(\alpha_\ell))$
@@ -861,6 +890,9 @@ However, we have $\embedalg{p^a-1}{p^b-1}(\embedalg{\ell}{p^a-1}(\alpha_\ell))=\
 while $\embedalg{m}{p^b-1}((\alpha_m)^{\frac{m}{\ell}})=(\alpha_{p^b-1})^{\frac{p^b-1}{\ell}}$,
 and we conclude with Proposition~\ref{key}
 \end{proof}
+As in the discussion following Defintion~\ref{alphastandard}, observe
+that the computation of $\kappa_{\ell,m}$ possibly requires a root of order
+up to $p^b-1$ in $\system$.
 \begin{proposition}
 \label{standard_K_embeddings_compatibles}
 Standard Kummer embeddings are compatible with composition:
@@ -904,7 +936,7 @@ We can finally state:
     \ENSURE {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
       defines a standard embedding $\embed{\ell}{m}:\F_{p^\ell}\hookrightarrow\F_{p^m}$,
       compatible with composition.}
-  \STATE Compute $\kappa=(\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)\ell}}$ where $a=\nu(\ell)$, $b=\nu(m)$.
+  \STATE Compute $\kappa_{\ell,m}=(\embedcyc{m}{p^b-1})^{-1}((\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)\ell}})$ where $a=\nu(\ell)$, $b=\nu(m)$.
   \STATE Return $\first{\alpha_\ell}{\zeta_\ell}$ and $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{(\zeta_m)^{\frac{m}{\ell}}}$.
   \end{algorithmic}
 \end{algorithm}
