@@ -231,7 +231,11 @@ The algorithms we present in the next sections need not assume any
 particular representation for finite fields, however when analyzing
 their complexities we will assume this representation. %
 Then, multiplications in $\F_{p^m}$ can be carried out using
-$O(\M(m))$ operations, and inversions using $O(\M(m)\log(m))$.
+$O(\M(m))$ operations, and inversions using $O(\M(m)\log(m))$. %
+In this work we will also need to perform computations in algebras
+$\F_{p^m}\otimes\F_{p^n}$; representing them as quotients of a
+bivariate polynomial ring, we can multiply elements using $O(\M(mn))$
+operations.
 
 We will extensively use a few standard routines, that we recall
 briefly. %
@@ -282,89 +286,97 @@ algorithm~\cite{LenstraJr91,Allombert02}, and its adaptation to
 compatible lattices of finite fields.
 
 
-\paragraph{Conway polynomials and compatible cyclotomic lattices}
-One of the most famous constructions is that of \emph{Conway
-  polynomials}. %
-The main feature of Conway polynomials is \emph{norm compatibility}:
-the norm map $\F_{q^n}\to\F_{q^m}$ is a surjection from the roots of the
-$n$-th Conway polynomial to the roots of the $m$-th Conway polynomial,
-whenever $m$ divides $n$. %
+\paragraph{Conway polynomials and cyclotomic lattices}
+The algorithms of the next sections will be dependent on the
+availability of a compatible lattice of finite field elements. %
+Let $I$ be a subset of $\N\setminus p\N$, we call \emph{cyclotomic
+  lattice} a function $\zeta:I\to\bar\F_p$ such that
+\begin{align}
+  \zeta(1) &= 1,\\
+  \label{eq:cyclotomic}
+  \zeta(\ell) &= \zeta(m)^{m/l} &\text{for any $\ell\,|\,m$,}\\
+  \zeta(\ell) &= \zeta(m)      &\text{iff $\ell=m$.}
+\end{align}
+Said otherwise, a cyclotomic lattice is a collection of primitive
+roots of unity in $\bar\F_p$ with a compatibility condition. %
+In the next sections, we shall assume that such a lattice is given in
+advance, for a set $I$ large enough, and we shall write $\zeta_\ell$ for
+$\zeta(\ell)$.
 
-Norm compatibility is easy to achieve for a fixed collection
-$\mathcal{F}$ of finite extensions of $\F_{p}$: let $K/\F_{p}$ be the
-smallest finite field containing all fields in $\mathcal{F}$, let
-$\eta$ be a primitive element of $K$, i.e., a generator of the
-multiplicative group $K^\times$, then the Conway polynomial of a field
-$k\subset K$ is defined as the minimal polynomial of $N_{K/k}(\eta)$,
-where $N_{K/k}$ is the norm map. %
-However, Conway polynomials have two other goals: incrementality and
-uniqueness. %
-This leads to the following definition.
+If $I$ is a finite set of indices, there is an easy randomized
+algorithm to construct a cyclotomic lattice: compute
+$n=\lcm_{i\in I}(i)$, construct the smallest field $\F_{p^a}$ such
+that $n$ divides $p^a-1$, take a random $x^{(p^a-1)/n}\in\F_{p^a}$ and
+test that it has multiplicative order $n$; all other roots in the
+lattice are constructed as powers of this element.
 
-\begin{definition}[Conway polynomial]
-  Let $p$ be a prime and $n>1$ an integer. %
-  The \emph{Conway polynomial} $C_{p,n}$ is the
-  \emph{lexicographically smallest} monic irreducible polynomial of
-  degree $n$ satisfying the following conditions:
-  \begin{itemize}
-  \item \emph{Primitivity:} $C_{p,n}$ is primitive (i.e., its roots
-    generate the multiplicative group $\F_{p^n}^\times$);
-  \item \emph{Norm compatibility:} If $m$ divides $n$, then
-    $C_{p,m}\left(X^{\frac{p^n-1}{p^m-1}}\right) = 0 \mod C_{p,n}$.
-  \end{itemize}
-\end{definition}
+Nevertheless, the most useful cyclotomic lattices are those where $I$
+is the whole set $\N/p\N$. %
+This bears the question of how to represent $\bar\F_p$. %
+It may seem odd to ask for a representation of $\bar\F_p$ as a
+prerequisite for a construction whose goal is precisely to represent
+$\bar\F_p$. %
+However we shall see that a relatively small cyclotomic sub-lattice is
+enough to construct a much larger lattice of compatibly embedded
+finite fields; it thus makes sense to assume that a cyclotomic lattice
+is available, if it can be computed \emph{incrementally}.
 
-The ``lexicographically smallest'' condition is required to ensure
-uniqueness; it is typically defined by writing $f\in\F_{p}[X]$ as
-\begin{equation*}
-  f = \sum_{i=0}^n (-1)^{n-i} f_i x^i,
-  \qquad\text{with $0\le f_i<p$,}
-\end{equation*}
-and taking the lexicographic order on the words $f_n\dots f_0$.
+\emph{Conway polynomials}~\cite{Nickel1988} offer a classic example of
+cyclotomic lattice. %
+The $m$-th Conway polynomial $C_m\in\F_p[X]$ is defined as the
+\emph{lexicographically smallest} monic irreducible polynomial of
+degree $m$ that is also \emph{primitive} (i.e., its roots generate
+$\F_{p^n}^\times$) and \emph{norm compatible} (i.e,
+$$C_\ell\Bigl(X^{\frac{p^m-1}{p^\ell-1}}\Bigr) = 0 \mod C_m$$
+whenever $\ell$ divides $m$). %
+The cyclotomic lattice is defined by letting $\zeta(p^m-1)$ be the
+image of $X$ in $\F_{p^m}=\F_p[X]/C_m$ for any $m$, and
+using~\eqref{eq:cyclotomic} to define $\zeta$ on all other indices. %
+Note that, using Conway polynomials, each value of $\zeta$ is
+represented in the smallest field containing it.
 
-Conway polynomials were defined by Parker%
-\footnote{According to Lübeck~\cite{Luebeck}.}, %
-who named them in honor of John Conway and his famous book ``On
-Numbers and Games''~\cite{Conway:ONAG2000}; their existence was shown
-by Nickel~\cite{Nickel1988}. %
-They were first adopted by the computer algebra system GAP~\cite{GAP4}
-as a default representation for finite fields. %
-They are typically computed by exhaustive search over all irreducible
-polynomials, or by a slightly better algorithm due to Heath and
-Loehr~\cite{heath+loehr99}. %
-Given the huge computational cost involved in finding them, they are
-usually precomputed; tables of Conway polynomials are available in any
-major computer algebra system.%
-\footnote{Most computer algebra systems switch to other methods when
-  precomputed Conway polynomials are not available. %
-  An interesting exception is SageMath (since version
-  5.13~\cite{Roe2013}), that defines \emph{pseudo-Conway polynomials}
-  by dropping the ``lexicographically first'' requirement, and
-  computes them on the fly whenever a true Conway polynomial is not
-  available in the tables. %
-  The approach is notoriously slow: computing a pseudo-Conway
-  polynomial for $\F_{p^{30}}$ takes in the order of seconds, already
-  for $p>1000$; compare this to the milliseconds needed to compute a
-  random irreducible polynomial of the same degree.} %
+The best algorithm to compute Conway polynomials has exponential
+complexity~\cite{heath+loehr99}, thus they are usually precomputed and
+tabulated up to a certain bound. %
+Most computer algebra systems switch to other ways of representing
+finite fields when the tables of Conway polynomials are not enough. %
+A notable exception is SageMath~\cite{Sage} (since version
+5.13~\cite{Roe2013}), that relaxes the ``lexicographically first''
+requirement and defines \emph{pseudo-Conway polynomials}; although
+easier to compute in practice, their computation still requires an
+exponential amount of work.
 
-We note that Conway polynomials are not especially good to represent
-embeddings: given an element of $\F_{p^m}$ represented as
-$a(X) \bmod C_{p,m}(X)$, its image in $\F_{p^n}$, for $m\mid n$, is
-computed as $a(X^{(p^n-1)/(p^m-1)})\bmod C_{p,n}(X)$, requiring very
-large modular exponentiations; while there are algorithms to perform
-this computation in $O(n^{1+o(1)})$ operations~\cite{KeUm11}, they are
-known to be very inefficient in practice. %
+Other ways to construct cyclotomic lattices are possible. %
+One may, for example, factor cyclotomic polynomials over $\F_p$, being
+careful to maintain compatibility. %
+In the next sections we shall not suppose any cyclotomic lattice
+construction in particular, and simply assume that we are given a
+collection of compatible roots of unity $\zeta_m$, and a
+representation of the corresponding finite fields $\F_p(\zeta_m)$ with
+explicit embeddings
+\[
+\begin{array}{cccc}
+  \embedcyc{\ell}{m}: & \F_{p}(\zeta_\ell) & \hookrightarrow & \F_{p}(\zeta_m) \\
+  & \zeta_\ell & \mapsto & (\zeta_{m})^{\frac{m}{\ell}},
+\end{array}
+\]
+whenever $l\,|\,m$.
+
 
 
 \section{The Lenstra-Allombert embedding algorithm}
 \label{sec:lenstra}
-\cite{LenstraJr91}\cite{brieulle2018computing}
 
-%TODO: add context? Change the notation to get rid of \Phi and \phi ?
+We now review the theory behind Allombert's
+adaptation~\cite{Allombert02} of Lenstra's isomorphism
+algorithm\cite{LenstraJr91}. %
+This will be our stepping stone towards the definition of some
+\emph{standard} elements in field extensions of $\F_p$, with an
+effective compatibility condition.
 
-The main ingredient of Allombert's algorithm~\cite{Allombert02} is an extension
+The main ingredient of the algorithm is an extension
 of Kummer theory.
-On any finite extension of $\F_{p}$, denote by \[ \sigma:x\mapsto x^p \]
+On any finite extension of $\F_{p}$, denote by $ \sigma:x\mapsto x^p $
 the Frobenius automorphism.
 Let $\ell$ be an integer not divisible by $p$.
 Then $\sigma$ acting on $\F_{p^\ell}$ can be seen as a $\F_{p}$-linear endomorphism,
