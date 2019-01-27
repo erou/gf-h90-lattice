@@ -969,6 +969,16 @@ Corollary~\ref{Phipsi} and Proposition~\ref{standard_K_embeddings_compatibles}
 \section{Implementation}
 \label{sec:implementation}
 
+To demonstrate that our strategy is practical, we implemented it using the
+Julia library Nemo~\cite{Fieker:2017:NCA:3087604.3087611} and the C library
+Flint~\cite{flint}. Critical routines are written in
+C\footnote{\url{https://github.com/erou/gf-h90-lattice/tree/master/implementation}}
+for performance, whereas the high level tasks are performed in Julia. Our code is available as a Julia
+package\footnote{\url{https://github.com/erou/LatticeGFH90.jl}}. Our
+implementation is limited to word-sized characteristics. Since Algorithm~\ref{algo:std_embed} require decorated finite
+fields, we first measure the time needed by Algorithm~\ref{algo:decoration} to
+perform this task.
+
 \bibliographystyle{plain}
 \bibliography{gf-h90}
 
