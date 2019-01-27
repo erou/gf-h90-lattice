@@ -976,7 +976,7 @@ package\footnote{\url{https://github.com/erou/LatticeGFH90.jl}}. Our
 implementation is limited to word-sized characteristics. To benefit from the
 great number of precomputed Conway polynomials, we use very small
 characteristics in our benchmarks. We do not see major differences between the
-different possible choices of characteristics, so we choose $p=5$.
+different possible choices of characteristics, so we choose $p=3$.
 
 Since Algorithm~\ref{algo:std_embed} require decorated finite
 fields, we first measure the time needed by Algorithm~\ref{algo:decoration} to
@@ -993,6 +993,13 @@ each pair $(A_\ell, \alpha_\ell), (A_m, \alpha_m)$ of such algebras with
 $\ell\,|\,m$ we measure
 the time needed to embed the corresponding fields $\mathbb{F}_{p^\ell}$ into
 $\mathbb{F}_{p^m}$.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=.5]{solve_h90-3.png}
+  \caption{Timings of the decoration for $p=3$.}
+  \label{fig:timings-decoration}
+\end{figure}
 
 \section{Conclusion and future work}
 \label{sec:conclusion}
