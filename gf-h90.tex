@@ -631,7 +631,7 @@ A Kummer algebra is \emph{complete} if it is of the largest degree for a given l
 \end{definition}
 Thus, the complete Kummer algebra of level $a$ is
 \[ A_{p^a-1}=\F_{p^{p^a-1}}\otimes\F_{p^a} \]
-with field of scalars $\F_{p^a}=\F_{p}(\zeta_{p^a-1})$ given by the corresponding primitive element $\zeta_{p^a-1}$ in our compatible system $\system$,
+with field of scalars $\F_{p^a}=\F_{p}(\zeta_{p^a-1})$ given by the corresponding $\zeta_{p^a-1}$ in our compatible system $\system$,
 e.g. defined by a (pseudo-)Conway polynomial of degree $a$.
 \begin{lemma}
 \label{Kummer_bizarre}
@@ -795,16 +795,19 @@ Then there is a unique Kummer embedding
 such that $\embedalg{p^a-1}{p^b-1}(\alpha_{p^a-1})=\norm_{b/a}(\alpha_{p^b-1})$.
 \end{proposition}
 \begin{proof}
-Set $\hat\alpha=\norm_{b/a}(\alpha_{p^b-1})$.
-Choose an arbitrary Kummer embedding $\Phi:A_{p^a-1}\hookrightarrow A_{p^b-1}$ (Proposition~\ref{Phipsi}),
-and set $\hat\alpha'=\Phi(\alpha_{p^a-1})$, so $(\hat\alpha')^{p^a-1}=1\otimes\embedcyc{p^a-1}{p^b-1}(\a_{p^a-1})$.
-Then $\hat\alpha,\hat\alpha'\in A_{p^b-1}$ are two nonzero solutions of~\eqref{h90}
-for $(\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}$, of order $p^a-1$.
-Thus $\hat\alpha=(1\otimes\lambda)\hat\alpha'$ for some $\lambda\in\F_{p^b}$,
-and \[ (\hat\alpha)^{p^a-1}=1\otimes\lambda^{p^a-1}\embedcyc{p^a-1}{p^b-1}(\a_{p^a-1}). \]
-But both $\hat\alpha,\hat\alpha'$ are invariant under $1\otimes\sigma^a$, so $\lambda$ is invariant under $\sigma^a$,
-i.e. $\lambda^{p^a-1}=1$.
-We conclude with Proposition~\ref{Phialpha}.
+By Lemma~\ref{FrobFrob} and the properties of the norm,
+\begin{equation*}
+\begin{split}
+(\norm_{b/a}(\alpha_{p^b-1}))^{p^a}&=(\sigma^a\otimes\sigma^a)(\norm_{b/a}(\alpha_{p^b-1}))\\
+&=(\sigma^a\otimes1)(\norm_{b/a}(\alpha_{p^b-1}))\\
+&=\norm_{b/a}((\sigma^a\otimes1)(\alpha_{p^b-1}))\\
+&=\norm_{b/a}((1\otimes(\zeta_{p^b-1})^a)\alpha_{p^b-1})\\
+&=(1\otimes\embedcyc{p^a-1}{p^b-1}(\zeta_{p^a-1})^a)\norm_{b/a}(\alpha_{p^b-1}).
+\end{split}
+\end{equation*}
+So $\hat\alpha=\norm_{b/a}(\alpha_{p^b-1})$
+satisfies $(\hat{\alpha})^{p^a-1}=1\otimes\embedcyc{p^a-1}{p^b-1}(\a_{p^a-1})$
+and we conclude with Proposition~\ref{Phialpha}.
 \end{proof}
 
 
