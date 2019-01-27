@@ -988,11 +988,21 @@ extraction: this takes almost all the time.
 To measure the execution of Algorithm~\ref{algo:decoration}, we let $\ell$ grow
 from $1$ to $200$, and for each $\ell$ not divisible by $p$ such that the $\nu(\ell)$-th Conway
 polynomial is available, we add the time needed to compute the Kummer algebra
-$A_\ell$ and decore it. We obtain a set of decorated Kummer algebras and for
+$A_\ell$ and to decore it. We obtain a set of decorated Kummer algebras and for
 each pair $(A_\ell, \alpha_\ell), (A_m, \alpha_m)$ of such algebras with
 $\ell\,|\,m$ we measure
 the time needed to embed the corresponding fields $\mathbb{F}_{p^\ell}$ into
 $\mathbb{F}_{p^m}$.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.2]{solve_h90-5.png}
+  \caption{Decoration timings for $p=5$.}
+  \label{fig:timings-decoration}
+\end{figure}
+
+\paragraph{Acknowledgements} This work was partly financed by ANR-15-CE39-0013
+project Manta and by grants from R\'egion Ile-de-France.
 
 \bibliographystyle{plain}
 \bibliography{gf-h90}
