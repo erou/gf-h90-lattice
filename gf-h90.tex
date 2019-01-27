@@ -209,8 +209,9 @@ the main ingredient to our construction. %
 In Section~\ref{sec:compatibleH90} we introduce a notion of compatibility
 for solutions of Hilbert~90 in Kummer algebras, that provides standard
 defining polynomials for finite fields.
-Then in Section~\ref{sec:construction} we use these compatible solutions
-to incrementally construct lattices with compatible embeddings.
+Then in Section~\ref{sec:construction} we again use these compatible solutions
+to construct standard compatible embeddings between finite fields,
+from which a lattice can be incrementally constucted.
 Finally, in Section~\ref{sec:implementation} we present our
 implementation and compare it to available alternatives.
 
@@ -388,7 +389,7 @@ Then $\sigma$ acting on $\F_{p^\ell}$ can be seen as a $\F_{p}$-linear endomorph
 with minimal polynomial $T^\ell-1$, which is separable but not necessarily split,
 i.e. $\F_{p^\ell}$ is not necessarily a Kummer extension of $\F_{p}$.
 We make an extension of scalars and work in the
-\emph{Kummer algebra of degree $\ell$}:
+\emph{Kummer algebra of degree~$\ell$}:
 \[
   A_\ell = \F_{p^\ell}\otimes\F_{p}(\zeta_\ell),
 \]
@@ -553,7 +554,10 @@ Thus $\first{\hat{\alpha}}{(\zeta_m)^{\frac{m}{\ell}}}=\psi(x_0)=\psi(\first{\al
 and since $\first{\alpha_{\ell}}{\zeta_\ell}$ generates $\F_{p^\ell}$, this uniquely characterizes $\psi$.
 \end{proof}
 
-We can now state and prove Allombert's algorithm.
+We can now state and prove Allombert's algorithm.\footnote{Actually,
+  Allombert's algorithm does not require $A_m$,
+  but only the smaller algebra $\F_{p^m}\otimes\F_p(\zeta_l)$.
+  This will make no difference for us.}
 
 \begin{algorithm}
   \caption{(Allombert's)}
@@ -571,7 +575,6 @@ We can now state and prove Allombert's algorithm.
   \STATE Return $\first{\alpha_{\ell}}{\zeta_\ell}$ and $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{(\zeta_m)^{\frac{m}{\ell}}}$.
   \end{algorithmic}
 \end{algorithm}
-
 \begin{proposition}
   Algorithm~\ref{algo:allombert} is correct: it returns elements that define an
   embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
@@ -599,29 +602,20 @@ There are two points in Algorithm~\ref{algo:allombert} on which we would like to
 or equivalently, it provides a defining irreducible polynomial of degree $\ell$.
 However this polynomial depends on the choice of $\alpha_{\ell}$
 (even though only through~$\a_\ell$, cf. Proposition~\ref{depend}).
-\item[\emph{Compatibility:}] The embedding $\psi$ depends on a constant $\kappa=\kappa_{\ell,m}$,
+\item[\emph{Compatibility:}] The embedding $\psi$ depends on a constant $\kappa$,
 which itself depends on the choice of $\alpha_\ell,\alpha_m$ (and of a $\ell$-th root extraction).
 Thus, given a certain number of finite fields, in order to ensure compatibility of the various
-embeddings between them, one has to keep track of all these constants $\kappa$,
+embeddings between them, one has to keep track of these constants $\kappa$
+for all pairs $(\ell,m)$,
 which grows \emph{quadratically} with the number of fields.
 \end{description}
 
-It would be very nice if one could always force $\kappa=1$, that is, if $\alpha_\ell,\alpha_m$
+It would be nice if one could force $\kappa=1$, that is, if $\alpha_\ell,\alpha_m$
 and $\Phi:A_\ell\hookrightarrow A_m$
 could be chosen so that $\Phi(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
-\begin{lemma}
-\label{power_compatibily}
-Let $\alpha_\ell\in A_\ell$, $\alpha_m\in A_m$ be nonzero solutions of \eqref{h90}
-for $\zeta_\ell$ and $\zeta_m$, with Kummer constants $\a_\ell$ and $\a_m$, respectively.
-Then, there is a Kummer embedding $\Phi:A_\ell\hookrightarrow A_m$
-such that $\Phi(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$ if and only if $\a_m=\embedcyc{\ell}{m}(\a_\ell)$.
-
-Moreover, if so, then this $\Phi$ is unique.
-\end{lemma}
-\begin{proof}
-Proposition~\ref{Phialpha} with $\hat{\alpha}=(\alpha_m)^{\frac{m}{\ell}}$.
-\end{proof}
-Observe that if Lemma~\ref{power_compatibily} is satisfied,
+From the description of Algorithm~\ref{algo:allombert},
+this requires $\a_m=\embedcyc{\ell}{m}(\a_\ell)$.
+Thus,
 necessarily $\a_m$ lies in the subfield $\F_{p}((\zeta_m)^{\frac{m}{\ell}})$ of $\F_{p}(\zeta_m)$.
 Possibly this condition could fail if $A_\ell$ and $A_m$ do not have the same field of scalars.
 This motivates:
@@ -665,6 +659,7 @@ with such $\alpha_\ell$ standard.
 Observe that $\embedcyc{l}{p^a-1}$ is an isomorphism when $a=\nu(\ell)$,
 so $\stda_\ell$ is well defined.
 
+%%%%%%%%   Supprimable si redondant avec la section 6 ou 7  %%%%%%%%%%
 It seems that, in order to compute $\stda_\ell$
 so as to check that $\alpha_\ell$ is standard, one has to
 consider the primitive root $\zeta_{p^a-1}$ of order $p^a-1$ in our
@@ -679,6 +674,7 @@ and maybe one could devise more efficient ways to deal with this.
 To start with, observe it can also be written
 $\stda_\ell=(\embedcyc{l}{\frac{p^a-1}{d}})^{-1}((\zeta_{\frac{p^a-1}{d}})^{\frac{a}{d}})$,
 where $d=\gcd(a,p^a-1)$, so we only need go to order $\frac{p^a-1}{d}$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 For complete algebras, Lemma~\ref{Kummer_bizarre} asserts that all nonzero $\alpha_{p^a-1}$ are standard.
 \begin{proposition}
@@ -737,21 +733,23 @@ By design, decorated Kummer algebras of the same level admit standard Kummer emb
 under which the corresponding standard solutions of~\eqref{h90} are power-compatible:
 \begin{proposition}
 \label{embedincomplete}
-Let $\ell\,|\,m$ not divisible by $p$ be such $\nu(\ell)=\nu(m)=a$.
+Let $\ell\,|\,m$ be integers prime to $p$ and such $\nu(\ell)=\nu(m)=a$.
 Let $(A_\ell,\alpha_\ell)$, $(A_m,\alpha_m)$ be decorated Kummer algebras
 of degree $\ell,m$ respectively, and of the same level $a$.
-Then there is a unique Kummer embedding
+Then, there is a unique Kummer embedding
 \[ \embedalg{\ell}{m}:A_\ell\hookrightarrow A_m \]
 such that $\embedalg{\ell}{m}(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
 \end{proposition}
 \begin{proof}
-Special case of Lemma~\ref{power_compatibily}.
+Proposition~\ref{Phialpha} with $\hat{\alpha}=(\alpha_m)^{\frac{m}{\ell}}$.
 \end{proof}
 Most often we will apply Proposition~\ref{embedincomplete} with $m=p^a-1$.
 
-On the other hand, because of Lemma~\ref{power_compatibily}, a Kummer embedding
-between decorated Kummer algebras of different levels cannot have this power-compatibity.
-However, at least between complete decorated algebras, we can request some \emph{norm}-compatibility
+On the other hand, 
+since power-compatibility implies $\a_m=\embedcyc{\ell}{m}(\a_\ell)$,
+it cannot be satisfied for a Kummer embedding
+between decorated Kummer algebras of different levels.
+However, at least between \emph{complete} decorated algebras, we can request some \emph{norm}-compatibility
 instead.
 
 Let $A_m$ be a Kummer algebra of level $b=\nu(m)$, so
@@ -812,7 +810,7 @@ and we conclude with Proposition~\ref{Phialpha}.
 
 
 
-\section{Incrementally constructing lattices}
+\section{Standard embeddings}
 \label{sec:construction}
 
 In Proposition~\ref{embedincomplete}, we saw how to construct a standard
@@ -895,9 +893,11 @@ However, we have $\embedalg{p^a-1}{p^b-1}(\embedalg{\ell}{p^a-1}(\alpha_\ell))=\
 while $\embedalg{m}{p^b-1}((\alpha_m)^{\frac{m}{\ell}})=(\alpha_{p^b-1})^{\frac{p^b-1}{\ell}}$,
 and we conclude with Proposition~\ref{key}
 \end{proof}
+%%%%%%%    Supprimable si redondant avec la section 6 ou 7 %%%%%%%%%%%%%%
 As in the discussion following Defintion~\ref{alphastandard}, observe
 that the computation of $\kappa_{\ell,m}$ possibly requires a root of order
 up to $p^b-1$ in $\system$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{proposition}
 \label{standard_K_embeddings_compatibles}
 Standard Kummer embeddings are compatible with composition:
@@ -955,8 +955,8 @@ satisfy $\embed{\ell}{n}=\embed{m}{n}\circ\embed{\ell}{m}$.
 \begin{proof}
 Corollary~\ref{Phipsi} and Proposition~\ref{standard_K_embeddings_compatibles}
 \end{proof}
-\section{Poor Artin-Schreier}
-\label{sec:A-S}
+%\section{Poor Artin-Schreier}
+%\label{sec:A-S}
 
 
 
