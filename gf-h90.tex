@@ -1001,16 +1001,16 @@ To measure the execution of Algorithm~\ref{algo:decoration}, we let $\ell$ grow
 from $1$ to $200$, and for each $\ell$ not divisible by $p$ such that the $\nu(\ell)$-th Conway
 polynomial is available, we add the time needed to compute the Kummer algebra
 $A_\ell$ and to decore it. We
-then embed the prime field $\mathbb{F}_{p}$ in all the finite fields
-$\mathbb{F}_{p^\ell}$ that we have decorated, that leads to 
-Figure~\ref{fig:timings}
+then embed the field $\mathbb{F}_{p^2}$ in all the finite fields
+$\mathbb{F}_{p^\ell}$ that we have decorated for which $2\,|\,\ell$, that leads to 
+Figure~\ref{fig:timings}.
 
 \begin{figure}[h]
   \centering{
  \includegraphics[scale=.24]{solve_h90-3.png}
  \includegraphics[scale=.24]{embed-3.png}}
   \caption{Timings of the decoration (left) and of the embeddings from
-    $\mathbb{F}_{p}$ (right) for $p=3$.}
+    $\mathbb{F}_{p^2}$ (right) for $p=3$.}
   \label{fig:timings}
 \end{figure}
 

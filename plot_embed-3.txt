@@ -5,7 +5,7 @@ set xtics (50, 100, 150, 200)
 set xlabel "degree of the destination algebra" font ", 18"
 set ylabel "Time (ms)" font ", 18"
 set y2label "level of the destination algebra" font ", 18"
-set yrange [0.05:100]
+set yrange [0.06:50]
 set logscale y
 
-plot "<(sed -n '1,115p' benchmarks/embed-3.txt)" u 4:($5*1000):3 notitle with points pt 7 palette
+plot "<(sed -n '116,179p' benchmarks/embed-3.txt)" u 4:($5*1000):3 notitle with points pt 7 palette
