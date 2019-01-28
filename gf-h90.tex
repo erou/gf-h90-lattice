@@ -31,7 +31,7 @@
   \email{erousseau@enst.fr}
 }
 
-\title{Efficient lattices of compatibly embedded finite fields}
+\title{Standard lattices of compatibly embedded finite fields}
 
 \begin{document}
 
@@ -45,18 +45,22 @@
   and to represent all finite fields in a standard manner.
 
   The most well known constructions are Conway polynomials, and the
-  Bosma-Cannon-Steel framework used in Magma. %
+  Bosma--Cannon--Steel framework used in Magma. %
   They all have drawbacks: Conway polynomials are extremely expensive
-  to compute, while the Bosma-Cannon-Steel framework does not provide
+  to compute, while the Bosma--Cannon--Steel framework does not provide
   a standard way to represent finite fields, and becomes inefficient
   as the number of extensions grows.
 
   In this work, leveraging the theory of the Lenstra-Allombert
   isomorphism algorithm, we generalize at the same time Conway
-  polynomials and the Bosma-Cannon-Steel framework, obtaining the
-  first construction with quadratic complexity in the extension
-  degree, and linear complexity in the number of extensions. %
-  We also provide an implementation in C/Flint/Julia/Nemo, showing
+  polynomials and the Bosma--Cannon--Steel framework: our construction
+  can be used both to define new standard families of compatible
+  polynomials defining finite fields, and to compute compatible
+  embeddings between arbitrary finite fields. %
+  Our construction computes and evaluates chains of embeddings in
+  quasi-quadratic time in the (largest) extension degree, and linear
+  time in the number of extensions involved. %
+  Furthermore, our implementation written in C/Flint/Julia/Nemo shows
   that our construction is practical.
 \end{abstract}
 
@@ -76,11 +80,11 @@ efficiently.
 
 Concretely, what is sought is a data structure $\Lambda$ to represent
 arbitrary collections of extensions of $\F_{p}$, in such a way that
-elements of $\F_{p^n}$ are represented in optimal space (i.e., $O(n)$
+elements of $\F_{p^m}$ are represented in optimal space (i.e., $O(m)$
 coefficients), and that arithmetic operations are performed
-efficiently (i.e., $O\left(\lcm(n,m)^d\right)$ arithmetic operations
-to combine an element of $\F_{p^m}$ and an element of $\F_{p^n}$,
-where $d\le 3$ and, possibly, $d=1+\varepsilon$). %
+efficiently (i.e., $O\left(\lcm(\ell,m)^d\right)$ arithmetic
+operations to combine an element of $\F_{p^\ell}$ and an element of
+$\F_{p^m}$, where $d\le 3$ and, possibly, $d=1+\varepsilon$). %
 To this end, it is useful to set several sub-goals:
 
 \begin{description}
@@ -163,65 +167,55 @@ practical only for relatively small characteristic.
 
 
 \paragraph{Our contribution}
-In this work we present the first
-quadratic, % TODO: let's hope this is true...
-incremental, general and/or unique % TODO: also this...
-solution for lattices of compatibly embedded finite fields. %
+In this work we present an incremental, general and/or unique solution
+for lattices of compatibly embedded finite fields, where all
+embeddings can be computed and evaluated in quasi-quadratic time. %
 Our starting point is Allombert's~\cite{Allombert02} and
 subsequent~\cite{brieulle2018computing} improvements to Lenstra's
-isomorphism algorithm. %
-Plugging them in the Bosma-Cannon-Steel framework immediately produces
-a quadratic, incremental general solution, however we go much
-further. %
+isomorphism algorithm~\cite{LenstraJr91}. %
+Plugging them in the Bosma--Cannon--Steel framework immediately produces
+an incremental general solution with quasi-quadratic complexity;
+however we go much further. %
 Indeed, we show that the compatibility requirement can be taken a step
 further by constructing a lattice of $\F_{p}$-algebras with a
 distinguished element, which is a byproduct of the Lenstra-Allombert
 algorithm.
 
 The advantages of our construction over a naive combination of the
-Lenstra-Allombert algorithm and the Bosma-Cannon-Steel framework are
+Lenstra-Allombert algorithm and the Bosma--Cannon--Steel framework are
 multiple. %
 Storage drops from quadratic to linear in the number of extensions
 stored in $\Lambda$, and the cost of adding a new extension to
 $\Lambda$ drops similarly. %
-This yields a significant speedup in practice, as we show in our
-implementation (see Section~\ref{sec:implementation}).
 
-Our $\F_{p}$-algebras are constructed by tensoring element-wise an
-arbitrary lattice of extensions of $\F_{p}$ with a lattice of compatible
-roots of unity. %
+Our $\F_{p}$-algebras are constructed by tensoring an arbitrary
+lattice of extensions of $\F_{p}$ with a lattice of compatible roots
+of unity. %
 One of the possible ways to construct the second lattice is by using
 Conway polynomials; this way, our construction can be seen as a
 generalization of Conway polynomials, permitting to represent
-(uniquely) an exponentially larger set of finite fields than with
-Conway polynomials alone. %
-Since the storage overhead for the second lattice is only logarithmic
-in the degree of the extension fields, the high cost for computing
-Conway polynomials is absorbed in the total complexity.
-
-The main drawback of our method is that, in some instances, combining
-elements of $\F_{p^m}$ and $\F_{p^n}$ requires constructing a field
-extension of degree larger than $\lcm(m,n)$. %
-While this does not affect the asymptotic complexity of our
-construction, % TODO: doesn't it?
-it can in practice make some computations visibly slower.
+(uniquely) finite fields of exponentially larger degree. %
+This is also the main drawback of our construction, indeed computing
+the standard polynomials implied by it is provably as hard as
+computing Conway polynomials, and thus unlikely to be doable
+efficiently.
 
 
-\paragraph{Organisation}
+\paragraph{Organization}
 The presentation is structured as follows. %
-In Section~\ref{sec:conway} we review some basic facts on roots of
-unity and Conway polynomials. %
+In Section~\ref{sec:conway} we review some basic algorithms and facts
+on roots of unity and Conway polynomials. %
 In Section~\ref{sec:lenstra} we review the Lenstra-Allombert algorithm
-and we define and study \emph{Kummer algebras},
-the main ingredient to our construction. %
-In Section~\ref{sec:compatibleH90} we introduce a notion of compatibility
-for solutions of Hilbert~90 in Kummer algebras, that provides standard
-defining polynomials for finite fields.
-Then in Section~\ref{sec:construction} we again use these compatible solutions
+and we define and study \emph{Kummer algebras}, the main ingredient to
+our construction. %
+In Section~\ref{sec:compatibleH90} we introduce a notion of
+compatibility for solutions of Hilbert~90 in Kummer algebras, that
+provides standard defining polynomials for finite fields.  Then in
+Section~\ref{sec:construction} we again use these compatible solutions
 to construct standard compatible embeddings between finite fields,
-from which a lattice can be incrementally constucted.
-Finally, in Section~\ref{sec:implementation} we present our
-implementation and compare it to available alternatives.
+from which a lattice can be incrementally constructed.  Finally, in
+Section~\ref{sec:implementation} we give the complexities of our
+algorithms, and present our implementation.
 
 
 \section{Preliminaries}
@@ -571,7 +565,8 @@ to our more general setting.
   \caption{(Allombert's algorithm)}
   \label{algo:allombert}
   \begin{algorithmic}[1]
-    \REQUIRE {$\F_{p^\ell}, \F_{p^m}$, for $\ell\,|\,m$ integers prime to $p$.}
+    \REQUIRE {$\F_{p^\ell}, \F_{p^m}$, for $\ell\,|\,m$ integers prime to $p$, a root system
+      $\system=\{\zeta_\ell,\zeta_m\}$.}
     \ENSURE {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
       defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.}
   \STATE Prepare the Kummer algebras $A_\ell$ and $A_m$.
@@ -604,7 +599,11 @@ only changes $\psi$ by a power of $\sigma$.
 \section{Standard solutions of (H90)}
 \label{sec:compatibleH90}
 
-There are two points in Algorithm~\ref{algo:allombert} on which we would like to improve:
+Plugging Algorithm~\ref{algo:allombert} into the Bosma--Cannon--Steel
+framework immediately gives a way to compatibly embed arbitrary finite
+fields. %
+However, there are two points in Allombert's algorithm on which we
+would like to improve:
 \begin{description}
 \item[\emph{Uniqueness:}] As mentioned, the element $\first{\alpha_{\ell}}{\zeta_\ell}$ is a generating element for $\F_{p^{\ell}}$,
 or equivalently, it provides a defining irreducible polynomial of degree $\ell$.
@@ -667,23 +666,6 @@ with such $\alpha_\ell$ standard.
 Observe that $\embedcyc{l}{p^a-1}$ is an isomorphism when $a=\nu(\ell)$,
 so $\stda_\ell$ is well defined.
 
-%%%%%%%%   Supprimable si redondant avec la section 6 ou 7  %%%%%%%%%%
-It seems that, in order to compute $\stda_\ell$
-so as to check that $\alpha_\ell$ is standard, one has to
-consider the primitive root $\zeta_{p^a-1}$ of order $p^a-1$ in our
-system $\system$.
-When $\system$ is constructed from (pseudo-)Conway polynomials,
-one already needs $\zeta_{p^a-1}$ in order to construct $\zeta_\ell$.
-However for a more general system $\system$, one would like to avoid this cost
-as much as possible.
-Actually, what we really need is only
-precompute $\stda_\ell$ in $\F_p(\zeta_\ell)$,
-and maybe one could devise more efficient ways to deal with this.
-To start with, observe it can also be written
-$\stda_\ell=(\embedcyc{l}{\frac{p^a-1}{d}})^{-1}((\zeta_{\frac{p^a-1}{d}})^{\frac{a}{d}})$,
-where $d=\gcd(a,p^a-1)$, so we only need go to order $\frac{p^a-1}{d}$.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 For complete algebras, Lemma~\ref{Kummer_bizarre} asserts that all nonzero $\alpha_{p^a-1}$ are standard.
 \begin{proposition}
 \label{standardexiste}
@@ -738,7 +720,34 @@ By Proposition~\ref{depend}, we also note that $P_\ell$ only depends on $\stda_{
 and thus it only depends on the given system $\system$ of compatible roots,
 possibly up to order $p^{\nu(\ell)}-1$
 (e.g., $P_\ell$ only depends the Conway polynomial of degree $\nu(\ell)$).
-In this sense, $P_\ell$ gives a standard definition of $\F_{p^\ell}$.
+In this sense, $P_\ell$ gives a standard definition of $\F_{p^\ell}$. %
+As an example, we give in Table~\ref{tab:std-polys} the ten first
+standard polynomials induced by the root system of Conway polynomials
+for $p=2$.
+
+
+\begin{table}[h]
+  \centering
+  \small
+  \begin{tabular}[h]{r}
+    $x+1$\\
+    $x^3+x+1$\\
+    $x^5+x^3+1$\\
+    $x^7+x+1$\\
+    $x^9+x^7+x^4+x^2+1$   \\
+    $x^{11}+x^8+x^7+x^6+x^2+x+1$\\
+    $x^{13}+x^{10}+x^5+x^3+1$\\
+    $x^{15}+x+1$ \\
+    \tiny
+    $x^{17}+x^{11}+x^{10}+x^8+ x^7+x^6+x^4+x^3+x^2+x+1$ \\
+    \tiny
+    $x^{19}+x^{17}+x^{16}+x^{15}+x^{14}+x^{13}+x^{12}+x^8+x^7+x^6+x^5+x^3+1$
+  \end{tabular}
+  
+  \caption{The ten first standard polynomials derived from Conway
+    polynomials for $p=2$.}
+  \label{tab:std-polys}
+\end{table}
 
 By design, decorated Kummer algebras of the same level admit standard Kummer embeddings,
 under which the corresponding standard solutions of~\eqref{h90} are power-compatible:
@@ -904,11 +913,7 @@ However, we have $\embedalg{p^a-1}{p^b-1}(\embedalg{\ell}{p^a-1}(\alpha_\ell))=\
 while $\embedalg{m}{p^b-1}((\alpha_m)^{\frac{m}{\ell}})=(\alpha_{p^b-1})^{\frac{p^b-1}{\ell}}$,
 and we conclude with Proposition~\ref{key}
 \end{proof}
-%%%%%%%    Supprimable si redondant avec la section 6 ou 7 %%%%%%%%%%%%%%
-As in the discussion following Defintion~\ref{alphastandard}, observe
-that the computation of $\kappa_{\ell,m}$ possibly requires a root of order
-up to $p^b-1$ in $\system$.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{proposition}
 \label{standard_K_embeddings_compatibles}
 Standard Kummer embeddings are compatible with composition:
@@ -947,7 +952,7 @@ If $(\F_{p^\ell},\alpha_\ell)$ is a decorated finite field,
 then from $\alpha_\ell$ one derives the standard generating
 element $x_0=\first{\alpha_\ell}{\zeta_\ell}$ of $\F_{p^\ell}$.
 Conversely, given such a standard $x_0$, one can retrieve $\alpha_\ell$,
-e.g., using the equations given in~\cite{Allombert02}.
+e.g., using the equations given in~\cite{Allombert02,brieulle2018computing}.
 
 We can finally state:
 \begin{algorithm}
@@ -976,72 +981,176 @@ Corollary~\ref{Phipsi} and Proposition~\ref{standard_K_embeddings_compatibles}
 \section{Implementation}
 \label{sec:implementation}
 
-To demonstrate that our strategy is practical, we implemented it using the
-Julia library Nemo~\cite{Fieker:2017:NCA:3087604.3087611} and the C library
-Flint~\cite{flint}. The timings in this section are obtained on an Intel Core
-i7-7500U CPU at 2.70GHz, using Nemo 0.11.1
-running on Julia 1.1.0, and Nemo's current version of
-Flint\footnote{\url{https://github.com/wbhart/flint2}}. Critical routines are written in
-C\footnote{\url{https://github.com/erou/gf-h90-lattice/tree/master/implementation}}
-for performance, whereas the high level tasks are performed in Julia. Our code
-is available as a Julia
-package\footnote{\url{https://github.com/erou/LatticeGFH90.jl}}. Our
-implementation is limited to word-sized characteristics. To benefit from the
-great number of precomputed Conway polynomials, we use very small
-characteristics in our benchmarks. We do not see major differences between the
-different possible choices of characteristics, so we choose $p=3$.
+In the previous sections we kept the description of Kummer embeddings
+abstract, leaving many computational details unspecified. %
+There are various ways in which our algorithms can possibly be
+implemented, depending on how one chooses to represent finite fields
+and the cyclotomic root system $\system$. %
+A reasonable option is to use (pseudo-)Conway polynomials to represent
+the fields $\F_p(\zeta_{p^a-1})$, and deduce from them the smallest
+possible representation for any other field $\F_p(\zeta_\ell)$. %
+Assuming this technique, we can prove a bound on the complexity of our
+algorithms.
 
-Since Algorithm~\ref{algo:std_embed} require decorated finite
-fields, we first measure the time needed by Algorithm~\ref{algo:decoration} to
-perform this task. In fact, the computations in Algorithm~\ref{algo:std_embed}
-take negligible time in comparison with the ones in
-Algorithm~\ref{algo:decoration}. The bottleneck of the decoration being the root extraction.
+\begin{proposition}
+  Given a collection of (pseudo-)Conway polynomials for $\F_p$, of
+  degree up $d$, standard solutions $\alpha_\ell$ of~\eqref{h90} can
+  be computed for any $\ell\,|\,(p^i-1)$ for any $i\le d$ using
+  $O\bigr(\M(\ell^2)\log(\ell) + \M(\ell)\log(\ell)\log(p)\bigl)$. %
+  operations. %
+  After that, Kummer embeddings $\F_{p^\ell}\subset\F_{p^m}$ can be
+  computed using $O(\M(m^2)\log(m))$ operations.
+\end{proposition}
+\begin{proof}
+  Let $a=\nu(\ell)$ be the level of $A_\ell$, we take the $a$-th
+  polynomial from the collection of (pseudo)-Conway polynomials, and
+  use it to define $\zeta_{p^a-1}$. %
+  Because $a\in O(\ell)$, the cost of multiplications in
+  $\F_p(\zeta_{p^a-1})$ will be bounded by $O(\M(\ell))$.
 
-To measure the execution of Algorithm~\ref{algo:decoration}, we let $\ell$ grow
-from $1$ to $200$, and for each $\ell$ not divisible by $p$ such that the $\nu(\ell)$-th Conway
-polynomial is available, we add the time needed to compute the Kummer algebra
-$A_\ell$ and to decore it. We
-then embed the field $\mathbb{F}_{p^2}$ in all the finite fields
-$\mathbb{F}_{p^\ell}$ that we have decorated for which $2\,|\,\ell$, that leads to 
-Figure~\ref{fig:timings}.
+  From $\zeta_{p^a-1}$, we compute $\zeta_l$ using $O(\ell\M(\ell))$
+  operations, and its minimal polynomial in
+  $O(\ell^{(\omega+1)/2})$. %
+  Then, the Kummer constant $\stda_\ell=(\zeta_{p^a-1})^a$ is computed
+  in negligible time, and its expression in the power basis of
+  $\zeta_\ell$ is computed in $O(\ell^{(\omega+1)/2})$ using the
+  algorithms for evaluating embeddings mentioned in
+  Section~\ref{sec:conway}.
+
+  To construct the Kummer algebra
+  $A_\ell=\F_{p^\ell}\otimes\F_p(\zeta_\ell)$ we need an irreducible
+  polynomial of degree $\ell$, not necessarily related to the
+  (pseudo-)Conway polynomials used to represent the fields of
+  scalars. %
+  Very efficient, quasi-optimal algorithms for finding such a
+  polynomial are given
+  in~\cite{BoFlSaSc06,couveignes+lercier11,DeDoSc13}, we can thus
+  neglect this cost.
+  
+  The cost of computing a solution $\alpha'_\ell$ to~\eqref{h90} was
+  extensively studied in~\cite{brieulle2018computing}, where it was
+  found to be bounded by
+  $O\bigr(\M(\ell^2)\log(\ell) + \M(\ell)\log(p)\bigl)$. %
+  Then, the constant $\a'_l=(\alpha'_\ell)^\ell$ is computed in
+  $O\left(\M(\ell^2)\log(\ell)\right)$, and the $\ell$-th root
+  $\kappa$ is computed in $O(\M(\ell)\log(\ell)\log(p))$ according
+  to~\cite{brieulle2018computing}. %
+  $\alpha_\ell=(1\otimes\kappa)\alpha'_\ell$ is then computed in a
+  negligible number of operations.
+
+  Finally, the projection $\first{\alpha_\ell}{\zeta_\ell}$ comes for
+  free, and its minimal polynomial $P_\ell$ is computed again in
+  $O(\ell^{(\omega+1)/2})$ operations.
+
+  Now, to computed a Kummer embedding of $(\F_{p^\ell},\alpha_\ell)$
+  into $(\F_{p^m},\alpha_m)$, we compute the scalar $\kappa_{\ell,m}$
+  in $O(m\M(m))$ operations, and $(\alpha_m)^{\frac{m}{\ell}}$ in
+  $O(\M(m^2)\log(m))$. %
+
+  We then need to convert $(\alpha_m)^{\frac{m}{\ell}}$ in the power
+  basis of $\zeta_\ell$. %
+  Applying a generic change of basis algorithm as before would be too
+  expensive: indeed we have to convert $m$ coefficients from the field
+  of scalars $\F_p(\zeta_m)$ to $\F_p(\zeta_\ell)$, which would cost
+  $O(m^{(\omega+3)/2})$. %
+  Instead we notice that we are only interested in the value
+  $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{\zeta_\ell}$,
+  therefore we proceed as follows.
+
+  We start by computing the minimal polynomial of $\zeta_m$ over
+  $\F_p(\zeta_\ell)$ in $O(\M(m^2))$ operations using the algorithm
+  of~\cite{shoup99}, from which we deduce the matrix of the trace form
+  from $\F_p(\zeta_m)$ to $\F_p(\zeta_l)$ in $O(\M(m\ell))$ operations
+  (see~\cite[Th.~3.1]{rouiller99}). %
+  Now, if $\eta$ is any element such that
+  $\Tr_{\F_q(\zeta_m)/\F_q(\zeta_\ell)}=1$, the map
+  $\pi:x\mapsto\Tr_{\F_q(\zeta_m)/\F_q(\zeta_\ell)}(\eta x)$ is
+  $\F_p(\zeta_\ell)$-linear, and agrees with the embedding defined by
+  $(\zeta_m)^{\frac{m}{\ell}}\mapsto\zeta_\ell$ on
+  $\F_p\bigl((\zeta_m)^{\frac{m}{\ell}}\bigr)$. %
+  Hence, the composition of $\pi$ with the projection on the first
+  coordinate is $\F_p$-linear, and is obtained by multiplying the
+  first row of the trace form with the multiplication-by-$\eta$
+  matrix, in $O(m\M(m))$ operations. %
+  Once we have obtained the vector of this linear form, we can
+  evaluate it on the scalar part of $(\alpha_m)^{\frac{m}{\ell}}$ in
+  $O(m^2)$ operations, to obtain the final result.
+\end{proof}
+
+We remark that storing the decorated fields $(\F_{p^l},\alpha_\ell)$
+requires $O(\ell^2)$ field elements, however, using the formulas
+in~\cite{Allombert02,brieulle2018computing}, it is possible to only
+store $\first{\alpha_\ell}{\zeta_\ell}$, and recover all other
+coefficients of $\alpha_\ell$ in $O(\ell\M(\ell)\log(p))$ operations.
+
+To demonstrate that feasibility of this approach, we implemented it in
+the Julia-based CAS Nemo~\cite{Fieker:2017:NCA:3087604.3087611}, with
+performance critical routines written in C/Flint~\cite{flint}. %
+Our code is available as a Julia package at
+\url{https://github.com/erou/LatticeGFH90.jl}.
+
+We tested Algorithms~\ref{algo:decoration} and~\ref{algo:std_embed}
+for various small primes, using precomputed Conway polynomials
+available in Nemo. %
+We do not see major differences between different primes. %
+In Figure~\ref{fig:timings} we report timings obtained for the case
+$p=3$, on an Intel Core i7-7500U CPU clocked at 2.70GHz, using Nemo
+0.11.1 running on Julia 1.1.0, and Nemo's current version of Flint. %
+The plot on the left shows timings for
+Algorithm~\ref{algo:decoration}, for degrees $\ell$ growing from $1$
+to $200$, for every $\ell$ coprime to $p$ and such that the
+$\nu(\ell)$-th Conway polynomial is available in Nemo; the color scale
+shows the level of the associated algebra $A_\ell$. %
+The bottleneck of this algorithm appears to be the $\ell$-th root
+extraction routine.
+
+The plot on the right shows timings for
+Algorithm~\ref{algo:std_embed}, measured by computing the standard
+embedding of $\mathbb{F}_{p^2}$ in $\mathbb{F}_{p^\ell}$. %
+As expected, computing the embeddings takes negligible time in
+comparison to the decoration of the finite fields. %
+We also tested embedding fields larger than $\F_{p^2}$, and noticed
+that the running time mostly depends on the size of the larger field.
+
 
 \begin{figure}[h]
   \centering
- \includegraphics[scale=.24]{solve_h90-3.png}
- \includegraphics[scale=.24]{embed-3.png}}
-  \caption{Timings of the decoration (left) and of the embeddings from
-    $\mathbb{F}_{p^2}$ (right) for $p=3$.
+  \includegraphics[scale=.24]{solve_h90-3.png}
+  \includegraphics[scale=.24]{embed-3.png}
+  \caption{Timings for computing decorated fields
+    $(\F_{p^\ell},\alpha_\ell)$ (left, log scale), and for computing the
+    standard Kummer embedding from $\mathbb{F}_{p^2}$ to $\F_{p^\ell}$
+    (right) for $p=3$.}
   \label{fig:timings}
 \end{figure}
 
-From the solutions $\alpha_\ell$ of~\ref{h90}, we can also compute standard polynomials as the
-minimum polynomials of $\first{\alpha_\ell}{\zeta_\ell}$. For instance, with
-$p=2$ the first ten standard polynomials of degree not divisible by $p$ are
-given by the folllowing table.
-
-\begin{center}
-\small{
-\begin{tabular}[h]{cc}
-  \bf{Degree} & \bf{Polynomial} \\
-  $1$ & $T+1$ \\
-  $3$ & $T^3+T+1$ \\
-  $5$ & $T^5+T^3+1$ \\
-  $7$ & $T^7+T+1$ \\
-  $9$ & $T^9+T^7+T^4+T^2+1$ \\
-  $11$ & $T^{11}+T^8+T^7+T^6+T^2+T+1$\\
-  $13$ & $T^{13}+T^{10}+T^5+T^3+1$\\
-  $15$ & $T^{15}+T+1$ \\
-  $17$ & $T^{17}+T^{11}+T^{10}+T^8+$\\
-  & $T^7+T^6+T^4+T^3+T^2+T+1$ \\
-  $19$ & $T^{19}+T^{17}+T^{16}+T^{15}+T^{14}+T^{13}+$\\
-  & $T^{12}+T^8+T^7+T^6+T^5+T^3+1$
-\end{tabular}
-}
-\end{center}
-
-
 \section{Conclusion and future work}
 \label{sec:conclusion}
+
+We presented a new family of standard compatible polynomials for
+defining finite fields. %
+Its construction being dependent on the availability of Conway
+polynomials, it has, at the present moment, very little practical
+impact; its existence is nevertheless remarkable in itself.
+
+It is even evident that computing our standard polynomials is
+essentially equivalent to computing Conway polynomials; indeed from
+$\alpha_\ell$ one can immediately deduce $(\zeta_{p^a-1})^a$, and by
+taking an $a$-th root (doable in polynomial time in $\ell$), deduce
+$\zeta_{p^a-1}$ and the associated Conway polynomial. %
+Hence, an efficient algorithm for computing our polynomials (for
+arbitrary degrees) would imply an efficient algorithm to compute
+Conway polynomials, which would be unexpected.
+
+However, our proposed implementation is not the only possible way to
+exploit our definitions. %
+It would be interesting, indeed, to find some middle ground between
+the flexibility of the Bosma--Steel--Cannon framework and the rigidity
+of Conway polynomials, for example by lazily enforcing the conditions
+required to have a standard solution of~\eqref{h90}, while
+incrementally constructing the lattice of roots of unity. %
+We leave these questions for future work.
+
 
 \paragraph{Acknowledgments}
 We would like to thank \'Eric Schost for fruitful discussions and for
