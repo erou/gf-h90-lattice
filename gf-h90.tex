@@ -983,29 +983,47 @@ Since Algorithm~\ref{algo:std_embed} require decorated finite
 fields, we first measure the time needed by Algorithm~\ref{algo:decoration} to
 perform this task. In fact, the computations in Algorithm~\ref{algo:std_embed}
 take negligible time in comparison with the ones in
-Algorithm~\ref{algo:decoration}. The bottleneck of the decoration is the root
-extraction: this takes almost all the time.
+Algorithm~\ref{algo:decoration}. The bottleneck of the decoration being the root extraction.
 
 To measure the execution of Algorithm~\ref{algo:decoration}, we let $\ell$ grow
 from $1$ to $200$, and for each $\ell$ not divisible by $p$ such that the $\nu(\ell)$-th Conway
 polynomial is available, we add the time needed to compute the Kummer algebra
-$A_\ell$ and to decore it: this gives Figure~\ref{fig:timings-decoration}. We
+$A_\ell$ and to decore it. We
 then embed the prime field $\mathbb{F}_{p}$ in all the finite fields
 $\mathbb{F}_{p^\ell}$ that we have decorated, that leads to 
-Figure~\ref{fig:timings-embedding}
+Figure~\ref{fig:timings}
+
 \begin{figure}[h]
-  \centering
-  \includegraphics[scale=.5]{solve_h90-3.png}
-  \caption{Timings of the decoration for $p=3$.}
-  \label{fig:timings-decoration}
-\end{figure}
-\begin{figure}[h]
-  \centering
-  \includegraphics[scale=.5]{embed-3.png}
-  \caption{Timings of the embeddings from $\mathbb{F}_{p}$ for $p=3$.}
-  \label{fig:timings-embedding}
+ \includegraphics[scale=.24]{solve_h90-3.png}
+ \includegraphics[scale=.24]{embed-3.png}
+  \caption{Timings of the decoration (left) and of the embeddings from
+    $\mathbb{F}_{p}$ (right) for $p=3$.}
+  \label{fig:timings}
 \end{figure}
 
+From the solutions $\alpha_\ell$ of~\ref{h90}, we can also compute standard polynomials as the
+minimum polynomials of $\first{\alpha_\ell}{\zeta_\ell}$. For instance, with
+$p=2$ the
+first ten standard polynomials of degree not divisible by $2$ are
+
+\centering
+\small{
+\begin{tabular}[h]{cc}
+  \bf{degree} & \bf{polynomial} \\
+  $1$ & $T+1$ \\
+  $3$ & $T^3+T+1$ \\
+  $5$ & $T^5+T^3+1$ \\
+  $7$ & $T^7+T+1$ \\
+  $9$ & $T^9+T^7+T^4+T^2+1$ \\
+  $11$ & $T^{11}+T^8+T^7+T^6+T^2+T+1$\\
+  $13$ & $T^{13}+T^{10}+T^5+T^3+1$\\
+  $15$ & $T^{15}+T+1$ \\
+  $17$ & $T^{17}+T^{11}+T^{10}+T^8+$\\
+  & $T^7+T^6+T^4+T^3+T^2+T+1$ \\
+  $19$ & $T^{19}+T^{17}+T^{16}+T^{15}+T^{14}+T^{13}+$\\
+  & $T^{12}+T^8+T^7+T^6+T^5+T^3+1$
+\end{tabular}
+}
 
 
 \section{Conclusion and future work}

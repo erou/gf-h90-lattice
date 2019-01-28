@@ -1,10 +1,10 @@
 set datafile separator ","
 set palette rgb 33,13,10 
-set tics font ", 15"
+set tics font ", 18"
 set xtics (50, 100, 150, 200)
-set xlabel "degree of the destination algebra" font ", 15"
-set ylabel "Timing (ms)" font ", 15"
-set y2label "level of the destination algebra" font ", 15"
+set xlabel "degree of the destination algebra" font ", 18"
+set ylabel "Time (ms)" font ", 18"
+set y2label "level of the destination algebra" font ", 18"
 set yrange [0.05:100]
 set logscale y
 
