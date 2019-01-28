@@ -3,6 +3,13 @@
 \usepackage{hyperref}
 \usepackage{macros}
 \usepackage{amscd}
+\usepackage{xcolor}
+
+\definecolor{green}{rgb}{.08,.69,.10}
+\definecolor{blue}{rgb}{.01,.26,.87}
+\definecolor{red}{rgb}{.89,0,0}
+\hypersetup{colorlinks,linkcolor={red!70!black},
+  citecolor={green!70!black},urlcolor={blue!70!black}}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}[theorem]{Proposition}
@@ -15,11 +22,12 @@
   \alignauthor Luca De Feo\\
   \affaddr{Universit\'e Paris Saclay -- UVSQ, LMV}\\
   \email{luca.de-feo@uvsq.fr}
-  \alignauthor Hugues Randriam
+  \alignauthor Hugues Randriam\\
   \affaddr{LTCI, T\'el\'ecom ParisTech}\\
   \email{randriam@enst.fr}
-  \alignauthor \'Edouard Rousseau
-  \affaddr{LTCI, T\'el\'ecom ParisTech, UVSQ, LMV}\\
+  \alignauthor \'Edouard Rousseau\\
+  \affaddr{LTCI, T\'el\'ecom ParisTech,\\
+    Universit\'e Paris Saclay -- UVSQ, LMV}\\
   \email{erousseau@enst.fr}
 }
 
@@ -236,7 +244,7 @@ their complexities we will assume this representation. %
 Then, multiplications in $\F_{p^m}$ can be carried out using
 $O(\M(m))$ operations, and inversions using $O(\M(m)\log(m))$. %
 In this work we will also need to perform computations in algebras
-$\F_{p^m}\otimes\F_{p^n}$; representing them as quotients of a
+$\F_{p^m}\otimes\F_{p^n}$: representing them as quotients of a
 bivariate polynomial ring, we can multiply elements using $O(\M(mn))$
 operations.
 
@@ -272,7 +280,7 @@ compute its image $\phi(x)$ using $O\bigl(m^{(\omega+1)/2)}\bigr)$
 operations; similarly, given an element $y=\phi(x)$ in $\F_{p^m}$, it
 is possible to recover $x$ in the same asymptotic number of
 operations. %
-The relevant algorithms are reviewed in~\cite[Sec.~6]{ffisom-long};
+The relevant algorithms are summarized in~\cite[Sec.~6]{ffisom-long};
 note that, for specially constructed generators $\alpha_\ell$, more
 efficient algorithms may
 exist~\cite{df+schost12,DoSc12,DeDoSc13,DeDoSc2014}.
@@ -339,13 +347,13 @@ Note that, using Conway polynomials, each value of $\zeta$ is
 represented in the smallest field containing it.
 
 The best algorithm to compute Conway polynomials has exponential
-complexity~\cite{heath+loehr99}, thus they are usually precomputed and
-tabulated up to a certain bound. %
+complexity~\cite{heath+loehr99}, hence they are usually precomputed
+and tabulated up to a certain bound. %
 Most computer algebra systems switch to other ways of representing
 finite fields when the tables of Conway polynomials are not enough. %
 A notable exception is SageMath~\cite{Sage} (since version
-5.13~\cite{Roe2013}), that relaxes the ``lexicographically first''
-requirement and defines \emph{pseudo-Conway polynomials}; although
+5.13~\cite{Roe2013}), that defines \emph{pseudo-Conway polynomials} by
+relaxing the ``lexicographically first'' requirement; although
 easier to compute in practice, their computation still requires an
 exponential amount of work.
 
@@ -375,29 +383,30 @@ whenever $l\,|\,m$.
 
 We now review the theory behind Allombert's
 adaptation~\cite{Allombert02} of Lenstra's isomorphism
-algorithm\cite{LenstraJr91}. %
+algorithm~\cite{LenstraJr91}. %
 This will be our stepping stone towards the definition of some
-\emph{standard} elements in field extensions of $\F_p$, with an
+\emph{standard} elements in field extensions of $\F_p$ with an
 effective compatibility condition.
 
 The main ingredient of the algorithm is an extension
 of Kummer theory.
-On any finite extension of $\F_{p}$, denote by $ \sigma:x\mapsto x^p $
+For any finite extension of $\F_{p}$, we denote by $ \sigma:x\mapsto x^p $
 the Frobenius automorphism.
-Let $\ell$ be an integer not divisible by $p$.
-Then $\sigma$ acting on $\F_{p^\ell}$ can be seen as a $\F_{p}$-linear endomorphism,
-with minimal polynomial $T^\ell-1$, which is separable but not necessarily split,
-i.e. $\F_{p^\ell}$ is not necessarily a Kummer extension of $\F_{p}$.
-We make an extension of scalars and work in the
+Let $\ell$ be an integer not divisible by $p$,
+then $\sigma$ is an $\F_{p}$-linear endomorphism of $\F_{p^\ell}$
+with minimal polynomial $T^\ell-1$, separable but not necessarily split,
+i.e., $\F_{p^\ell}$ is not necessarily a Kummer extension of $\F_{p}$.
+We extend scalars and work in the
 \emph{Kummer algebra of degree~$\ell$}:
 \[
   A_\ell = \F_{p^\ell}\otimes\F_{p}(\zeta_\ell),
 \]
-where $\otimes$ is tensor product over $\F_{p}$, and $\zeta_\ell$ is a primitive $\ell$-th root of unity, taken from a system of such compatible roots. We
+where $\otimes$ is the tensor product over $\F_{p}$, and $\zeta_\ell$ is a primitive
+$\ell$-th root of unity, taken from the given cyclotomic lattice. We
 call $\F_{p}(\zeta_\ell)$ the \emph{field of scalars} of $A_\ell$, and
 we define the \emph{level} of $A_\ell$ as
 \[
-  \nu(\ell) = \omega_{(\mathbb{Z}/\ell\mathbb{Z})^\times}(p) = [\F_{p}(\zeta_\ell):\F_{p}],
+  \nu(\ell) = \mathrm{ord}_{(\mathbb{Z}/\ell\mathbb{Z})^\times}(p) = [\F_{p}(\zeta_\ell):\F_{p}],
 \]
 that is, the degree of its field of scalars.
 
@@ -420,8 +429,8 @@ Then $1,\alpha_\ell,\cdots,(\alpha_\ell)^{\ell-1}$ are eigenvectors for distinct
 form a basis of $A_\ell$ over $1\otimes\F_{p}(\zeta_{\ell})$.
 Likewise
 \[ (\alpha_\ell)^\ell = 1\otimes\a_\ell \]
-for a certain scalar $\a_\ell\in\F_{p}(\zeta_\ell)$,
-the \emph{Kummer constant} of $\alpha_\ell$.
+for some scalar $\a_\ell\in\F_{p}(\zeta_\ell)$,
+that we shall call the \emph{Kummer constant} of $\alpha_\ell$.
 This proves:
 \begin{proposition}
 \label{alphagen}
@@ -430,9 +439,9 @@ inducing an isomorphism
 \[ A_\ell\simeq \F_{p}(\zeta_{\ell})[T]/(T^\ell-\a_\ell). \]
 \end{proposition}
 
-Since $A_\ell$ is known to be an \'etale algebra, we note
-that $\alpha_\ell$ nonzero implies $\a_\ell$ is nonzero, which in turn implies
-that $\alpha_\ell$ in \emph{invertible} in $A_\ell$: $\;(\alpha_\ell)^{-1} = (1\otimes\a_\ell^{-1})(\alpha_\ell)^{\ell-1}$.
+Since $A_\ell$ is known to be an \'etale algebra, 
+$\alpha_\ell$ being nonzero implies that $\a_\ell$ is nonzero, which in turn implies
+that $\alpha_\ell$ is \emph{invertible} in $A_\ell$, indeed $\;(\alpha_\ell)^{-1} = (1\otimes\a_\ell^{-1})(\alpha_\ell)^{\ell-1}$.
 
 %We call $\a_\ell$ the \emph{Kummer constant} associated with $\alpha_\ell$.
 %In the sequel, we might have to consider various
@@ -449,14 +458,14 @@ that $\alpha_\ell$ in \emph{invertible} in $A_\ell$: $\;(\alpha_\ell)^{-1} = (1\
 We will make frequent use of the following:
 \begin{lemma}
 \label{FrobFrob}
-Let $K,L$ are two finite extensions of $\F_{p}$.
-Then for any $\beta\in K\otimes L$,
+Let $K,L$ be two finite extensions of $\F_{p}$.
+Then, for any $\beta\in K\otimes L$,
 we have $(\sigma\otimes\sigma)(\beta)=\beta^p$.
 \end{lemma}
 In this generality we also introduce the following notation: if $\eta\in L$ has degree $d$ over $\F_{p}$,
 then any $\beta\in K\otimes\F_{p}(\eta)\subset K\otimes L$ decomposes uniquely as $\beta = \sum_{i =  0}^{d-1}y_i\otimes\eta^i$,
 and we set  \[ \first{\beta}{\eta}=y_0. \]
-In particular, back to $A_\ell$, if we write
+In particular, coming back to $A_\ell$, if we write
 $\alpha_\ell = \sum_{i =  0}^{a-1}x_i\otimes\zeta_{\ell}^i$ where $a=\nu(\ell)$,
 it is shown in~\cite{Allombert02} that $x_0=\first{\alpha_\ell}{\zeta_\ell}$ is a generating element for the extension
 $\F_{p^\ell}/\F_{p}$.
@@ -466,15 +475,15 @@ $\F_{p^\ell}/\F_{p}$.
 With the notations above, there are precisely $\ell$ elements $x\in A_\ell$ that are solutions of~\eqref{h90} for $\zeta_\ell$
 and satisfy $x^\ell=1\otimes\a_\ell$, namely, these are the $(1\otimes\zeta_\ell)^u\alpha_\ell=(\sigma^u\otimes 1)(\alpha_\ell)$
 for $0\leq u<\ell$.
-The corresponding generating elements for $\F_{p^\ell}/\F_{p}$ are the $\first{(\sigma^u\otimes 1)(\alpha_\ell)}{\zeta_\ell}=\sigma^u(x_0)$.
-They all have the same minimal polynomial, which is a generating polynomial for $\F_{p^\ell}/\F_{p}$ that depends only on $\a_\ell$.
+The corresponding generating elements for $\F_{p^\ell}/\F_{p}$ are the $\first{(\sigma^u\otimes 1)(\alpha_\ell)}{\zeta_\ell}=\sigma^u(x_0)$;
+they all have the same minimal polynomial, which is a generating polynomial for $\F_{p^\ell}/\F_{p}$ depending only on $\a_\ell$.
 \end{proposition}
 \begin{proof}
 Clear.
 \end{proof}
 
 Now we consider Kummer algebras of various degrees.
-Since we assumed the fields of scalars are defined from a system $\system$
+Since we assumed that the fields of scalars are defined from a system $\system$
 of compatible roots of unity,
 they are compatibly embedded:
 for $\ell\,|\,m$ prime to $p$, we have the embedding
@@ -487,7 +496,7 @@ for $\ell\,|\,m$ prime to $p$, we have the embedding
 
 It is easily shown that, as an $\F_{p}$-algebra, $A_\ell$ is isomorphic to a product of copies of $\F_{p^\ell}(\zeta_\ell)$,
 and $A_m$ to a product of copies of $\F_{p^m}(\zeta_m)$.
-This allows to describe all $\F_{p}$-algebra morphisms from $A_\ell$ to $A_m$. However here we will focus only on a certain
+This allows us to describe all $\F_{p}$-algebra morphisms from $A_\ell$ to $A_m$. However here we will focus only on a certain
 subclass of them:
 \begin{definition}
 \label{Kembedding}
@@ -527,7 +536,7 @@ Moreover, this correspondence commutes with composition of embeddings.
 Let $\Phi$ be a Kummer embedding. Being a $\F_{p}$-algebra morphism, it satisfies $\Phi(\beta^p)=\Phi(\beta)^p$ for all $\beta\in A_\ell$.
 By Lemma~\ref{FrobFrob}, this means that $\Phi$ commutes with $\sigma\otimes\sigma$, and thus,
 also with $(\sigma\otimes 1)^{-1}\circ(\sigma\otimes\sigma)=1\otimes\sigma$.
-This gives that $\Phi$ maps $\F_{p^\ell}\otimes1$ into $\F_{p^m}\otimes 1$.
+This implies that $\Phi$ maps $\F_{p^\ell}\otimes1$ into $\F_{p^m}\otimes 1$.
 The other assertions are clear.
 \end{proof}
 
@@ -547,31 +556,30 @@ defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$
 \end{corollary}
 \begin{proof}
 By Proposition~\ref{Phialpha} there is a unique Kummer embedding $\Phi$ such that $\Phi(\alpha_\ell)=\hat{\alpha}$.
-By Proposition~\ref{Phipsi} we have $\Phi=\psi\otimes\embedcyc{\ell}{m}$ for some $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
+By Proposition~\ref{Phipsi} we have that $\Phi=\psi\otimes\embedcyc{\ell}{m}$ for some $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
 Writing $\alpha_\ell=\sum_{i=0}^{a-1}x_i\otimes\zeta_{\ell}^i$,
-it follows \[ \hat{\alpha}=\Phi(\alpha_\ell)=\sum_{i=0}^{a-1}\psi(x_i)\otimes(\zeta_m)^{\frac{mi}{\ell}}. \]
+it follows that \[ \hat{\alpha}=\Phi(\alpha_\ell)=\sum_{i=0}^{a-1}\psi(x_i)\otimes(\zeta_m)^{\frac{mi}{\ell}}. \]
 Thus $\first{\hat{\alpha}}{(\zeta_m)^{\frac{m}{\ell}}}=\psi(x_0)=\psi(\first{\alpha_{\ell}}{\zeta_\ell})$,
-and since $\first{\alpha_{\ell}}{\zeta_\ell}$ generates $\F_{p^\ell}$, this uniquely characterizes $\psi$.
+and, since $\first{\alpha_{\ell}}{\zeta_\ell}$ generates $\F_{p^\ell}$, this uniquely characterizes $\psi$.
 \end{proof}
 
-We can now state and prove Allombert's algorithm.\footnote{Actually,
-  Allombert's algorithm does not require $A_m$,
-  but only the smaller algebra $\F_{p^m}\otimes\F_p(\zeta_l)$.
-  This will make no difference for us.}
+We can now state Allombert's algorithm and prove its correctness; we
+give below a minor variation on the original algorithm, better adapted
+to our more general setting.
 
 \begin{algorithm}
-  \caption{(Allombert's)}
+  \caption{(Allombert's algorithm)}
   \label{algo:allombert}
   \begin{algorithmic}[1]
-    \REQUIRE {blackbox $\F_{p^\ell}, \F_{p^m}$, for $\ell\,|\,m$ integers prime to $p$.}
+    \REQUIRE {$\F_{p^\ell}, \F_{p^m}$, for $\ell\,|\,m$ integers prime to $p$.}
     \ENSURE {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
       defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.}
   \STATE Prepare the Kummer algebras $A_\ell$ and $A_m$.
-  \STATE Find $\alpha_\ell\in A_\ell$, $\alpha_m\in A_m$ nonzero solutions of \eqref{h90} for $\zeta_\ell$
+  \STATE Find $\alpha_\ell\in A_\ell$ and $\alpha_m\in A_m$, nonzero solutions of \eqref{h90} for $\zeta_\ell$
   and $\zeta_m$ respectively.
-  \STATE Compute their Kummer constants: $(\alpha_\ell)^\ell=1\otimes\a_\ell$, 
+  \STATE Compute their Kummer constants: $(\alpha_\ell)^\ell=1\otimes\a_\ell$ and
   $(\alpha_m)^m=1\otimes\a_m$.
-  \STATE Compute $\kappa$ a $\ell$-th root of $\embedcyc{\ell}{m}(\a_\ell)/\a_m$.
+  \STATE Compute $\kappa$, a $\ell$-th root of $\embedcyc{\ell}{m}(\a_\ell)/\a_m$.
   \STATE Return $\first{\alpha_{\ell}}{\zeta_\ell}$ and $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{(\zeta_m)^{\frac{m}{\ell}}}$.
   \end{algorithmic}
 \end{algorithm}
@@ -581,16 +589,16 @@ We can now state and prove Allombert's algorithm.\footnote{Actually,
 \end{proposition}
 \begin{proof}
 By Propositions~\ref{Phialpha} and~\ref{Phipsi}, there exists $\hat{\alpha}\in A_m$
-solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$ that satisfy $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$.
+solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$ that satisfies $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$.
 On the other hand, $(\alpha_m)^{\frac{m}{\ell}}\in A_m$ is also a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$,
 thus $\hat{\alpha}=(1\otimes\lambda)(\alpha_m)^{\frac{m}{\ell}}$ for some $\lambda\in\F_{p}(\zeta_m)$.
-It follows $\embedcyc{\ell}{m}(\a_\ell)/\a_m=\lambda^\ell$ is a $\ell$-th power,
+It follows that $\embedcyc{\ell}{m}(\a_\ell)/\a_m=\lambda^\ell$ is a $\ell$-th power,
 and $\kappa = (\zeta_{m})^{\frac{um}{\ell}}\lambda$ for some integer $u$.
 Now we can replace $\hat{\alpha}$
 with $(1\otimes(\zeta_{m})^{\frac{um}{\ell}})(\hat{\alpha})=(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}$
 and conclude with Corollary~\ref{alphapsi}.
 \end{proof}
-From this proof and Proposition~\ref{depend}, we remark that another choice of the $l$-th root $\kappa$
+From this proof and Proposition~\ref{depend}, it follows that another choice of the $l$-th root $\kappa$
 only changes $\psi$ by a power of $\sigma$.
     
 \section{Standard solutions of (H90)}
@@ -610,7 +618,7 @@ for all pairs $(\ell,m)$,
 which grows \emph{quadratically} with the number of fields.
 \end{description}
 
-It would be nice if one could force $\kappa=1$, that is, if $\alpha_\ell,\alpha_m$
+It would be useful if one could force $\kappa=1$, that is, if $\alpha_\ell,\alpha_m$
 and $\Phi:A_\ell\hookrightarrow A_m$
 could be chosen so that $\Phi(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
 From the description of Algorithm~\ref{algo:allombert},
@@ -626,14 +634,14 @@ A Kummer algebra is \emph{complete} if it is of the largest degree for a given l
 Thus, the complete Kummer algebra of level $a$ is
 \[ A_{p^a-1}=\F_{p^{p^a-1}}\otimes\F_{p^a} \]
 with field of scalars $\F_{p^a}=\F_{p}(\zeta_{p^a-1})$ given by the corresponding $\zeta_{p^a-1}$ in our compatible system $\system$,
-e.g. defined by a (pseudo-)Conway polynomial of degree $a$.
+e.g., defined by a (pseudo-)Conway polynomial of degree $a$.
 \begin{lemma}
 \label{Kummer_bizarre}
-All nonzero solutions $\alpha_{p^a-1}\in A_{p^a-1}$ of \eqref{h90} for $\zeta_{p^a-1}$,
+All nonzero solutions $\alpha_{p^a-1}\in A_{p^a-1}$ of \eqref{h90} for $\zeta_{p^a-1}$
 have the same Kummer constant $\a_{p^a-1}=(\zeta_{p^a-1})^a$.
 \end{lemma}
 \begin{proof}
-From Lemma~\ref{FrobFrob} and the fact that $\sigma^a$ is trivial on $\F_{p}(\zeta_{p^a-1})\simeq\F_{p^a}$ we get
+From Lemma~\ref{FrobFrob} and the fact that $\sigma^a$ is trivial on $\F_{p}(\zeta_{p^a-1})\simeq\F_{p^a}$ we get that
 \begin{equation*}
 \begin{split}
 (\alpha_{p^a-1})^{p^a}=(\sigma^a\otimes\sigma^a)(\alpha_{p^a-1})&=(\sigma^a\otimes1)(\alpha_{p^a-1})\\
@@ -644,13 +652,13 @@ We conclude since $\alpha_{p^a-1}$ is invertible.
 \end{proof}
 \begin{definition}
 \label{alphastandard}
-Let $l$ be an integer prime by $p$.
+Let $l$ be an integer prime to $p$.
 We define the \emph{standard} Kummer constant of order $\ell$ as
 \[ \stda_{\ell}=(\embedcyc{l}{p^a-1})^{-1}((\zeta_{p^a-1})^a)\in\F_p(\zeta_\ell) \]
 where $a=\nu(\ell)$ is the level of $A_\ell$.
 
 We say a solution $\alpha_\ell\in A_\ell$ of~\eqref{h90} for $\zeta_\ell$ is
-standard if its Kummer constant is standard:
+\emph{standard} if its Kummer constant is standard:
 \[ (\alpha_\ell)^\ell=1\otimes\stda_{\ell}. \]
 Then, by a \emph{decorated} Kummer algebra we mean a pair
 \[ (A_\ell,\alpha_{\ell}) \]
@@ -680,7 +688,7 @@ For complete algebras, Lemma~\ref{Kummer_bizarre} asserts that all nonzero $\alp
 \begin{proposition}
 \label{standardexiste}
 Let $l$ be an integer not divisible by $p$.
-Then $A_\ell$ can be decorated, i.e. it admits a standard $\alpha_\ell$.
+Then $A_\ell$ can be decorated, i.e., it admits a standard $\alpha_\ell$.
 Moreover, this $\alpha_\ell$ is unique up to a $\ell$-th root of unity.
 \end{proposition}
 \begin{proof}
@@ -691,7 +699,7 @@ Then $\Phi(\alpha'_\ell)$ and $(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}$ are two no
 for $\embedcyc{l}{p^a-1}(\zeta_\ell)=(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}}$ in $A_{p^a-1}$, thus there is a scalar $\lambda\in\F_{p}(\zeta_{p^a-1})$
 such that
 \begin{equation*}
-(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}=(1\otimes\lambda)\Phi(\alpha'_\ell)=\Phi((1\otimes\tilde\lambda)\alpha'_\ell).
+(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}=(1\otimes\lambda)\Phi(\alpha'_\ell)=\Phi((1\otimes\tilde\lambda)\alpha'_\ell),
 \end{equation*}
 where $\tilde\lambda=(\embedcyc{l}{p^a-1})^{-1}(\lambda)\in\F_{p}(\zeta_{\ell})$.
 
@@ -699,13 +707,16 @@ Setting $\alpha_\ell=(1\otimes\eta\tilde\lambda)\alpha'_\ell\in A_\ell$ for $\et
 we get $\a_{\ell}=\eta^\ell(\embedcyc{l}{p^a-1})^{-1}(\stda_{p^a-1})=\eta^\ell\stda_\ell$, and
 thus the standard $\alpha_\ell\in A_\ell$ are the $(1\otimes\zeta_\ell^u\tilde\lambda)\alpha'_\ell$, for $0\leq u<\ell$.
 \end{proof}
-This allows:
+
+The decoration of an algebra $A_\ell$, and the associated standard
+irreducible polynomial, can be computed by the simple adaptation of
+Allombert's algorithm presented below. %
 
 \begin{algorithm}
-  \caption{(decoration-standardization)}
+  \caption{(Decoration -- Standardization)}
   \label{algo:decoration}
   \begin{algorithmic}[1]
-    \REQUIRE {blackbox $\F_{p^\ell}$, for $\ell$ an integer prime to $p$.}
+    \REQUIRE {$\F_{p^\ell}$, for $\ell$ an integer prime to $p$, a root system $\system$.}
     \ENSURE {$(A_\ell,\alpha_\ell)$ decorated, $P_\ell$ irreducible polynomial of degree $\ell$,
       and $s\in\F_{p^\ell}$ a generating element inducing $\F_{p^\ell}\simeq\F_{p}[T]/(P_\ell)$.}
   \STATE Prepare the Kummer algebra $A_\ell$.
@@ -719,23 +730,23 @@ This allows:
   \end{algorithmic}
 \end{algorithm}
 
-Algorithm~\ref{algo:decoration} is correct: indeed Proposition~\ref{standardexiste} ensures that
-a standard $\alpha_{\ell}$ exists, and thus, $\alpha'_\ell=(1\otimes\kappa^{-1})\alpha_{\ell}$
+Algorithm~\ref{algo:decoration} is correct, indeed Proposition~\ref{standardexiste} ensures that
+a standard $\alpha_{\ell}$ exists, and thus $\alpha'_\ell=(1\otimes\kappa^{-1})\alpha_{\ell}$
 for some $\kappa\in\F_{p}(\zeta_\ell)$, so $\stda_\ell/\a'_\ell=\kappa^\ell$ is a $\ell$-th power.
 
 By Proposition~\ref{depend}, we also note that $P_\ell$ only depends on $\stda_{\ell}$,
 and thus it only depends on the given system $\system$ of compatible roots,
 possibly up to order $p^{\nu(\ell)}-1$
-(e.g. $P_\ell$ only depends the Conway polynomial of degree $\nu(\ell)$).
+(e.g., $P_\ell$ only depends the Conway polynomial of degree $\nu(\ell)$).
 In this sense, $P_\ell$ gives a standard definition of $\F_{p^\ell}$.
 
 By design, decorated Kummer algebras of the same level admit standard Kummer embeddings,
 under which the corresponding standard solutions of~\eqref{h90} are power-compatible:
 \begin{proposition}
 \label{embedincomplete}
-Let $\ell\,|\,m$ be integers prime to $p$ and such $\nu(\ell)=\nu(m)=a$.
+Let $\ell\,|\,m$ be integers prime to $p$ and such that $\nu(\ell)=\nu(m)=a$.
 Let $(A_\ell,\alpha_\ell)$, $(A_m,\alpha_m)$ be decorated Kummer algebras
-of degree $\ell,m$ respectively, and of the same level $a$.
+of degree $\ell,m$ respectively (and of the same level $a$).
 Then, there is a unique Kummer embedding
 \[ \embedalg{\ell}{m}:A_\ell\hookrightarrow A_m \]
 such that $\embedalg{\ell}{m}(\alpha_\ell)=(\alpha_m)^{\frac{m}{\ell}}$.
@@ -753,12 +764,12 @@ However, at least between \emph{complete} decorated algebras, we can request som
 instead.
 
 Let $A_m$ be a Kummer algebra of level $b=\nu(m)$, so
-\[ A_m=\F_{p^m}\otimes\F_{p}(\zeta_m)\overset{\sim}{\longrightarrow}\F_{p^m}\otimes\F_{p}(\zeta_{p^b-1}) \]
+\[ A_m=\F_{p^m}\otimes\F_{p}(\zeta_m)\overset{\sim}{\longrightarrow}\F_{p^m}\otimes\F_{p}(\zeta_{p^b-1}), \]
 where the isomorphism is given by $1\otimes\embedcyc{m}{p^b-1}$.
 Then, for an integer $a\,|\,b$,
 the subalgebra of $A_m$ invariant under $1\otimes\sigma^a$ is identified
 by this isomorphism with
-\[ (A_m)^{1\otimes\sigma^a}\simeq\F_{p^m}\otimes\F_{p}((\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}) \]
+\[ (A_m)^{1\otimes\sigma^a}\simeq\F_{p^m}\otimes\F_{p}((\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}), \]
 where $(\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}=\operatorname{N}_{\F_{p^b}/\F_{p^a}}(\zeta_{p^b-1})=\embedcyc{p^a-1}{p^b-1}(\zeta_{p^a-1})$.
 
 \begin{definition}
@@ -772,12 +783,12 @@ the \emph{scalar norm} operator
 \end{array}
 \]
 \end{definition}
-This is well-defined, i.e. the image of $\norm_{b/a,A_n}$ is invariant under $1\otimes\sigma^a$ as specified.
-Often the ambiant algebra $A_n$ will be implicit,
+This is well-defined, i.e., the image of $\norm_{b/a,A_n}$ is invariant under $1\otimes\sigma^a$ as specified.
+Often the ambient algebra $A_n$ will be implicit,
 and we will write $\norm_{b/a}$ instead of $\norm_{b/a,A_n}$.
 
 By construction, $\norm_{b/a}$ acts on $1\otimes\F_{p^b}^\times$ as $1\otimes\operatorname{N}_{\F_{p^b}/\F_{p^a}}$.
-They are multiplicative:
+Scalar norms are multiplicative:
 \[
   \norm_{b/a}(\gamma\gamma')=\norm_{b/a}(\gamma)\norm_{b/a}(\gamma'),
 \]
@@ -820,7 +831,7 @@ and in Proposition~\ref{embedcomplete}, a standard
 norm-compatible embedding between decorated complete algebras
 of dividing levels.
  
-Now consider general $\ell\,|\,m$ not divisible by $p$,
+Now, consider general $\ell\,|\,m$ not divisible by $p$,
 set $a=\nu(\ell)$, $b=\nu(m)$, and consider the diagram
 \begin{equation*}
 \label{3cotes}
@@ -840,11 +851,11 @@ that makes the diagram commute.
 Consider $\hat{\hat\alpha}=\embedalg{p^a-1}{p^b-1}(\embedalg{\ell}{p^a-1}(\alpha_\ell))\in A_{p^b-1}$.
 Then $\hat{\hat\alpha}$ is invariant under $\sigma^\ell\otimes1$ and
 under $1\otimes\sigma^a$ (because $\alpha_\ell$ is),
-thus, a fortiori, invariant under $\sigma^m\otimes1$ and
+thus, \textit{a fortiori}, invariant under $\sigma^m\otimes1$ and
 under $1\otimes\sigma^b$, which means it lies in the image
 of $\embedalg{m}{p^b-1}$.
 We can then set $\hat\alpha=(\embedalg{m}{p^b-1})^{-1}(\hat{\hat\alpha})$.
-If $\embedalg{\ell}{m}$ exists, then necessarily it maps $\alpha_\ell$
+If $\embedalg{\ell}{m}$ exists, then it necessarily maps $\alpha_\ell$
 to $\hat\alpha$.
 However, chasing in the diagram, it is easily seen that $\hat\alpha$ is
 a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$ that
@@ -906,7 +917,7 @@ with $\ell\,|\,m\,|\,n$, the corresponding standard embeddings
 satisfy $\embedalg{\ell}{n}=\embedalg{m}{n}\circ\embedalg{\ell}{m}$.
 \end{proposition}
 \begin{proof}
-We have to show $\embedalg{\ell}{n}(\alpha_\ell)=\embedalg{m}{n}(\embedalg{\ell}{m}(\alpha_\ell))$:
+We have to show that $\embedalg{\ell}{n}(\alpha_\ell)=\embedalg{m}{n}(\embedalg{\ell}{m}(\alpha_\ell))$;
 nothing but a pleasant computation with the explicit constants given 
 by Corollary~\ref{explicit_general_standard_embedding}.
 
@@ -922,13 +933,13 @@ A_{p^a-1} @>>> A_{p^b-1} @>>> A_{p^c-1} \\
 A_\ell @>>> A_m @>>> A_n
 \end{CD}
 \end{equation*}
-we see indeed this common image
+we see that this common image
 is $\norm_{c/a}(\alpha_{p^c-1})^{\frac{p^a-1}{\ell}}$.
 \end{proof}
 
 By a \emph{decorated finite field} (of degree $\ell$, an integer prime to $p$),
 we mean a pair $(\F_{p^\ell},\alpha_\ell)$,
-where $\F_{p^\ell}$ is a (blackbox) finite field,
+where $\F_{p^\ell}$ is a finite field,
 and $\alpha_\ell$ a standard solution of~\eqref{h90} in the corresponding
 Kummer algebra $A_\ell=\F_{p^\ell}\otimes\F_{p}(\zeta_\ell)$.
 
@@ -936,14 +947,14 @@ If $(\F_{p^\ell},\alpha_\ell)$ is a decorated finite field,
 then from $\alpha_\ell$ one derives the standard generating
 element $x_0=\first{\alpha_\ell}{\zeta_\ell}$ of $\F_{p^\ell}$.
 Conversely, given such a standard $x_0$, one can retrieve $\alpha_\ell$,
-e.g. using the equations given in~\cite{Allombert02}.
+e.g., using the equations given in~\cite{Allombert02}.
 
 We can finally state:
 \begin{algorithm}
-  \caption{(standard, compatible Allombert)}
+  \caption{(Standard compatible embeddings)}
   \label{algo:std_embed}
   \begin{algorithmic}[1]
-    \REQUIRE {decorated finite fields $(\F_{p^\ell},\alpha_\ell)$, $(\F_{p^m},\alpha_m)$, for $\ell\,|\,m$ integers prime to $p$.}
+    \REQUIRE {Decorated finite fields $(\F_{p^\ell},\alpha_\ell)$, $(\F_{p^m},\alpha_m)$, for $\ell\,|\,m$ integers prime to $p$, a root system $\system$.}
     \ENSURE {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
       defines a standard embedding $\embed{\ell}{m}:\F_{p^\ell}\hookrightarrow\F_{p^m}$,
       compatible with composition.}
