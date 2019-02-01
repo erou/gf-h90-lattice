@@ -80,6 +80,15 @@ int main() {
       flint_printf(".%d,%d,%d.", deg, deg2, deg1 % primes[i%5]);
     }
 
+    mp_limb_t coeff;
+    change_basis_inverse_and_project(&coeff, a, 1, g, ctx, ctx_g);
+
+    if (coeff != nmod_poly_get_coeff_ui(aa, 0)) {
+      flint_printf("Constant coefficients differ %d != %d\n",
+		   coeff, nmod_poly_get_coeff_ui(aa, 0));
+    } else {
+      flint_printf("!");
+    }
     
     nmod_poly_clear(modulus);
     fq_nmod_clear(aaa, ctx);

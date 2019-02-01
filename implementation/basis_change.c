@@ -1,4 +1,5 @@
 #include <flint/fmpz.h>
+#include <flint/nmod_vec.h>
 #include "basis_change.h"
 #include "minpoly.h"
 
@@ -102,51 +103,62 @@ void change_basis_inverse_precomp(fq_nmod_t res,
 }
 
 /*
+ * Given the image g of the canonical generator of ctx_to in ctx_from,
+ * compute the inverse modulo ctx_to of the derivative of ctx_to, and
+ * an element with relative ctx_from/ctx_to trace 1.
+ *
+ * These elements are needed as precomputations for
+ * change_basis_inverse_precomp, as well as
+ * change_basis_inverse_and_project.
+ */
+void change_basis_prepare(fq_nmod_t deriv_inv, fq_nmod_t trace_one,
+			  const fq_nmod_t g,
+			  const fq_nmod_ctx_t ctx_from, const fq_nmod_ctx_t ctx_to) {
+  slong degree = fq_nmod_ctx_degree(ctx_from);
+  slong deg_low = fq_nmod_ctx_degree(ctx_to);
+  fmpz_t deg_ratio;
+  
+  // put 1 / modulus' in deriv_inv
+  nmod_poly_derivative(deriv_inv, ctx_to->modulus);
+  fq_nmod_inv(deriv_inv, deriv_inv, ctx_to);
+
+  // Compute an element of relative trace 1
+  fmpz_init_set_ui(deg_ratio, degree / deg_low);
+  if (fmpz_invmod(deg_ratio, deg_ratio, &(ctx_to->p))) {
+    fq_nmod_set_fmpz(trace_one, deg_ratio, ctx_from);
+  } else {
+    fq_nmod_t x_trace;
+    fq_nmod_init(x_trace, ctx_to);
+    fq_nmod_one(trace_one, ctx_from);
+    do {
+      nmod_poly_shift_left(trace_one, trace_one, 1);
+      change_basis_inverse_precomp(x_trace, trace_one, g, ctx_from, ctx_to, deriv_inv, NULL);
+    } while(fq_nmod_is_zero(x_trace, ctx_to));
+    change_basis_direct(x_trace, x_trace, ctx_to, g, ctx_from);
+    fq_nmod_div(trace_one, trace_one, x_trace, ctx_from);
+    fq_nmod_clear(x_trace, ctx_from);
+  }
+}
+
+/*
  * Given a ∈ ctx_from, and given the image g of the canonical
  * generator of ctx_to in ctx_from, compute the image of a in ctx_to.
  *
- * ctx_to can be smaller than ctx_from, but not bigger. In this case,
- * deg(ctx_from)/deg(ctx_to) must not be divisible by the
- * characteristic, othwerise 0 is returned.
+ * ctx_to can be smaller than ctx_from, but not bigger.
  */
 void change_basis_inverse(fq_nmod_t res,
 			  const fq_nmod_t a, const fq_nmod_t g,
 			  const fq_nmod_ctx_t ctx_from, const fq_nmod_ctx_t ctx_to) {
   nmod_poly_t deriv_inv;
+  fq_nmod_t trace_one;
 
+  fq_nmod_init(trace_one, ctx_from);
   nmod_poly_init(deriv_inv, ctx_to->modulus->mod.n);
-  // compute 1 / modulus'
-  nmod_poly_derivative(deriv_inv, ctx_to->modulus);
-  fq_nmod_inv(deriv_inv, deriv_inv, ctx_to);
 
-  // correct scalar for proper embeddings
-  slong degree = fq_nmod_ctx_degree(ctx_from);
-  slong deg_low = fq_nmod_ctx_degree(ctx_to);
-  fmpz_t deg_ratio;
-  if (degree / deg_low > 1) {
-    fq_nmod_t trace_one;
-    fq_nmod_init(trace_one, ctx_from);
-    fmpz_init_set_ui(deg_ratio, degree / deg_low);
-    if (fmpz_invmod(deg_ratio, deg_ratio, &(ctx_to->p))) {
-      fq_nmod_set_fmpz(trace_one, deg_ratio, ctx_from);
-    } else {
-      fq_nmod_t x_trace;
-      fq_nmod_init(x_trace, ctx_to);
-      fq_nmod_one(trace_one, ctx_from);
-      do {
-	nmod_poly_shift_left(trace_one, trace_one, 1);
-	change_basis_inverse_precomp(x_trace, trace_one, g, ctx_from, ctx_to, deriv_inv, NULL);
-      } while(fq_nmod_is_zero(x_trace, ctx_to));
-      change_basis_direct(x_trace, x_trace, ctx_to, g, ctx_from);
-      fq_nmod_div(trace_one, trace_one, x_trace, ctx_from);
-      fq_nmod_clear(x_trace, ctx_from);
-    }
-    change_basis_inverse_precomp(res, a, g, ctx_from, ctx_to, deriv_inv, trace_one);
-    fq_nmod_clear(trace_one, ctx_from);
-  } else {
-    change_basis_inverse_precomp(res, a, g, ctx_from, ctx_to, deriv_inv, NULL);
-  }
-
+  change_basis_prepare(deriv_inv, trace_one, g, ctx_from, ctx_to);
+  change_basis_inverse_precomp(res, a, g, ctx_from, ctx_to, deriv_inv, trace_one);
+  
+  fq_nmod_clear(trace_one, ctx_from);
   nmod_poly_clear(deriv_inv);
 }
 
@@ -170,29 +182,85 @@ void change_basis_direct(fq_nmod_t res,
  * the linear form ⎣.⎦_g ∘ Tr, where Tr is the trace from ctx to k(g),
  * and ⎣.⎦_g is the projection on the first component in the basis g.
  */
-void project_tr(nmod_poly_t res, const fq_nmod_t g,
-		const fq_nmod_ctx_t minpoly, const fq_nmod_ctx_t ctx) {
-  fq_nmod_t hprime, gprime, gshift;
+void project_tr(mp_limb_t * res, const fq_nmod_t g,
+		const fq_nmod_ctx_t minpoly, const nmod_poly_t minpoly_deriv_inv,
+		const fq_nmod_ctx_t ctx) {
+  fq_nmod_t hprime, gshift;
   slong d = fq_nmod_ctx_degree(ctx);
 
   fq_nmod_init(hprime, ctx);
-  fq_nmod_init(gprime, minpoly);
   fq_nmod_init(gshift, minpoly);
-
   
   // rev(ctx' · ((minpoly ÷ x) / minpoly')(g)) / rev(ctx)  mod x^d
   
   nmod_poly_derivative(hprime, ctx->modulus);
-  nmod_poly_derivative(gprime, minpoly->modulus);
   nmod_poly_shift_right(gshift, minpoly->modulus, 1);
-  fq_nmod_inv(gshift, gshift, minpoly);
-  fq_nmod_mul(gprime, gprime, gshift, minpoly);
-  nmod_poly_compose_mod_brent_kung_preinv(gshift, gprime, g, ctx->modulus, ctx->inv);
-  fq_nmod_mul(gprime, hprime, gshift, ctx);
-  nmod_poly_reverse(gshift, gprime, d);
-  nmod_poly_mullow(res, gshift, ctx->inv, d);
+  fq_nmod_mul(gshift, gshift, minpoly_deriv_inv, minpoly);
+  nmod_poly_compose_mod_brent_kung_preinv(gshift, gshift, g, ctx->modulus, ctx->inv);
+  fq_nmod_mul(gshift, hprime, gshift, ctx);
+  nmod_poly_reverse(gshift, gshift, d);
+  _nmod_poly_mullow(res, gshift->coeffs, gshift->length,
+		    ctx->inv->coeffs, ctx->inv->length, d, ctx->mod);
 
   fq_nmod_clear(hprime, ctx);
-  fq_nmod_clear(gprime, minpoly);
   fq_nmod_clear(gshift, minpoly);
+}
+
+/*
+ * Inputs:
+ *  - an array `polys` of lenght `n` of element of `ctx_to`
+ *     expressed in `ctx_from`,
+ *  - the canonical generator `g` of `ctx_to` expressed in `ctx_from`,
+ *  - the values `to_deriv_inv` and `trace_one` precomputed 
+ *    by `change_basis_prepare`.
+ * 
+ * Output the constant coefficients of `polys` expressed in the basis
+ * g.
+ *
+ * Note, the output `res` must be pre-allocated to length n.
+ */
+void change_basis_inverse_and_project_precomp(mp_limb_t * res,
+					      const fq_nmod_struct * polys, slong n,
+					      const fq_nmod_t g, const fq_nmod_ctx_t ctx_from,
+					      const fq_nmod_ctx_t ctx_to,
+					      const fq_nmod_t to_deriv_inv,
+					      const fq_nmod_t trace_one) {
+  slong d = fq_nmod_ctx_degree(ctx_from);
+  mp_limb_t form[d];
+  
+  project_tr(form, g, ctx_to, to_deriv_inv, ctx_from);
+  transposed_mulmod(form, form, trace_one, ctx_from->modulus, ctx_from->inv);
+
+  slong nlimbs = _nmod_vec_dot_bound_limbs(d, ctx_from->mod);
+  for (slong i = 0; i < n; i++) {
+    res[i] = _nmod_vec_dot(form, polys[i].coeffs, polys[i].length, ctx_from->mod, nlimbs);
+  }
+}
+
+/*
+ * Inputs:
+ *  - an array `polys` of lenght `n` of element of `ctx_to`
+ *     expressed in `ctx_from`,
+ *  - the canonical generator `g` of `ctx_to` expressed in `ctx_from`.
+ * 
+ * Output the constant coefficients of `polys` expressed in the basis
+ * g.
+ *
+ * Note, the output `res` must be pre-allocated to length n.
+ */
+void change_basis_inverse_and_project(mp_limb_t * res,
+				      const fq_nmod_struct * polys, slong n,
+				      const fq_nmod_t g, const fq_nmod_ctx_t ctx_from,
+				      const fq_nmod_ctx_t ctx_to) {
+  nmod_poly_t deriv_inv;
+  fq_nmod_t trace_one;
+
+  fq_nmod_init(trace_one, ctx_from);
+  nmod_poly_init(deriv_inv, ctx_to->modulus->mod.n);
+
+  change_basis_prepare(deriv_inv, trace_one, g, ctx_from, ctx_to);
+  change_basis_inverse_and_project_precomp(res, polys, n, g, ctx_from, ctx_to, deriv_inv, trace_one);
+  
+  fq_nmod_clear(trace_one, ctx_from);
+  nmod_poly_clear(deriv_inv);
 }
