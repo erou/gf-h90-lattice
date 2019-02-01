@@ -163,3 +163,36 @@ void change_basis_direct(fq_nmod_t res,
 			 const fq_nmod_t g, const fq_nmod_ctx_t ctx_to) {
   nmod_poly_compose_mod_brent_kung_preinv(res, a, g, ctx_to->modulus, ctx_to->inv);
 }
+
+
+/*
+ * Given an element g ∈ ctx with minpoly min, compute the vector of
+ * the linear form ⎣.⎦_g ∘ Tr, where Tr is the trace from ctx to k(g),
+ * and ⎣.⎦_g is the projection on the first component in the basis g.
+ */
+void project_tr(nmod_poly_t res, const fq_nmod_t g,
+		const fq_nmod_ctx_t minpoly, const fq_nmod_ctx_t ctx) {
+  fq_nmod_t hprime, gprime, gshift;
+  slong d = fq_nmod_ctx_degree(ctx);
+
+  fq_nmod_init(hprime, ctx);
+  fq_nmod_init(gprime, minpoly);
+  fq_nmod_init(gshift, minpoly);
+
+  
+  // rev(ctx' · ((minpoly ÷ x) / minpoly')(g)) / rev(ctx)  mod x^d
+  
+  nmod_poly_derivative(hprime, ctx->modulus);
+  nmod_poly_derivative(gprime, minpoly->modulus);
+  nmod_poly_shift_right(gshift, minpoly->modulus, 1);
+  fq_nmod_inv(gshift, gshift, minpoly);
+  fq_nmod_mul(gprime, gprime, gshift, minpoly);
+  nmod_poly_compose_mod_brent_kung_preinv(gshift, gprime, g, ctx->modulus, ctx->inv);
+  fq_nmod_mul(gprime, hprime, gshift, ctx);
+  nmod_poly_reverse(gshift, gprime, d);
+  nmod_poly_mullow(res, gshift, ctx->inv, d);
+
+  fq_nmod_clear(hprime, ctx);
+  fq_nmod_clear(gprime, minpoly);
+  fq_nmod_clear(gshift, minpoly);
+}
