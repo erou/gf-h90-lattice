@@ -1042,7 +1042,7 @@ algorithms.
   free, and its minimal polynomial $P_\ell$ is computed again in
   $O(\ell^{(\omega+1)/2})$ operations.
 
-  Now, to computed a Kummer embedding of $(\F_{p^\ell},\alpha_\ell)$
+  Now, to compute a Kummer embedding of $(\F_{p^\ell},\alpha_\ell)$
   into $(\F_{p^m},\alpha_m)$, we compute the scalar $\kappa_{\ell,m}$
   in $O(m\M(m))$ operations, and $(\alpha_m)^{\frac{m}{\ell}}$ in
   $O(\M(m^2)\log(m))$. %
@@ -1057,24 +1057,39 @@ algorithms.
   $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{\zeta_\ell}$,
   therefore we proceed as follows.
 
-  We start by computing the minimal polynomial of $\zeta_m$ over
-  $\F_p(\zeta_\ell)$ in $O(\M(m^2))$ operations using the algorithm
-  of~\cite{shoup99}, from which we deduce the matrix of the trace form
-  from $\F_p(\zeta_m)$ to $\F_p(\zeta_l)$ in $O(\M(m\ell))$ operations
-  (see~\cite[Th.~3.1]{rouiller99}). %
-  Now, if $\eta$ is any element such that
-  $\Tr_{\F_q(\zeta_m)/\F_q(\zeta_\ell)}=1$, the map
-  $\pi:x\mapsto\Tr_{\F_q(\zeta_m)/\F_q(\zeta_\ell)}(\eta x)$ is
-  $\F_p(\zeta_\ell)$-linear, and agrees with the embedding defined by
-  $(\zeta_m)^{\frac{m}{\ell}}\mapsto\zeta_\ell$ on
-  $\F_p\bigl((\zeta_m)^{\frac{m}{\ell}}\bigr)$. %
-  Hence, the composition of $\pi$ with the projection on the first
-  coordinate is $\F_p$-linear, and is obtained by multiplying the
-  first row of the trace form with the multiplication-by-$\eta$
-  matrix, in $O(m\M(m))$ operations. %
-  Once we have obtained the vector of this linear form, we can
-  evaluate it on the scalar part of $(\alpha_m)^{\frac{m}{\ell}}$ in
-  $O(m^2)$ operations, to obtain the final result.
+  Let $\Tr$ denote the trace map from $\F_p(\zeta_m)$ to
+  $\F_p(\zeta_\ell)$, and let $\eta\in\F_p(\zeta_m)$ be such that
+  $\Tr(\eta)=1$. %
+  Then the map $x\mapsto \Tr(x\eta)$ sends
+  $(\zeta_m)^{\frac{m}{\ell}}$ to $\zeta_\ell$, and is
+  $\F_p(\zeta_\ell)$-linear, it thus agrees with the inverse map of
+  $\zeta_\ell\mapsto(\zeta_m)^{\frac{m}{\ell}}$ on the image of
+  $\F_p(\zeta_\ell)$. %
+  
+  We thus need to evaluate $x\mapsto\first{\Tr(x\eta)}{\zeta_\ell}$
+  for many values in $\F_p(\zeta_m)$, but this is a $\F_p$-linear
+  form, hence we can precompute its vector on the power basis of
+  $\zeta_m$. %
+  Let $h_m,h_\ell$ be the minimal polynomials of $\zeta_m,\zeta_\ell$,
+  and let $b,a$ be their degrees. %
+  Let $h_0$ be the constant coefficient of $h_\ell$, and let
+  \[\tau = -\frac{h_0}{(\zeta_m)^{\frac{m}{\ell}}} \frac{h_m'(\zeta_m)}{h_\ell'((\zeta_m)^{\frac{m}{\ell}})}\in\F_p(\zeta_m),\]
+  direct calculation shows that
+  \begin{equation*}
+    \sum_{i=0}^{b-1} \first{\Tr(\zeta_m^i)}{\zeta_\ell}Z^i = \frac{\tau(Z^{-1})}{Zh_m(Z^{-1})}  \mod Z^b,
+  \end{equation*}
+  where by $\tau(Z)$ we mean $\tau\in\F_p(\zeta_m)$ seen as a
+  polynomial in $\zeta_m$. %
+  Hence, we can compute the vector of the linear form
+  $x\mapsto\first{\Tr(x)}{\zeta_l}$ using only basic polynomial
+  arithmetic and modular composition, i.e., in $O(m^{(\omega+1)/2})$
+  operations.
+
+  Finally, we compute
+  $(1\otimes\kappa\eta)(\alpha_m)^{\frac{m}{\ell}}$, we see it as a
+  polynomial with coefficients in $\F_p(\zeta_m)$, and we apply the
+  map $\first{\Tr(x)}{\zeta_l}$ to each coefficient. %
+  This costs $O(m\M(m))$ operations.
 \end{proof}
 
 We remark that storing the decorated fields $(\F_{p^l},\alpha_\ell)$
