@@ -59,7 +59,7 @@ void change_basis_direct(fq_nmod_t res,
 
 /*
  * Inputs:
- *  - an array `polys` of lenght `n` of element of `ctx_to`
+ *  - an array `polys` of length `n` of element of `ctx_to`
  *     expressed in `ctx_from`,
  *  - the canonical generator `g` of `ctx_to` expressed in `ctx_from`,
  *  - the values `to_deriv_inv` and `trace_one` precomputed 
@@ -79,7 +79,7 @@ void change_basis_inverse_and_project_precomp(mp_limb_t * res,
 
 /*
  * Inputs:
- *  - an array `polys` of lenght `n` of element of `ctx_to`
+ *  - an array `polys` of length `n` of element of `ctx_to`
  *     expressed in `ctx_from`,
  *  - the canonical generator `g` of `ctx_to` expressed in `ctx_from`.
  * 
