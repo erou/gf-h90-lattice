@@ -16,11 +16,11 @@
 % Redifine \paragraph to take less space
 \def\paragraph#1{\smallskip\noindent{{\bf \rm #1.}}}
 
-\newcommand{\embed}[2]{{\psi^{\mathrm{std}}_{{#1},{#2}}}}
+\newcommand{\embed}[2]{{\phi^{\mathrm{std}}_{{#1},{#2}}}}
 %\newcommand{\system}{\mathbb{\mu}}
 %\newcommand{\system}{\mathbb{\bbmu}}
-\newcommand{\system}{\mathcal{S}^\mu}
-\newcommand{\embedcyc}[2]{{\phi^{\system}_{{#1},{#2}}}}
+\newcommand{\system}[1][I]{\mathcal{S}^{#1}}
+\newcommand{\embedcyc}[2]{{\iota^{\system}_{{#1},{#2}}}}
 \newcommand{\embedalg}[2]{{\Phi^{\mathrm{std}}_{{#1},{#2}}}}
 \newcommand{\first}[2]{\left\lfloor #1 \right\rfloor_{#2}}
 \newcommand{\stda}{\a^{\mathrm{std}}}

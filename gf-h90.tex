@@ -293,34 +293,38 @@ compatible lattices of finite fields.
 
 \paragraph{Conway polynomials and cyclotomic lattices}
 The algorithms of the next sections will be dependent on the
-availability of a compatible lattice of finite field elements. %
-Let $I$ be a subset of $\N\setminus p\N$, we call \emph{cyclotomic
-  lattice} a function $\zeta:I\to\bar\F_p$ such that
-\begin{align}
-  \zeta(1) &= 1,\\
-  \label{eq:cyclotomic}
-  \zeta(\ell) &= \zeta(m)^{m/l} &\text{for any $\ell\,|\,m$,}\\
-  \zeta(\ell) &= \zeta(m)      &\text{iff $\ell=m$.}
-\end{align}
-Said otherwise, a cyclotomic lattice is a collection of primitive
-roots of unity in $\bar\F_p$ with a compatibility condition. %
-In the next sections, we shall assume that such a lattice is given in
-advance, for a set $I$ large enough, and we shall write $\zeta_\ell$ for
-$\zeta(\ell)$.
+availability of a cyclotomic lattice. %
+By this we mean, formally, a collection
+\[ \system=\{(K_\ell,\zeta_\ell)\}_{\ell\in I} \]
+over some support set $I\subset\N\setminus p\N$,
+where $K_\ell$ is an explicitely represented finite extension of $\F_p$,
+and $\zeta_\ell\in K_\ell$ a generating element that is also a primitive $\ell$-th root
+of unity,
+so \[ K_\ell=\F_p(\zeta_\ell),\quad(\zeta_\ell)^\ell=1, \]
+together with
+explicit embeddings
+\[
+\begin{array}{cccc}
+  \embedcyc{\ell}{m}: & K_\ell & \hookrightarrow & K_m \\
+  & \zeta_\ell & \mapsto & (\zeta_{m})^{\frac{m}{\ell}}
+\end{array}
+\]
+whenever $l\,|\,m$.
 
 If $I$ is a finite set of indices, there is an easy randomized
 algorithm to construct a cyclotomic lattice: compute
-$n=\lcm_{i\in I}(i)$, construct the smallest field $\F_{p^a}$ such
+$n=\lcm_{\ell\in I}(\ell)$, construct the smallest field $\F_{p^a}$ such
 that $n$ divides $p^a-1$, take a random $x^{(p^a-1)/n}\in\F_{p^a}$ and
-test that it has multiplicative order $n$; all other roots in the
-lattice are constructed as powers of this element.
+test that it has multiplicative order $n$;
+then all roots $\zeta_\ell$ in the
+lattice are constructed as powers of this element,
+and we can set $K_\ell=\F_p(\zeta_\ell)\subset\F_{p^a}$
+and let $\embedcyc{\ell}{m}$ be natural inclusion.
 
 Nevertheless, the most useful cyclotomic lattices are those where $I$
-is the whole set $\N\setminus p\N$. % ai-je eu raison de corriger ?
-This bears the question of how to represent $\bar\F_p$. %
-It may seem odd to ask for a representation of $\bar\F_p$ as a
-prerequisite for a construction whose goal is precisely to represent
-$\bar\F_p$. %
+is the whole set $\N\setminus p\N$.
+It may seem odd to ask for such data, which in the end provides a representation of $\bar\F_p$,
+as a prerequisite for a construction whose goal is precisely to represent $\bar\F_p$.
 However we shall see that a relatively small cyclotomic sub-lattice is
 enough to construct a much larger lattice of compatibly embedded
 finite fields; it thus makes sense to assume that a cyclotomic lattice
@@ -328,17 +332,17 @@ is available, if it can be computed \emph{incrementally}.
 
 \emph{Conway polynomials}~\cite{Nickel1988} offer a classic example of
 cyclotomic lattice. %
-The $m$-th Conway polynomial $C_m\in\F_p[X]$ is defined as the
+The $a$-th Conway polynomial $C_a\in\F_p[X]$ is defined as the
 \emph{lexicographically smallest} monic irreducible polynomial of
-degree $m$ that is also \emph{primitive} (i.e., its roots generate
-$\F_{p^n}^\times$) and \emph{norm compatible} (i.e,
-$$C_\ell\Bigl(X^{\frac{p^m-1}{p^\ell-1}}\Bigr) = 0 \mod C_m$$
-whenever $\ell$ divides $m$). %
-The cyclotomic lattice is defined by letting $\zeta(p^m-1)$ be the
-image of $X$ in $\F_{p^m}=\F_p[X]/C_m$ for any $m$, and
-using~\eqref{eq:cyclotomic} to define $\zeta$ on all other indices. %
-Note that, using Conway polynomials, each value of $\zeta$ is
-represented in the smallest field containing it.
+degree $a$ that is also \emph{primitive} (i.e., its roots generate
+$\F_{p^a}^\times$) and \emph{norm compatible} (i.e,
+$$C_a\Bigl(X^{\frac{p^b-1}{p^a-1}}\Bigr) = 0 \mod C_b$$
+whenever $a$ divides $b$). %
+The cyclotomic lattice is defined first by letting $\zeta_{p^a-1}$ be the
+image of $X$ in $K_{p^a-1}=\F_{p^a}=\F_p[X]/C_a$ for any $a$;
+this is then extended to all $\ell\in I$ by setting $K_\ell=K_{p^a-1}$
+and $\zeta_\ell=(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}}$
+where $\F_{p^a}$ is the smallest extension $\F_p$ containing $\ell$-th roots of unity.
 
 The best algorithm to compute Conway polynomials has exponential
 complexity~\cite{heath+loehr99}, hence they are usually precomputed
@@ -356,21 +360,8 @@ One may, for example, factor cyclotomic polynomials over $\F_p$, being
 careful to maintain compatibility. %
 In the next sections we shall not suppose any cyclotomic lattice
 construction in particular, and simply assume that we are given a
-collection of compatible roots of unity.
-That is, formally, we are given a system $\system=\{(K_\ell,\zeta_\ell)\}_{\ell\geq1}$
-where $K_\ell$ is an explicitely represented finite extension of $\F_p$,
-and $\zeta_\ell\in K_\ell$ a generating element that is also a primitive $\ell$-th root
-of unity,
-so \[ K_\ell=\F_p(\zeta_\ell),\quad(\zeta_\ell)^\ell=1, \]
-together with
-explicit embeddings
-\[
-\begin{array}{cccc}
-  \embedcyc{\ell}{m}: & K_\ell & \hookrightarrow & K_m \\
-  & \zeta_\ell & \mapsto & (\zeta_{m})^{\frac{m}{\ell}}
-\end{array}
-\]
-whenever $l\,|\,m$.
+collection $\system$ that satisfies the properties given at the
+beginning of this paragraph.
 
 \section{The Lenstra-Allombert embedding algorithm}
 \label{sec:lenstra}
@@ -487,8 +478,7 @@ Clear.
 \end{proof}
 
 Now we consider Kummer algebras of various degrees.
-Since we assumed that the fields of scalars are defined from a system $\system$
-of compatible roots of unity,
+Since we assumed that the fields of scalars are defined from a cyclotomic lattice $\system$,
 they are compatibly embedded:
 for $\ell\,|\,m$ prime to $p$, we have the embedding
 \[
@@ -525,13 +515,13 @@ Direct consequence of Proposition~\ref{alphagen} and Definition~\ref{Kembedding}
 
 Actually, Kummer embeddings are easily characterized:
 \begin{proposition}
-\label{Phipsi}
+\label{Phiphi}
 There is a natural $1$-to-$1$ correspondence between Kummer embeddings $\Phi:A_\ell\hookrightarrow A_m$
-and embeddings of finite fields $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$, given by:
+and embeddings of finite fields $\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$, given by:
 \begin{itemize}
 \item If $\Phi$ is a Kummer embedding, then $\Phi$ maps $\F_{p^\ell}\otimes1$ into $\F_{p^m}\otimes 1$.
-Thus the restriction of $\Phi$ to $\F_{p^\ell}\otimes1$ is of the form $\psi\otimes1$ for some $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
-\item Conversely, if $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$ is an embedding of finite fields, then $\Phi=\psi\otimes\embedcyc{\ell}{m}$
+Thus the restriction of $\Phi$ to $\F_{p^\ell}\otimes1$ is of the form $\phi\otimes1$ for some $\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
+\item Conversely, if $\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$ is an embedding of finite fields, then $\Phi=\phi\otimes\embedcyc{\ell}{m}$
 is a Kummer embedding.
 \end{itemize}
 Moreover, this correspondence commutes with composition of embeddings.
@@ -545,7 +535,7 @@ The other assertions are clear.
 \end{proof}
 
 \begin{corollary}
-\label{alphapsi}
+\label{alphaphi}
 Let $\alpha_\ell\in A_\ell$ be a nonzero solution of~\eqref{h90} for $\zeta_\ell$,
 with Kummer constant $\a_\ell$, and
 let $\hat{\alpha}\in A_m$ be a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$
@@ -554,17 +544,17 @@ Then:
 \begin{itemize}
 \item $\hat{\alpha}\in\F_{p^m}\otimes\F_{p}((\zeta_m)^{\frac{m}{\ell}})\;\subset\;A_m$
 \item the assignation $\first{\alpha_{\ell}}{\zeta_\ell}\mapsto\first{\hat{\alpha}}{(\zeta_m)^{\frac{m}{\ell}}}$
-defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$
-\item $\Phi=\psi\otimes\embedcyc{\ell}{m}$ is the unique Kummer embedding such that $\Phi(\alpha_\ell)=\hat{\alpha}$.
+defines an embedding $\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$
+\item $\Phi=\phi\otimes\embedcyc{\ell}{m}$ is the unique Kummer embedding such that $\Phi(\alpha_\ell)=\hat{\alpha}$.
 \end{itemize}
 \end{corollary}
 \begin{proof}
 By Proposition~\ref{Phialpha} there is a unique Kummer embedding $\Phi$ such that $\Phi(\alpha_\ell)=\hat{\alpha}$.
-By Proposition~\ref{Phipsi} we have that $\Phi=\psi\otimes\embedcyc{\ell}{m}$ for some $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
+By Proposition~\ref{Phiphi} we have that $\Phi=\phi\otimes\embedcyc{\ell}{m}$ for some $\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
 Writing $\alpha_\ell=\sum_{i=0}^{a-1}x_i\otimes\zeta_{\ell}^i$,
-it follows that \[ \hat{\alpha}=\Phi(\alpha_\ell)=\sum_{i=0}^{a-1}\psi(x_i)\otimes(\zeta_m)^{\frac{mi}{\ell}}. \]
-Thus $\first{\hat{\alpha}}{(\zeta_m)^{\frac{m}{\ell}}}=\psi(x_0)=\psi(\first{\alpha_{\ell}}{\zeta_\ell})$,
-and, since $\first{\alpha_{\ell}}{\zeta_\ell}$ generates $\F_{p^\ell}$, this uniquely characterizes $\psi$.
+it follows that \[ \hat{\alpha}=\Phi(\alpha_\ell)=\sum_{i=0}^{a-1}\phi(x_i)\otimes(\zeta_m)^{\frac{mi}{\ell}}. \]
+Thus $\first{\hat{\alpha}}{(\zeta_m)^{\frac{m}{\ell}}}=\phi(x_0)=\phi(\first{\alpha_{\ell}}{\zeta_\ell})$,
+and, since $\first{\alpha_{\ell}}{\zeta_\ell}$ generates $\F_{p^\ell}$, this uniquely characterizes $\phi$.
 \end{proof}
 
 We can now state Allombert's algorithm and prove its correctness; we
@@ -575,9 +565,9 @@ to our more general setting.
   \label{algo:allombert}
   \begin{algorithmic}[1]
     \REQUIRE {$\F_{p^\ell}, \F_{p^m}$, for $\ell\,|\,m$ integers prime to $p$,
-      and $\zeta_\ell,\zeta_m$ roots in a compatible system $\system$.}
+      and a cyclotomic lattice $\system[\{l,m\}]$.}
     \ENSURE {$s\in\F_{p^\ell}, t\in\F_{p^m}$, such that the assignation $s\mapsto t$
-      defines an embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.}
+      defines an embedding $\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.}
   \STATE Prepare the Kummer algebras $A_\ell$ and $A_m$.
   \STATE Find $\alpha_\ell\in A_\ell$ and $\alpha_m\in A_m$, nonzero solutions of \eqref{h90} for $\zeta_\ell$
   and $\zeta_m$ respectively.
@@ -589,10 +579,10 @@ to our more general setting.
 \end{algorithm}
 \begin{proposition}
   Algorithm~\ref{algo:allombert} is correct: it returns elements that define an
-  embedding $\psi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
+  embedding $\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$.
 \end{proposition}
 \begin{proof}
-By Propositions~\ref{Phialpha} and~\ref{Phipsi}, there exists $\hat{\alpha}\in A_m$
+By Propositions~\ref{Phialpha} and~\ref{Phiphi}, there exists $\hat{\alpha}\in A_m$
 solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$ that satisfies $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$.
 On the other hand, $(\alpha_m)^{\frac{m}{\ell}}\in A_m$ is also a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{\ell}}$,
 thus $\hat{\alpha}=(1\otimes\lambda)(\alpha_m)^{\frac{m}{\ell}}$ for some $\lambda\in\F_{p}(\zeta_m)$.
@@ -600,10 +590,10 @@ It follows that $\embedcyc{\ell}{m}(\a_\ell)/\a_m=\lambda^\ell$ is a $\ell$-th p
 and $\kappa = (\zeta_{m})^{\frac{um}{\ell}}\lambda$ for some integer $u$.
 Now we can replace $\hat{\alpha}$
 with $(1\otimes(\zeta_{m})^{\frac{um}{\ell}})(\hat{\alpha})=(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}$
-and conclude with Corollary~\ref{alphapsi}.
+and conclude with Corollary~\ref{alphaphi}.
 \end{proof}
 From this proof and Proposition~\ref{depend}, it follows that another choice of the $l$-th root $\kappa$
-only changes $\psi$ by a power of $\sigma$.
+only changes $\phi$ by a power of $\sigma$.
     
 \section{Standard solutions of (H90)}
 \label{sec:compatibleH90}
@@ -618,7 +608,7 @@ would like to improve:
 or equivalently, it provides a defining irreducible polynomial of degree $\ell$.
 However this polynomial depends on the choice of $\alpha_{\ell}$
 (even though only through~$\a_\ell$, cf. Proposition~\ref{depend}).
-\item[\emph{Compatibility:}] The embedding $\psi$ depends on a constant $\kappa$,
+\item[\emph{Compatibility:}] The embedding $\phi$ depends on a constant $\kappa$,
 which itself depends on the choice of $\alpha_\ell,\alpha_m$ (and of a $\ell$-th root extraction).
 Thus, given a certain number of finite fields, in order to ensure compatibility of the various
 embeddings between them, one has to keep track of these constants $\kappa$
@@ -641,7 +631,7 @@ A Kummer algebra is \emph{complete} if it is of the largest degree for a given l
 \end{definition}
 Thus, the complete Kummer algebra of level $a$ is
 \[ A_{p^a-1}=\F_{p^{p^a-1}}\otimes\F_{p^a} \]
-with field of scalars $\F_{p^a}=\F_{p}(\zeta_{p^a-1})$ given by the corresponding $\zeta_{p^a-1}$ in our compatible system $\system$,
+with field of scalars $\F_{p^a}=\F_{p}(\zeta_{p^a-1})$ given by the corresponding $\zeta_{p^a-1}$ in our cyclotomic lattice $\system$,
 e.g., defined by a (pseudo-)Conway polynomial of degree $a$.
 \begin{lemma}
 \label{Kummer_bizarre}
@@ -685,7 +675,7 @@ Moreover, this $\alpha_\ell$ is unique up to a $\ell$-th root of unity.
 \begin{proof}
 Let $\alpha'_\ell$ be any nonzero solution of~\eqref{h90} for $\zeta_\ell$.
 Set $a=\nu(\ell)$, pick any $\alpha_{p^a-1}\in A_{p^a-1}$ standard (Lemma~\ref{Kummer_bizarre}),
-and pick any Kummer embedding $\Phi:A_\ell\hookrightarrow A_{p^a-1}$ (Proposition~\ref{Phipsi}).
+and pick any Kummer embedding $\Phi:A_\ell\hookrightarrow A_{p^a-1}$ (Proposition~\ref{Phiphi}).
 Then $\Phi(\alpha'_\ell)$ and $(\alpha_{p^a-1})^{\frac{p^a-1}{\ell}}$ are two nonzero solutions of~\eqref{h90}
 for $\embedcyc{l}{p^a-1}(\zeta_\ell)=(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}}$ in $A_{p^a-1}$, thus there is a scalar $\lambda\in\F_{p}(\zeta_{p^a-1})$
 such that
@@ -710,7 +700,7 @@ of such a standard $s$.
 \end{definition}
 
 By Proposition~\ref{depend}, we note that $P_\ell$ is entirely determined by $\stda_{\ell}$,
-and thus, by the given system $\system$ of compatible roots, possibly up to order $p^{\nu(\ell)}-1$.
+and thus, by the given cyclotomic lattice $\system$, possibly up to order $p^{\nu(\ell)}-1$.
 As an example, we give in Table~\ref{tab:std-polys} the ten first
 standard polynomials induced by the system of Conway polynomials
 for $p=2$ (thus, in this example, $P_\ell$ only depends on the Conway polynomial of degree $\nu(\ell)$).
@@ -748,7 +738,7 @@ Allombert's algorithm presented below. %
   \caption{(Decoration -- Standardization)}
   \label{algo:decoration}
   \begin{algorithmic}[1]
-    \REQUIRE {$\F_{p^\ell}$, for $\ell$ prime to $p$, and $\system$ a system of roots.}
+    \REQUIRE {$\F_{p^\ell}$, for $\ell$ prime to $p$, and $\system$ a cyclotomic lattice.}
     \ENSURE {$(A_\ell,\alpha_\ell)$ decorated, $P_\ell$ standard irreducible polynomial of degree $\ell$,
       and $s\in\F_{p^\ell}$ standard generating element inducing $\F_{p^\ell}\simeq\F_{p}[T]/(P_\ell)$.}
   \STATE Prepare the Kummer algebra $A_\ell$.
@@ -961,7 +951,7 @@ is $\norm_{c/a}(\alpha_{p^c-1})^{\frac{p^a-1}{\ell}}$.
 \end{proof}
 
 By a \emph{decorated finite field} (of degree $\ell$, an integer prime to $p$,
-and relative to a given system of roots $\system$),
+and relative to a given cyclotomic lattice $\system$),
 we mean a pair $(\F_{p^\ell},s_\ell)$,
 where $\F_{p^\ell}$ is a finite field,
 and $s_\ell\in\F_{p^\ell}$ a standard generating element
@@ -972,7 +962,7 @@ We can finally state:
   \caption{(Standard compatible embeddings)}
   \label{algo:std_embed}
   \begin{algorithmic}[1]
-    \REQUIRE {$\system$ a system of roots, and $(\F_{p^\ell},s_\ell)$, $(\F_{p^m},s_m)$, decorated finite fields, for $\ell\,|\,m$ integers prime to $p$.}
+    \REQUIRE {$\system$ a cyclotomic lattice, and $(\F_{p^\ell},s_\ell)$, $(\F_{p^m},s_m)$, decorated finite fields, for $\ell\,|\,m$ integers prime to $p$.}
     \ENSURE {$t\in\F_{p^m}$, such that the assignation $s_\ell\mapsto t$
       defines a standard embedding $\embed{\ell}{m}:\F_{p^\ell}\hookrightarrow\F_{p^m}$,
       compatible with composition.}
@@ -990,7 +980,7 @@ with $\ell\,|\,m\,|\,n$, the corresponding standard embeddings
 satisfy $\embed{\ell}{n}=\embed{m}{n}\circ\embed{\ell}{m}$.
 \end{proposition}
 \begin{proof}
-Corollary~\ref{alphapsi} and Proposition~\ref{standard_K_embeddings_compatibles}.
+Corollary~\ref{alphaphi} and Proposition~\ref{standard_K_embeddings_compatibles}.
 \end{proof}
 
 \section{Implementation}
@@ -1000,7 +990,7 @@ In the previous sections we kept the description of Kummer embeddings
 abstract, leaving many computational details unspecified. %
 There are various ways in which our algorithms can possibly be
 implemented, depending on how one chooses to represent finite fields
-and the cyclotomic root system $\system$. %
+and the cyclotomic lattice $\system$. %
 A reasonable option is to use (pseudo-)Conway polynomials to represent
 the fields $\F_p(\zeta_{p^a-1})$, and deduce from them the smallest
 possible representation for any other field $\F_p(\zeta_\ell)$. %
