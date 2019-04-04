@@ -447,6 +447,10 @@ Let $K,L$ be two finite extensions of $\F_{p}$.
 Then, for any $\beta\in K\otimes L$,
 we have $(\sigma\otimes\sigma)(\beta)=\beta^p$.
 \end{lemma}
+\begin{proof}
+If $\beta=u\otimes v$ is an elementary tensor we have $(\sigma\otimes\sigma)(\beta)=u^p\otimes v^p=\beta^p$.
+This then extends by linearity since we're in characteristic $p$. 
+\end{proof}
 In this generality we also introduce the following notation: if $\eta\in L$ has degree $d$ over $\F_{p}$,
 then any $\beta\in K\otimes\F_{p}(\eta)\subset K\otimes L$ decomposes uniquely as $\beta = \sum_{i =  0}^{d-1}y_i\otimes\eta^i$,
 and we set  \[ \first{\beta}{\eta}=y_0. \]
@@ -474,7 +478,10 @@ The corresponding generating elements for $\F_{p^\ell}/\F_{p}$ are the $\first{(
 they all have the same minimal polynomial, which is a generating polynomial for $\F_{p^\ell}/\F_{p}$ depending only on $\a_\ell$.
 \end{proposition}
 \begin{proof}
-Clear.
+The solutions of~\eqref{h90} for $\zeta_\ell$ form a $1\otimes\F_{p}(\zeta_{\ell})$-vector space of dimension $1$,
+thus they all are of the form $x=(1\otimes\xi)\alpha_\ell$.
+Adding the condition $x^\ell=1\otimes\a_\ell$ then forces $\xi^\ell=1$,
+from which all assertions follow.
 \end{proof}
 
 Now we consider Kummer algebras of various degrees.
