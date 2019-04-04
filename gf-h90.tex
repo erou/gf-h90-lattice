@@ -296,8 +296,8 @@ The algorithms of the next sections will be dependent on the
 availability of a cyclotomic lattice. %
 By this we mean, formally, a collection
 \[ \system=\{(K_\ell,\zeta_\ell)\}_{\ell\in I} \]
-over some support set $I\subset\N\setminus p\N$,
-where $K_\ell$ is an explicitely represented finite extension of $\F_p$,
+over some support set $I\subset\N\setminus p\N$.
+Where $K_\ell$ is an explicitely represented finite extension of $\F_p$,
 and $\zeta_\ell\in K_\ell$ a generating element that is also a primitive $\ell$-th root
 of unity,
 so \[ K_\ell=\F_p(\zeta_\ell),\quad(\zeta_\ell)^\ell=1, \]
@@ -377,8 +377,8 @@ The main ingredient of the algorithm is an extension
 of Kummer theory.
 For any finite extension of $\F_{p}$, we denote by $ \sigma:x\mapsto x^p $
 the Frobenius automorphism.
-Let $\ell$ be an integer not divisible by $p$,
-then $\sigma$ is an $\F_{p}$-linear endomorphism of $\F_{p^\ell}$
+Let $\ell$ be an integer not divisible by $p$.
+Then $\sigma$ is an $\F_{p}$-linear endomorphism of $\F_{p^\ell}$
 with minimal polynomial $T^\ell-1$, separable but not necessarily split,
 i.e., $\F_{p^\ell}$ is not necessarily a Kummer extension of $\F_{p}$.
 We extend scalars and work in the
@@ -419,7 +419,7 @@ that we shall call the \emph{Kummer constant} of $\alpha_\ell$.
 This proves:
 \begin{proposition}
 \label{alphagen}
-Any such $\alpha_\ell$ is a generating element for $A_\ell$ as an algebra over $1\otimes\F_{p}(\zeta_{\ell})$,
+Any nonzero solution $\alpha_\ell$ of \eqref{h90} for $\zeta_\ell$ is a generating element for $A_\ell$ as an algebra over $1\otimes\F_{p}(\zeta_{\ell})$,
 inducing an isomorphism
 \[ A_\ell\simeq \F_{p}(\zeta_{\ell})[T]/(T^\ell-\a_\ell). \]
 \end{proposition}
@@ -542,9 +542,10 @@ let $\hat{\alpha}\in A_m$ be a solution of~\eqref{h90} for $(\zeta_m)^{\frac{m}{
 that satisfies $(\hat{\alpha})^\ell=1\otimes\embedcyc{\ell}{m}(\a_\ell)$.
 Then:
 \begin{itemize}
-\item $\hat{\alpha}\in\F_{p^m}\otimes\F_{p}((\zeta_m)^{\frac{m}{\ell}})\;\subset\;A_m$
+\item
+  $\hat{\alpha}\in\F_{p^m}\otimes\F_{p}((\zeta_m)^{\frac{m}{\ell}})\;\subset\;A_m$;
 \item the assignation $\first{\alpha_{\ell}}{\zeta_\ell}\mapsto\first{\hat{\alpha}}{(\zeta_m)^{\frac{m}{\ell}}}$
-defines an embedding $\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$
+defines an embedding $\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$;
 \item $\Phi=\phi\otimes\embedcyc{\ell}{m}$ is the unique Kummer embedding such that $\Phi(\alpha_\ell)=\hat{\alpha}$.
 \end{itemize}
 \end{corollary}
@@ -613,7 +614,7 @@ which itself depends on the choice of $\alpha_\ell,\alpha_m$ (and of a $\ell$-th
 Thus, given a certain number of finite fields, in order to ensure compatibility of the various
 embeddings between them, one has to keep track of these constants $\kappa$
 for all pairs $(\ell,m)$,
-which grows \emph{quadratically} with the number of fields.
+which grow \emph{quadratically} with the number of fields.
 \end{description}
 
 It would be useful if one could force $\kappa=1$, that is, if $\alpha_\ell,\alpha_m$
@@ -701,7 +702,7 @@ of such a standard $s$.
 
 By Proposition~\ref{depend}, we note that $P_\ell$ is entirely determined by $\stda_{\ell}$,
 and thus, by the given cyclotomic lattice $\system$, possibly up to order $p^{\nu(\ell)}-1$.
-As an example, we give in Table~\ref{tab:std-polys} the ten first
+As an example, we give in Table~\ref{tab:std-polys} the first ten
 standard polynomials induced by the system of Conway polynomials
 for $p=2$ (thus, in this example, $P_\ell$ only depends on the Conway polynomial of degree $\nu(\ell)$).
 
@@ -724,7 +725,7 @@ for $p=2$ (thus, in this example, $P_\ell$ only depends on the Conway polynomial
     $x^{19}+x^{17}+x^{16}+x^{15}+x^{14}+x^{13}+x^{12}+x^8+x^7+x^6+x^5+x^3+1$
   \end{tabular}
   
-  \caption{The ten first standard polynomials derived from Conway
+  \caption{The first ten standard polynomials derived from Conway
     polynomials for $p=2$.}
   \label{tab:std-polys}
 \end{table}
@@ -999,15 +1000,15 @@ algorithms.
 
 \begin{proposition}
   Given a collection of (pseudo-)Conway polynomials for $\F_p$, of
-  degree up $d$, standard solutions $\alpha_\ell$ of~\eqref{h90} can
+  degree up to $d$, standard solutions $\alpha_\ell$ of~\eqref{h90} can
   be computed for any $\ell\,|\,(p^i-1)$ for any $i\le d$ using
-  $O\bigr(\M(\ell^2)\log(\ell) + \M(\ell)\log(\ell)\log(p)\bigl)$. %
+  $O\bigr(\M(\ell^2)\log(\ell) + \M(\ell)\log(\ell)\log(p)\bigl)$ %
   operations. %
   After that, Kummer embeddings $\F_{p^\ell}\subset\F_{p^m}$ can be
   computed using $O(\M(m^2)\log(m))$ operations.
 \end{proposition}
 \begin{proof}
-  Let $a=\nu(\ell)$ be the level of $A_\ell$, we take the $a$-th
+  Let $a=\nu(\ell)$ be the level of $A_\ell$. We take the $a$-th
   polynomial from the collection of (pseudo)-Conway polynomials, and
   use it to define $\zeta_{p^a-1}$. %
   Because $a\in O(\ell)$, the cost of multiplications in
