@@ -60,7 +60,11 @@
   Our construction computes and evaluates chains of embeddings in
   quasi-quadratic time in the (largest) extension degree, and linear
   time in the number of extensions involved. %
-  Furthermore, our implementation written in C/Flint/Julia/Nemo shows
+  A small drawback is that as a prerequisite it requires the existence of
+  compatible roots of unity that, in practice, will be provided by Conway-like methods.
+  Fortunately, a quite small lattice of such compatible roots allows to produce
+  a much larger lattice of compatibly embedded finite fields,
+  and indeed, our implementation written in C/Flint/Julia/Nemo shows
   that our construction is practical.
 \end{abstract}
 
