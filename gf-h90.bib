@@ -1,3 +1,21 @@
+% Encoding: UTF-8
+
+@misc{Allombert02-rev,
+title = "Explicit Computation of Isomorphisms between Finite Fields",
+year = "2002",
+crossref = "Allombert02",
+howpublished = "Revised version. \url{https://www.math.u-bordeaux.fr/~ballombe/fpisom.ps}",
+author = "Bill Allombert"
+}
+
+@InBook{lenstra+desmit08-stdmodels,
+  author   = {Lenstra Jr., Hendrick W. and de Smit, Bart},
+  title    = {Standard models for finite fields},
+  chapter  = {11.7 in Handbook of Finite Fields},
+  pages    = {401--404},
+  crossref = {mullen2013handbook},
+  keywords = {cyclotomic\_polynomial, irreducible\_polynomials},
+}
 @book{gauss1986disquisitiones,
   title={Disquisitiones Arithmeticae},
   author={Gauss, Carl Friedrich},
@@ -173,16 +191,6 @@ author = "Adrien Poteaux and \'Eric Schost",
 }
 
 
-
-
-@article{DoSc12,
-year={to appear},
-journal={Designs, Codes and Cryptography},
-title={Computing in degree $2^k$-extensions of finite fields of odd characteristic},
-author={Doliskani, Javad and Schost, \'Eric},
-}
-
-
 @Book{Bostan10,
   author = 	 {Alin Bostan},
   title = 	 {Algorithmes rapides pour les polyn\^omes, s\'eries formelles et matrices},
@@ -201,31 +209,23 @@ author={Doliskani, Javad and Schost, \'Eric},
         publisher = {ACM},
 } 
 
-@inproceedings{DeDoSc13,
-  author    = { {De Feo}, Luca and Doliskani, Javad and Schost, {\'E}ric},
-  title     = {Fast algorithms for $\ell$-adic towers over finite fields},
+@InProceedings{DeDoSc13,
+  author    = {De Feo, Luca and Doliskani, Javad and Schost, {\'E}ric},
+  title     = {Fast algorithms for $\ellrond$-adic towers over finite fields},
   booktitle = {ISSAC'13},
- publisher = {ACM},
-pages = {165-172},
   year      = {2013},
+  publisher = {ACM},
+  pages     = {165-172},
 }
 
-@article{Allombert02,
-title = "Explicit Computation of Isomorphisms between Finite Fields",
-journal = "Finite Fields Appl.",
-volume = "8",
-number = "3",
-pages = "332 - 342",
-year = "2002",
-author = "Bill Allombert"
-}
-
-@misc{Allombert02-rev,
-title = "Explicit Computation of Isomorphisms between Finite Fields",
-year = "2002",
-crossref = "Allombert02",
-howpublished = "Revised version. \url{https://www.math.u-bordeaux.fr/~ballombe/fpisom.ps}",
-author = "Bill Allombert"
+@Article{Allombert02,
+  author  = {Bill Allombert},
+  title   = {Explicit Computation of Isomorphisms between Finite Fields},
+  journal = {Finite Fields and Their Applications},
+  year    = {2002},
+  volume  = {8},
+  number  = {3},
+  pages   = {332 - 342},
 }
 
 
@@ -277,13 +277,13 @@ TITLE = {Solving polynomial equations},
 } 
 
 @Article{BoFlSaSc06,
-  author = {A. Bostan and P. Flajolet and B. Salvy and {\'E}. Schost},
-  title = {Fast computation of special resultants},
-  journal = {J. Symbolic Comput.},
-  volume = 41,
-  number = 1,
-  pages = {1-29},
-  year = {2006}
+  author  = {Alin Bostan and Philippe Flajolet and Bruno Salvy and {\'E}ric Schost},
+  title   = {Fast computation of special resultants},
+  journal = {Journal of Symbolic Computation},
+  year    = {2006},
+  volume  = {41},
+  number  = {1},
+  pages   = {1-29},
 }
 @article{BrCa87,
 title = "Irreducibles and the composed product for polynomials over a finite field",
@@ -338,14 +338,14 @@ author = "J. V. Brawley and L. Carlitz"
     url = {http://flintlib.org/},
 }
 
-@manual{Sage,
-  shorthand =     {Sage},
-  organization =  {{The Sage Developers}},
-  key =           {SageMath},
-  url =           {https://www.sagemath.org},
-  title =         {{SageMath, the Sage Mathematics Software
-                   System (Version 8.0)}},
-  year =          {2018},
+@Manual{Sage,
+  title        = {{SageMath, the Sage Mathematics Software System (Version 8.7)}},
+  year         = {201},
+  note         = {\url{https://www.sagemath.org}},
+  organization = {{The Sage Developers}},
+  url          = {https://www.sagemath.org},
+  key          = {SageMath},
+  shorthand    = {Sage},
 }
 
 @article{lenstra02-pell,
@@ -414,14 +414,15 @@ url = "http://www.sciencedirect.com/science/article/pii/S0747717100904279",
 author = "T. Lickteig and {M.-F.} Roy"
 }
 
-@article{KeUm11,
-        Author = {Kedlaya, Kiran S. and Umans, Christopher},
-        Journal = {SICOMP},
-        Number = {6},
-        Pages = {1767-1802},
-        Title = {Fast Polynomial Factorization and Modular Composition},
-        Volume = {40},
-        Year = {2011}
+@Article{KeUm11,
+  author  = {Kedlaya, Kiran S. and Umans, Christopher},
+  title   = {Fast Polynomial Factorization and Modular Composition},
+  journal = {SIAM Journal on Computing},
+  year    = {2011},
+  volume  = {40},
+  number  = {6},
+  pages   = {1767--1802},
+  doi     = {10.1137/08073408X},
 }
 
 @Article{GaSc12,
@@ -632,19 +633,6 @@ requirement is only polynomial.},
     year = {1990}
 }
 
-@electronic{lenstra+desmit08-stdmodels,
-    author = {Lenstra Jr., H. W. and De Smit, B.},
-    citeulike-article-id = {11159208},
-    citeulike-linkout-0 = {http://www.math.leidenuniv.nl/~desmit/papers/standard_models.pdf},
-    keywords = {cyclotomic\_polynomial, irreducible\_polynomials},
-    pages = {1-4},
-    posted-at = {2012-08-30 23:45:53},
-    priority = {0},
-    title = {Standard models for finite fields: the definition},
-    url = {http://www.math.leidenuniv.nl/~desmit/papers/standard_models.pdf},
-    year = {2008}
-}
-
 @article{thaine01,
     author = {Thaine, F.},
     citeulike-article-id = {11159205},
@@ -717,17 +705,19 @@ requirement is only polynomial.},
     year = {2006}
 }
 
-@article{couveignes+lercier11,
-    author = {Couveignes, Jean-Marc and Lercier, Reynald},
-    citeulike-article-id = {11159134},
-    howpublished = {Eprint arXiv:0905.1642},
-    journal = {To appear in the Israel Journal of Mathematics},
-    keywords = {elliptic\_curve, finite\_field, irreducible\_polynomials},
-    month = jul,
-    posted-at = {2012-08-30 23:25:40},
-    priority = {0},
-    title = {Fast construction of irreducible polynomials over finite fields.},
-    year = {2011}
+@Article{couveignes+lercier11,
+  author   = {Couveignes, Jean-Marc and Lercier, Reynald},
+  title    = {Fast construction of irreducible polynomials over finite fields},
+  journal  = {Israel Journal of Mathematics},
+  year     = {2013},
+  volume   = {194},
+  number   = {1},
+  month    = {Mar},
+  pages    = {77--105},
+  issn     = {1565-8511},
+  doi      = {10.1007/s11856-012-0070-8},
+  abstract = {We present a randomized algorithm that on inputting a finite field K with q elements and a positive integer d outputs a degree d irreducible polynomial in K[x]. The running time is d1+ɛ(d){\texttimes}(log q)5+ɛ(q) elementary operations. The function ɛ in this expression is a real positive function belonging to the class o(1), especially, the complexity is quasi-linear in the degree d. Once given such an irreducible polynomial of degree d, we can compute random irreducible polynomials of degree d at the expense of d1+ɛ(d) {\texttimes} (log q)1+ɛ(q) elementary operations only.},
+  day      = {01},
 }
 
 @book{voskresenskii98,
@@ -1864,23 +1854,22 @@ characteristic p=29,...,97.},
     year = {1999}
 }
 
-@article{df+schost12,
-    abstract = {An {Artin-Schreier} tower over the finite field Fp is a tower of field extensions generated by polynomials of the form {Xp−X}−α. Following Cantor and Couveignes, we give algorithms with quasi-linear time complexity for arithmetic operations in such towers. As an application, we present an implementation of Couveignes' algorithm for computing isogenies between elliptic curves using the p-torsion.},
-    author = {De Feo, L. and Schost, {\'E}.},
-    citeulike-article-id = {10175624},
-    citeulike-linkout-0 = {http://dx.doi.org/10.1016/j.jsc.2011.12.008},
-    doi = {10.1016/j.jsc.2011.12.008},
-    issn = {07477171},
-    journal = {J. Symbolic Comput.},
-    keywords = {artin-schreier, computer\_algebra, finite\_field, trace\_formulas, transposed\_algorithms},
-    number = {7},
-    pages = {771-792},
-    posted-at = {2012-04-04 12:50:03},
-    priority = {0},
-    title = {Fast arithmetics in {A}rtin-{S}chreier towers over finite fields},
-    url = {http://dx.doi.org/10.1016/j.jsc.2011.12.008},
-    volume = {47},
-    year = {2012}
+@Article{df+schost12,
+  author               = {De Feo, Luca and Schost, {\'E}ric},
+  title                = {Fast arithmetics in {A}rtin-{S}chreier towers over finite fields},
+  journal              = {Journal of Symbolic Computation},
+  year                 = {2012},
+  volume               = {47},
+  number               = {7},
+  pages                = {771-792},
+  issn                 = {07477171},
+  doi                  = {10.1016/j.jsc.2011.12.008},
+  url                  = {http://dx.doi.org/10.1016/j.jsc.2011.12.008},
+  abstract             = {An {Artin-Schreier} tower over the finite field Fp is a tower of field extensions generated by polynomials of the form {Xp−X}−α. Following Cantor and Couveignes, we give algorithms with quasi-linear time complexity for arithmetic operations in such towers. As an application, we present an implementation of Couveignes' algorithm for computing isogenies between elliptic curves using the p-torsion.},
+  citeulike-article-id = {10175624},
+  citeulike-linkout-0  = {http://dx.doi.org/10.1016/j.jsc.2011.12.008},
+  keywords             = {artin-schreier, computer\_algebra, finite\_field, trace\_formulas, transposed\_algorithms},
+  posted-at            = {2012-04-04 12:50:03},
 }
 
 @article{brassard+hoyer+kalach+kaplan+laplante+salvail11,
@@ -4643,24 +4632,6 @@ less than \$6n^{2.8}\$ arithmetic operations.},
     title = {Notions of {RSA} integers},
     url = {http://cosec.bit.uni-bonn.de/fileadmin/user_upload/publications/pubs/loenus10a.pdf},
     year = {2010}
-}
-
-@article{faugere+lubicz+robert10,
-    abstract = {The aim of this paper is to give a higher dimensional equivalent of theclassical modular polynomials \$\{Phi\_\ell(X},Y)\$. If \$j\$ is the \$j\$-invariantassociated to an elliptic curve \$E\_k\$ over a field \$k\$ then the roots {of\$\Phi\_}\{ell(j,X})\$ correspond to the \$j\$-invariants of the curves which are\$\ell\$-isogeneous to \$E\_k\$. Denote by \${X\_0(N})\$ the modular curve whichparametrizes the set of elliptic curves together with a \$N\$-torsion {subgroup.It} is possible to interpret \$\{Phi\_\ell(X},Y)\$ as an equation cutting out theimage of a certain modular correspondence \$X\_0(\ell) \to X\_0(1) \times X\_0(1)\$in the product \$X\_0(1) \times X\_0(1)\$. Let \$g\$ be a positive integer and\$\overn \in \N^g\$. We are interested in the moduli space that we denote {by\$\Mn}\$ of abelian varieties of dimension \$g\$ over a field \$k\$ together with anample symmetric line bundle \$\pol\$ and a symmetric theta structure of type\$\overn\$. If \$\ell\$ is a prime and let \$\overl=(\ell, ..., \ell)\$, there existsa modular correspondence \$\Mln \to \Mn \times \Mn\$. We give a system ofalgebraic equations defining the image of this modular correspondence.},
-    archivePrefix = {arXiv},
-    author = {Faug\`{e}re, Jean-{C}harles and Lubicz, David and Robert, Damien},
-    citeulike-article-id = {7500483},
-    citeulike-linkout-0 = {http://arxiv.org/abs/0910.4668},
-    citeulike-linkout-1 = {http://arxiv.org/pdf/0910.4668},
-    day = {24},
-    eprint = {0910.4668},
-    keywords = {algebraic\_geometry, hyperelliptic\_curves, isogenies},
-    month = oct,
-    posted-at = {2010-07-16 15:58:54},
-    priority = {4},
-    title = {Computing modular correspondences for abelian varieties},
-    url = {http://arxiv.org/abs/0910.4668},
-    year = {2009}
 }
 
 @article{lubicz+robert10,
@@ -8282,29 +8253,32 @@ We pose getting an explanation to these as an open problem.},
   year={1999}
 }
 
-@inproceedings{DeDoSc2014,
- author = {De Feo, Luca and Doliskani, Javad and Schost, \'{E}ric},
- title = {Fast Arithmetic for the Algebraic Closure of Finite Fields},
- booktitle = {Proceedings of the 39th International Symposium on Symbolic and Algebraic Computation},
- series = {ISSAC '14},
- year = {2014},
- isbn = {978-1-4503-2501-1},
- location = {Kobe, Japan},
- pages = {122--129},
- numpages = {8},
- url = {http://doi.acm.org/10.1145/2608628.2608672},
- doi = {10.1145/2608628.2608672},
- acmid = {2608672},
- publisher = {ACM},
- address = {New York, NY, USA},
- keywords = {extensions, finite fields, irreducible polynomials},
+@InProceedings{DeDoSc2014,
+  author    = {De Feo, Luca and Doliskani, Javad and Schost, \'{E}ric},
+  title     = {Fast Arithmetic for the Algebraic Closure of Finite Fields},
+  booktitle = {ISSAC '14},
+  year      = {2014},
+  publisher = {ACM},
+  location  = {Kobe, Japan},
+  isbn      = {978-1-4503-2501-1},
+  pages     = {122--129},
+  doi       = {10.1145/2608628.2608672},
+  url       = {http://doi.acm.org/10.1145/2608628.2608672},
+  acmid     = {2608672},
+  address   = {New York, NY, USA},
+  keywords  = {extensions, finite fields, irreducible polynomials},
+  numpages  = {8},
 }
 
-@book{mullen2013handbook,
-  title={Handbook of finite fields},
-  author={Mullen, Gary L. and Panario, Daniel},
-  year={2013},
-  publisher={CRC Press}
+@Book{mullen2013handbook,
+  author    = {Mullen, Gary L. and Panario, Daniel},
+  title     = {Handbook of finite fields},
+  year      = {2013},
+  date      = {2013-06-17},
+  publisher = {Chapman and Hall/CRC},
+  isbn      = {9781439873823},
+  pagetotal = {1068},
+  doi       = {10.1201/b15006},
 }
 
 @article{cantor1981,
@@ -8549,62 +8523,46 @@ url="http://dx.doi.org/10.1007/s00208-013-0906-5"
   year={2017}
 }
 
-@article{brieulle2018computing,
-  author =        {Brieulle, Ludovic and De Feo, Luca and
-                   Doliskani, Javad and Flori, Jean-Pierre and
-                   Schost, {\'E}ric},
-  journal =       {Mathematics of Computation},
-  title =         {Computing isomorphisms and embeddings of finite
-                   fields},
-  year =          {2018},
-  doi =           {10.1090/mcom/3363},
+@Electronic{Nickel1988,
+  author      = {Nickel, Werner},
+  title       = {{E}ndliche {K}{\"o}rper in dem gruppentheoretischen {P}rogrammsystem {GAP}},
+  year        = {1988},
+  url         = {https://www2.mathematik.tu-darmstadt.de/~nickel/},
+  note        = {\url{https://www2.mathematik.tu-darmstadt.de/~nickel/}},
+  institution = {RWTH Aachen},
+  type        = {mathesis},
 }
 
-@electronic{Nickel1988,
-  author =        {Nickel, Werner},
-  institution =   {RWTH Aachen},
-  type =          {mathesis},
-  title =         {{E}ndliche {K}örper in dem gruppentheoretischen
-                   {P}rogrammsystem {GAP}},
-  year =          {1988},
-  url =           {https://www2.mathematik.tu-darmstadt.de/~nickel/},
+@Manual{GAP4,
+  title        = {{GAP -- Groups, Algorithms, and Programming, Version 4.9.2}},
+  year         = {2018},
+  note         = {\url{https://www.gap-system.org}},
+  organization = {The GAP~Group},
+  url          = {https://www.gap-system.org},
+  key          = {GAP},
+  shorthand    = {GAP},
 }
 
-@manual{GAP4,
-  shorthand =     {GAP},
-  key =           {GAP},
-  organization =  {The GAP~Group},
-  title =         {{GAP -- Groups, Algorithms, and Programming, Version
-                   4.9.2}},
-  year =          {2018},
-  url =           {https://www.gap-system.org},
+@InProceedings{Fieker:2017:NCA:3087604.3087611,
+  author    = {Fieker, Claus and Hart, William and Hofmann, Tommy and Johansson, Fredrik},
+  title     = {{Nemo/Hecke}: Computer Algebra and Number Theory Packages for the {Julia} Programming Language},
+  booktitle = {ISSAC '17},
+  year      = {2017},
+  publisher = {ACM},
+  isbn      = {978-1-4503-5064-8},
+  pages     = {157--164},
+  doi       = {10.1145/3087604.3087611},
+  url       = {http://nemocas.org/},
+  address   = {New York, NY, USA},
 }
 
-@inproceedings{Fieker:2017:NCA:3087604.3087611,
-  address =       {New York, NY, USA},
-  author =        {Fieker, Claus and Hart, William and Hofmann, Tommy and
-                   Johansson, Fredrik},
-  booktitle =     {Proceedings of the 2017 ACM on International
-                   Symposium on Symbolic and Algebraic Computation},
-  pages =         {157--164},
-  publisher =     {ACM},
-  series =        {ISSAC '17},
-  title =         {{Nemo/Hecke}: Computer Algebra and Number Theory
-                   Packages for the {Julia} Programming Language},
-  year =          {2017},
-  doi =           {10.1145/3087604.3087611},
-  isbn =          {978-1-4503-5064-8},
-  url =           {http://nemocas.org/},
-}
-
-@manual{flint,
-  shorthand =     {Flint},
-  author =        {Hart, William and Johansson, Fredrik and
-                   Pancratz, Sebastian},
-  note =          {Version 2.4.0},
-  url =           {http://flintlib.org},
-  title =         {{FLINT}: {F}ast {L}ibrary for {N}umber {T}heory},
-  year =          {2013},
+@Manual{flint,
+  author    = {Hart, William and Johansson, Fredrik and Pancratz, Sebastian},
+  title     = {{FLINT}: {F}ast {L}ibrary for {N}umber {T}heory},
+  year      = {2013},
+  note      = {Version 2.4.0. \url{http://flintlib.org}},
+  url       = {http://flintlib.org},
+  shorthand = {Flint},
 }
 
 @electronic{Luebeck,
@@ -8614,14 +8572,42 @@ url="http://dx.doi.org/10.1007/s00208-013-0906-5"
   url =           {http://www.math.rwth-aachen.de/~Frank.Luebeck/data/ConwayPol/},
 }
 
-@misc{Roe2013,
-  author =        {Roe, David and Flori, Jean-Pierre and Bruin, Peter},
-  howpublished =  {Trac ticket \#14958},
-  month =         oct,
-  title =         {Implement pseudo-{C}onway polynomials},
-  year =          {2013},
-  url =           {https://trac.sagemath.org/ticket/14958},
+@Misc{Roe2013,
+  author       = {Roe, David and Flori, Jean-Pierre and Bruin, Peter},
+  title        = {Implement pseudo-{C}onway polynomials},
+  year         = {2013},
+  howpublished = {Trac ticket \#14958},
+  note         = {\url{https://trac.sagemath.org/ticket/14958}},
+  month        = oct,
+  url          = {https://trac.sagemath.org/ticket/14958},
 }
+
+@Article{DoSc12,
+  author   = {Doliskani, Javad and Schost, {\'E}ric},
+  title    = {Computing in degree $2^k$-extensions of finite fields of odd characteristic},
+  journal  = {Designs, Codes and Cryptography},
+  year     = {2015},
+  volume   = {74},
+  number   = {3},
+  month    = {Mar},
+  pages    = {559--569},
+  issn     = {1573-7586},
+  doi      = {10.1007/s10623-013-9875-7},
+  abstract = {We show how to perform basic operations (arithmetic, square roots, computing isomorphisms) over finite fields of the form {\$}{\$}{\backslash}mathbb F {\_}{\{}q^{\{}2^k{\}}{\}}{\$}{\$}Fq2kin essentially linear time.},
+  day      = {01},
+}
+
+@Article{brieulle2018computing,
+  author  = {Brieulle, Ludovic and De Feo, Luca and Doliskani, Javad and Flori, Jean-Pierre and Schost, {\'E}ric},
+  title   = {Computing isomorphisms and embeddings of finite fields},
+  journal = {Mathematics of Computation},
+  year    = {2019},
+  number  = {88},
+  pages   = {1391--1426},
+  doi     = {10.1090/mcom/3363},
+}
+
+@Comment{jabref-meta: databaseType:biblatex;}
 
 %%% Local Variables:
 %%% mode:auto-revert
