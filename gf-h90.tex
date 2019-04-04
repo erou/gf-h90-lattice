@@ -127,7 +127,7 @@ Note that any solution can be made unique by replacing all random
 choices with pseudo-random ones, however one is usually interested in
 uniqueness solutions that have a simple mathematical description. %
 Also, any solution can be made general by means of an isomorphism
-algorithm~\cite{LenstraJr91,Allombert02,rains2008,brieulle2018computing,narayanan2016fast}. %
+algorithm~\cite{LenstraJr91,Allombert02,brieulle2018computing,narayanan2016fast}. %
 Other optional goals, such as computing normal bases or evaluating
 Frobenius morphisms, may be added to the list, however they are out of
 the scope of this work.
@@ -138,7 +138,7 @@ polynomials~\cite{Nickel1988,heath+loehr99}, first adopted in
 GAP~\cite{GAP4}, and then also by Magma~\cite{MAGMA} and
 Sage~\cite{Sage}. %
 Conway polynomials yield uniqueness, however computing them requires
-exponential time, thus incrementality is only available at a
+exponential time using the best known algorithm, thus incrementality is only available at a
 prohibitive cost; for this reason, they are usually pre-computed and
 tabulated up to some bound.
 
@@ -227,7 +227,8 @@ algorithms, and present our implementation.
 \label{sec:conway}
 
 \paragraph{Fundamental algorithms and complexities}
-Throughout this paper we let $\F_p$ be a prime field, and we measure
+Throughout this paper we let $\F_p$ be a prime field for simplicity, though the
+results easily extend to $\F_q$, where $q$ is a power of $p$. We measure
 time complexities as a number of arithmetic operations $(+,\times,/)$
 over $\F_p$, and storage as a number of elements of $\F_p$. %
 We let $\M(m)$ denote the number of operations required to multiply
@@ -349,7 +350,7 @@ this is then extended to all $\ell\in I$ by setting $K_\ell=K_{p^a-1}$
 and $\zeta_\ell=(\zeta_{p^a-1})^{\frac{p^a-1}{\ell}}$
 where $\F_{p^a}$ is the smallest extension $\F_p$ containing $\ell$-th roots of unity.
 
-The best algorithm to compute Conway polynomials has exponential
+The best known algorithm to compute Conway polynomials has exponential
 complexity~\cite{heath+loehr99}, hence they are usually precomputed
 and tabulated up to a certain bound. %
 Most computer algebra systems switch to other ways of representing
