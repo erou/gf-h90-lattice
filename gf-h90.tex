@@ -1,10 +1,11 @@
-\documentclass{sig-alternate}
+\documentclass[sigconf]{acmart}
 
 \usepackage{hyperref}
 \usepackage{macros}
 \usepackage{amscd}
 \usepackage{xcolor}
 \usepackage{microtype}
+\usepackage{balance}
 
 \definecolor{green}{rgb}{.08,.69,.10}
 \definecolor{blue}{rgb}{.01,.26,.87}
@@ -18,25 +19,40 @@
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{definition}[theorem]{Definition}
 
-\numberofauthors{3}
-\author{
-  \alignauthor Luca De Feo\\
-  \affaddr{Universit\'e Paris Saclay -- UVSQ, LMV}\\
-  \email{luca.de-feo@uvsq.fr}
-  \alignauthor Hugues Randriam\\
-  \affaddr{LTCI, T\'el\'ecom ParisTech}\\
-  \email{randriam@enst.fr}
-  \alignauthor \'Edouard Rousseau\\
-  \affaddr{LTCI, T\'el\'ecom ParisTech,\\
-    Universit\'e Paris Saclay -- UVSQ, LMV}\\
-  \email{erousseau@enst.fr}
-}
+\settopmatter{printacmref=true}
+\fancyhead{}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08emT\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
-\title{Standard lattices of compatibly embedded finite fields}
+\copyrightyear{2019}
+\acmYear{2019}
+\setcopyright{acmlicensed}
+\acmConference[ISSAC '19] {2019 International Symposium on Symbolic and Algebraic Computation}{July 15--18, 2019}{Beijing, China}
+\acmBooktitle{2019 Int'l Symposium on Symbolic \& Algebraic Computation (ISSAC'19), July 15--18, 2019, Beijing, China}
+\acmPrice{15.00}
+\acmDOI{10.1145/XXXXXX.XXXXXX}
+\acmISBN{978-1-4503-6084-5/19/07} 
 
 \begin{document}
 
-\maketitle
+\title{Standard Lattices of Compatibly Embedded Finite Fields}
+
+\author{Luca De Feo}
+\email{luca.de-feo@uvsq.fr}
+\orcid{0000-0002-9321-0773}
+\affiliation{%
+  \institution{Universit\'e Paris Saclay -- UVSQ, LMV}
+}
+\author{Hugues Randriam}
+\email{randriam@enst.fr}
+\affiliation{%
+  \institution{LTCI, T\'el\'ecom ParisTech}
+}
+\author{\'Edouard Rousseau}
+\email{erousseau@enst.fr}
+\affiliation{
+  \institution{LTCI, T\'el\'ecom ParisTech}
+  \institution{Universit\'e Paris Saclay -- UVSQ, LMV}
+}
 
 \begin{abstract}
   Lattices of compatibly embedded finite fields are useful in computer
@@ -69,12 +85,30 @@
   that our construction is practical.
 \end{abstract}
 
-\category{\vspace{-.2\baselineskip}F.2.1}{Theory of computation}{Analysis of algorithms and problem complexity}[Computations in finite fields]
-\category{G.4}{Mathematics of computing}{Mathematical software\vspace{-.8\baselineskip}}
-\terms{\vspace{-.4\baselineskip}Algorithms,Theory\vspace{-.8\baselineskip}}
-\keywords{\vspace{-.4\baselineskip}Finite fields, field extensions, Conway polynomials.\vspace{-.8\baselineskip}}
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10002950.10003705</concept_id>
+<concept_desc>Mathematics of computing~Mathematical software</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+<concept>
+<concept_id>10010147.10010148.10010149.10010150</concept_id>
+<concept_desc>Computing methodologies~Algebraic algorithms</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
 
-\vspace{-.8\baselineskip}
+\ccsdesc[300]{Mathematics of computing~Mathematical software}
+\ccsdesc[500]{Computing methodologies~Algebraic algorithms}
+
+\keywords{Finite fields; field extensions; Conway polynomials.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\maketitle
+
 \section{Introduction}
 \label{sec:introduction}
 
@@ -982,7 +1016,7 @@ We can finally state:
       defines a standard embedding $\embed{\ell}{m}:\F_{p^\ell}\hookrightarrow\F_{p^m}$,
       compatible with composition.}
   \STATE Prepare the Kummer algebras $A_\ell$ and $A_m$.
-  \STATE Recover $\alpha_\ell$ from $s_\ell$ and $\alpha_m$ from $s_m$ using equations~\eqref{recoveralpha}.\vspace{-.7\baselineskip}
+  \STATE Recover $\alpha_\ell$ from $s_\ell$ and $\alpha_m$ from $s_m$ using equations~\eqref{recoveralpha}.%\vspace{-.7\baselineskip}
   \STATE Compute $\kappa_{\ell,m}=(\embedcyc{m}{p^b-1})^{-1}((\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)\ell}})$ where $a=\nu(\ell)$, $b=\nu(m)$.
   \STATE Return $\first{(1\otimes\kappa)(\alpha_m)^{\frac{m}{\ell}}}{(\zeta_m)^{\frac{m}{\ell}}}$.
   \end{algorithmic}
