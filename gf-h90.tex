@@ -177,9 +177,8 @@ exponential time using the best known algorithm, thus incrementality is only ava
 prohibitive cost; for this reason, they are usually pre-computed and
 tabulated up to some bound.
 
-The first to show the existence of a (incremental, general) data
-structure computable in deterministic polynomial time was
-Lenstra~\cite{LenstraJr91}, who proved that, besides the problem of
+Lenstra~\cite{LenstraJr91} was the first to show the existence of a (incremental, general) data
+structure computable in deterministic polynomial time. He proved that, besides the problem of
 finding irreducible polynomials, any other question is amenable to
 linear algebra. %
 Subsequent work of Lenstra and de
@@ -322,7 +321,7 @@ exist~\cite{df+schost12,DoSc12,DeDoSc13,DeDoSc2014}.
 
 The present work focuses on algorithms to \textbf{compute embeddings
   of finite fields}, i.e., algorithms that, given finite fields
-$\F_{p^\ell},\F_{p^m}$ with $\ell\,|\,m$, find an embedding
+$\F_{p^\ell}$ and $\F_{p^m}$ with $\ell\,|\,m$, find an embedding
 $\phi:\F_{p^\ell}\hookrightarrow\F_{p^m}$, a generator $\alpha_\ell$
 of $\F_{p^\ell}$, and its image $\phi(\alpha_\ell)$. %
 An extensive review of known algorithms is given
@@ -688,7 +687,8 @@ All nonzero solutions $\alpha_{p^a-1}\in A_{p^a-1}$ of \eqref{h90} for $\zeta_{p
 have the same Kummer constant $\a_{p^a-1}=(\zeta_{p^a-1})^a$.
 \end{lemma}
 \begin{proof}
-From Lemma~\ref{FrobFrob} and the fact that $\sigma^a$ is trivial on $\F_{p}(\zeta_{p^a-1})\simeq\F_{p^a}$ we get that
+  From Lemma~\ref{FrobFrob} and the fact that $\sigma^a$ is trivial on
+  $\F_{p^a}\simeq\F_{p}(\zeta_{p^a-1})$ we get that
 \begin{equation*}
 \begin{split}
 (\alpha_{p^a-1})^{p^a}=(\sigma^a\otimes\sigma^a)(\alpha_{p^a-1})&=(\sigma^a\otimes1)(\alpha_{p^a-1})\\
@@ -840,7 +840,7 @@ where $(\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}=\operatorname{N}_{\F_{p^b}/\F_{p^a}
 
 \begin{definition}
 \label{def:norm}
-Given a Kummer algebra $A_n$, and integers $a\,|\,b\,|\,\nu(n)$, we define
+Given a Kummer algebra $A_n$, and some integers $a\,|\,b\,|\,\nu(n)$, we define
 the \emph{scalar norm} operator
 \[
 \begin{array}{cccc}
@@ -863,7 +863,7 @@ commute with $\sigma\otimes1$.
 \begin{proposition}
 \label{embedcomplete}
 Let $a\,|\,b$ be integers,
-and $(A_{p^a-1},\alpha_{p^a-1})$, $(A_{p^b-1},\alpha_{p^b-1})$ decorated complete Kummer algebras
+and let $(A_{p^a-1},\alpha_{p^a-1})$, $(A_{p^b-1},\alpha_{p^b-1})$ be decorated complete Kummer algebras
 of level $a,b$ respectively.
 Then there is a unique Kummer embedding
 \[ \embedalg{p^a-1}{p^b-1}:A_{p^a-1}\hookrightarrow A_{p^b-1} \]
@@ -961,7 +961,9 @@ of respective degrees $\ell\,|\,m$ prime to $p$.
 Then the standard Kummer embedding $\embedalg{\ell}{m}:A_\ell\hookrightarrow A_m$
 is defined by the assignation
 $\alpha_\ell\;\mapsto\;(1\otimes\kappa_{\ell,m})(\alpha_m)^{\frac{m}{\ell}}$, where
-$\kappa_{\ell,m}=(\embedcyc{m}{p^b-1})^{-1}((\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)\ell}})$.
+\[
+  \kappa_{\ell,m}=(\embedcyc{m}{p^b-1})^{-1}((\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)\ell}}).
+\]
 \end{corollary}
 \begin{proof}
 It suffices to check that $\embedalg{p^a-1}{p^b-1}(\embedalg{\ell}{p^a-1}(\alpha_\ell))$
@@ -984,7 +986,7 @@ nothing but a pleasant computation with the explicit constants given
 by Corollary~\ref{explicit_general_standard_embedding}.
 
 Alternatively, set $a=\nu(\ell),b=\nu(m),c=\nu(n)$, and decorate $A_{p^a-1},A_{p^b-1},A_{p^c-1}$.
-It suffices to show that $\embedalg{\ell}{n}(\alpha_\ell)$
+It suffices to show that the elements $\embedalg{\ell}{n}(\alpha_\ell)$
 and $\embedalg{m}{n}(\embedalg{\ell}{m}(\alpha_\ell))$ have the same image under $\embedalg{n}{p^c-1}$
 in $A_{p^c-1}$.
 Chasing in the diagram
@@ -1085,8 +1087,8 @@ algorithms.
   extensively studied in~\cite{brieulle2018computing}, where it was
   found to be bounded by
   $O\bigr(\M(\ell^2)\log(\ell) + \M(\ell)\log(p)\bigl)$. %
-  Then, the constant $\a'_l=(\alpha'_\ell)^\ell$ is computed in
-  $O\left(\M(\ell^2)\log(\ell)\right)$, and the $\ell$-th root
+  Then, the constant $\a'_l=(\alpha'_\ell)^\ell$ is computed using
+  $O\left(\M(\ell^2)\log(\ell)\right)$ operations, and the $\ell$-th root
   $\kappa$ is computed in $O(\M(\ell)\log(\ell)\log(p))$ according
   to~\cite{brieulle2018computing}. %
   $\alpha_\ell=(1\otimes\kappa)\alpha'_\ell$ is then computed in a
@@ -1096,7 +1098,7 @@ algorithms.
   free, and its minimal polynomial $P_\ell$ is computed again in
   $O(\ell^{(\omega+1)/2})$ operations.
 
-  Now, to compute a Kummer embedding of $(\F_{p^\ell},\alpha_\ell)$
+  Now, in order to compute a Kummer embedding of $(\F_{p^\ell},\alpha_\ell)$
   into $(\F_{p^m},\alpha_m)$, we compute the scalar $\kappa_{\ell,m}$
   in $O(m\M(m))$ operations, and $(\alpha_m)^{\frac{m}{\ell}}$ in
   $O(\M(m^2)\log(m))$. %
