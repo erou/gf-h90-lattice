@@ -64,26 +64,22 @@
 
   The most well known constructions are Conway polynomials, and the
   Bosma--Cannon--Steel framework used in Magma. %
-  They all have drawbacks: Conway polynomials are extremely expensive
-  to compute, while the Bosma--Cannon--Steel framework does not provide
-  a standard way to represent finite fields, and becomes inefficient
-  as the number of extensions grows.
-
   In this work, leveraging the theory of the Lenstra-Allom\-bert
-  isomorphism algorithm, we generalize at the same time Conway
-  polynomials and the Bosma--Cannon--Steel framework: our construction
-  can be used both to define new standard families of compatible
-  polynomials defining finite fields, and to compute compatible
-  embeddings between arbitrary finite fields. %
-  Our construction computes and evaluates chains of embeddings in
-  quasi-quadratic time in the (largest) extension degree, and linear
-  time in the number of extensions involved. %
-  A small drawback is that it requires the existence of
-  compatible roots of unity that, in practice, will be provided by Conway-like methods.
-  Fortunately, a quite small lattice of such compatible roots allows to produce
-  a much larger lattice of compatibly embedded finite fields,
-  and indeed, our implementation written in C/Flint/Julia/Nemo shows
-  that our construction is practical.
+  isomorphism algorithm, we generalize both at the same time. %
+  
+  Compared to Conway polynomials, our construction defines a much
+  larger set of field extensions from a small pre-computed table;
+  however it is provably as inefficient as Conway polynomials if one
+  wants to represent \emph{all} field extensions, and thus yields no
+  asymptotic improvement for representing $\bar\F_p$.
+
+  Compared to Bosma--Cannon--Steel lattices, it is considerably more
+  efficient both in computation time and storage: all algorithms have
+  at worst quadratic complexity, and storage is linear in the number
+  of represented field extensions and their degrees.
+
+  Our implementation written in C/Flint/Julia/Nemo shows that our
+  construction in indeed practical.
 \end{abstract}
 
 \begin{CCSXML}
@@ -225,20 +221,22 @@ The advantages of our construction over a naive combination of the
 Lenstra-Allombert algorithm and the Bosma--Cannon--Steel framework are
 multiple. %
 Storage drops from quadratic to linear in the number of extensions
-stored in $\Lambda$, and the cost of adding a new extension to
-$\Lambda$ drops similarly. %
+stored in $\Lambda$ and in their degrees, and the cost of adding a new
+extension to $\Lambda$ drops similarly. %
 
 Our $\F_{p}$-algebras are constructed by tensoring an arbitrary
-lattice of extensions of $\F_{p}$ with a lattice of compatible roots
-of unity. %
-One of the possible ways to construct the second lattice is by using
-Conway polynomials; this way, our construction can be seen as a
-generalization of Conway polynomials, permitting to represent
-(uniquely) finite fields of exponentially larger degree. %
-This is also the main drawback of our construction, indeed computing
-the standard polynomials implied by it is provably as hard as
-computing Conway polynomials, and thus unlikely to be doable
-efficiently.
+lattice of extensions of $\F_{p}$ with what we call a \emph{cyclotomic
+  lattice} (see next section). %
+In this work we mostly abstract away from the concrete instantiation
+of the cyclotomic lattice, only fixing a choice in
+Section~\ref{sec:implementation}, where we use Conway polynomials to
+analyze the complexity and implement our algorithms. %
+This choice allows us to uniquely represent finite fields of degree
+exponentially larger than with Conway polynomials alone; however it
+also has the serious drawback of being generically as hard to compute
+as Conway polynomials, and thus relatively unpractical. %
+We leave the exploration of other, more practical, instantiations of
+cyclotomic lattices for future work.
 
 
 \paragraph{Organization}
@@ -334,11 +332,11 @@ compatible lattices of finite fields.
 
 \paragraph{Conway polynomials and cyclotomic lattices}
 The algorithms of the next sections will be dependent on the
-availability of a cyclotomic lattice. %
+availability of a \emph{cyclotomic lattice}. %
 By this we mean, formally, a collection
 \[ \system=\{(K_\ell,\zeta_\ell)\}_{\ell\in I} \]
 over some support set $I\subset\N\setminus p\N$.
-Where $K_\ell$ is an explicitely represented finite extension of $\F_p$,
+Where $K_\ell$ is an explicitly represented finite extension of $\F_p$,
 and $\zeta_\ell\in K_\ell$ a generating element that is also a primitive $\ell$-th root
 of unity,
 so \[ K_\ell=\F_p(\zeta_\ell),\quad(\zeta_\ell)^\ell=1, \]
