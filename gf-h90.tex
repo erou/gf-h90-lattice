@@ -681,7 +681,7 @@ A Kummer algebra is \emph{complete} if it is of the largest degree for a given l
 Thus, the complete Kummer algebra of level $a$ is
 \[ A_{p^a-1}=\F_{p^{p^a-1}}\otimes\F_{p^a} \]
 with field of scalars $\F_{p^a}=\F_{p}(\zeta_{p^a-1})$ given by the corresponding $\zeta_{p^a-1}$ in our cyclotomic lattice $\system$,
-e.g., defined by a (pseudo-)Conway polynomial of degree $a$.
+e.g., defined by a (pseudo)-Conway polynomial of degree $a$.
 \begin{lemma}
 \label{Kummer_bizarre}
 All nonzero solutions $\alpha_{p^a-1}\in A_{p^a-1}$ of \eqref{h90} for $\zeta_{p^a-1}$
@@ -1040,14 +1040,14 @@ abstract, leaving many computational details unspecified. %
 There are various ways in which our algorithms can possibly be
 implemented, depending on how one chooses to represent finite fields
 and the cyclotomic lattice $\system$. %
-A reasonable option is to use (pseudo-)Conway polynomials to represent
+A reasonable option is to use (pseudo)-Conway polynomials to represent
 the fields $\F_p(\zeta_{p^a-1})$, and deduce from them the smallest
 possible representation for any other field $\F_p(\zeta_\ell)$. %
 Assuming this technique, we can prove a bound on the complexity of our
 algorithms.
 
 \begin{proposition}
-  Given a collection of (pseudo-)Conway polynomials for $\F_p$, of
+  Given a collection of (pseudo)-Conway polynomials for $\F_p$, of
   degree up to $d$, standard solutions $\alpha_\ell$ of~\eqref{h90} can
   be computed for any $\ell\,|\,(p^i-1)$ for any $i\le d$ using
   $O\bigr(\M(\ell^2)\log(\ell) + \M(\ell)\log(\ell)\log(p)\bigl)$ %
@@ -1074,7 +1074,7 @@ algorithms.
   To construct the Kummer algebra
   $A_\ell=\F_{p^\ell}\otimes\F_p(\zeta_\ell)$ we need an irreducible
   polynomial of degree $\ell$, not necessarily related to the
-  (pseudo-)Conway polynomials used to represent the fields of
+  (pseudo)-Conway polynomials used to represent the fields of
   scalars. %
   Very efficient, quasi-optimal algorithms for finding such a
   polynomial are given
@@ -1152,7 +1152,7 @@ in~\cite{Allombert02,brieulle2018computing}, it is possible to only
 store $\first{\alpha_\ell}{\zeta_\ell}$, and recover all other
 coefficients of $\alpha_\ell$ in $O(\ell\M(\ell)\log(p))$ operations.
 
-To demonstrate that feasibility of this approach, we implemented it in
+To demonstrate the feasibility of this approach, we implemented it in
 the Julia-based CAS Nemo~\cite{Fieker:2017:NCA:3087604.3087611}, with
 performance critical routines written in C/Flint~\cite{flint}. %
 Our code is available as a Julia package at
