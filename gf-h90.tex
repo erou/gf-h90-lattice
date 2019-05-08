@@ -414,8 +414,17 @@ This will be our stepping stone towards the definition of some
 \emph{standard} elements in field extensions of $\F_p$ with an
 effective compatibility condition.
 
-The main ingredient of the algorithm is an extension
-of Kummer theory.
+The main ingredient of the algorithm is an extension of Kummer
+theory. %
+Because of this, the algorithm is limited to field extensions
+$\F_{p^\ell}$ of degree $\ell$ prime to $p$. %
+The easier case of extensions of degree $p^e$ is covered in a similar
+way using Artin-Schreier theory, and the generic case is solved by
+separately computing isomorphisms for the power-of-$p$ and the
+prime-to-$p$ parts, and then tensoring the results together. %
+Due to space constraints, we will not give details for the general
+case here; see~\cite{LenstraJr91,Allombert02,brieulle2018computing}.
+
 For any finite extension of $\F_{p}$, we denote by $ \sigma:x\mapsto x^p $
 the Frobenius automorphism.
 Let $\ell$ be an integer not divisible by $p$.
@@ -755,6 +764,16 @@ As an example, we give in Table~\ref{tab:std-polys} the first ten
 standard polynomials induced by the system of Conway polynomials
 for $p=2$ (thus, in this example, $P_\ell$ only depends on the Conway polynomial of degree $\nu(\ell)$).
 
+We remark that it is easy to extend the definitions of decorated
+algebras and standard elements to any extension degree, similarly to
+the way this is done for the basic Lenstra--Allombert algorithm. %
+Use any (standard) construction for Artin-Schreier towers over finite
+fields (e.g.,~\cite{df+schost12}), define decorated algebras by
+tensoring together Kummer algebras and Artin-Schreier extensions of
+$\F_p$, and define standard elements as, e.g., the product of a
+solution of multiplicative H90 and one of additive H90. %
+While this solution is simple and effective, it is rather orthogonal
+to our work, hence we omit the details here.
 
 \begin{table}[b]
   \centering
@@ -1218,6 +1237,10 @@ the flexibility of the Bosma--Steel--Cannon framework and the rigidity
 of Conway polynomials, for example by lazily enforcing the conditions
 required to have a standard solution of~\eqref{h90}, while
 incrementally constructing the lattice of roots of unity. %
+
+Another line of work would be to give a complete implementation of a
+lattice of finite fields, not limited to extensions of degree coprime
+to $p$. %
 We leave these questions for future work.
 
 
