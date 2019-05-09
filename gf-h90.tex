@@ -1051,6 +1051,7 @@ satisfy $\embed{\ell}{n}=\embed{m}{n}\circ\embed{\ell}{m}$.
 Corollary~\ref{alphaphi} and Proposition~\ref{standard_K_embeddings_compatibles}.
 \end{proof}
 
+
 \section{Implementation}
 \label{sec:implementation}
 
@@ -1200,16 +1201,15 @@ comparison to the decoration of the finite fields. %
 We also tested embedding fields larger than $\F_{p^2}$, and noticed
 that the running time mostly depends on the size of the larger field.
 
-
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=.24]{solve_h90-3.png}
-  \includegraphics[scale=.24]{embed-3.png}
+  \includegraphics[scale=0.84]{plot_solve_h90.eps}
+  \includegraphics[scale=0.84]{plot_embed.eps}
   \caption{Timings for computing decorated fields
     $(\F_{p^\ell},\alpha_\ell)$ (left, log scale), and for computing the
     standard Kummer embedding from $\mathbb{F}_{p^2}$ to $\F_{p^\ell}$
     (right) for $p=3$.}
-  \label{fig:timings}
+  \label{fig:timings2}
 \end{figure}
 
 \section{Conclusion and future work}
@@ -1259,6 +1259,7 @@ Domaine d'Int\'er\^et Majeur \emph{Math'Innov}.
 \bibliographystyle{ACM-Reference-Format}
 \balance
 \bibliography{gf-h90}
+
 
 \end{document}
 
