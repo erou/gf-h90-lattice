@@ -1,5 +1,7 @@
 # gf-h90-lattice
 
+A repo containing the sources to compute our paper.
+
 ## Commandes git
 
 - `git pull` permet de récupérer le repo en local
